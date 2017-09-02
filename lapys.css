@@ -40,19 +40,6 @@
             }
         }
 
-        /* Move In */
-        @keyframes moveIn {
-            0% {
-                bottom: -100px;
-                position: relative
-            }
-
-            to {
-                bottom: 0;
-                position: relative
-            }
-        }
-
     /* Media
             @media
     */
@@ -297,17 +284,16 @@
                 resemble inline-text elements (<b>, <i> e.t.c.) inherit
                 similar styles to those elements.
         */
-        font-weight: 600
+        font-weight: 600 !important
     }
 
     [big],
     .big,
     big:not([default]) {
-        font-size: xx-large
+        font-size: xx-large !important
     }
 
-    [center],
-    .center {
+    [center] {
         text-align: center
     }
 
@@ -316,6 +302,7 @@
     .cite,
     cite {
         display: block;
+        font-style: italic;
         min-height: 20px;
         padding: 5px
     }
@@ -346,18 +333,18 @@
     }
 
     [hr] {
-        border-bottom-color: rgba(0, 0, 0, .1);
+        border-bottom-color: rgba(0, 0, 0, .15);
         padding-bottom: 2.5px;
         padding-top: 7.5px
     }
 
     [lower] {
-        text-transform: lowercase
+        text-transform: lowercase !important
     }
 
     [medium],
     .medium {
-        font-size: medium
+        font-size: medium !important
     }
 
     [readonly] {
@@ -366,7 +353,7 @@
 
     [small],
     .small {
-        font-size: 65%
+        font-size: 80% !important
     }
 
     [type="button"],
@@ -395,9 +382,8 @@
             }
 
     [upper] {
-        text-transform: uppercase
+        text-transform: uppercase !important
     }
-
         /* Not */
             /* Default */
                 /* Pseudo */
@@ -417,28 +403,29 @@
                         text-decoration: none
                     }
 
-                /* <audio> */
-                    /* Not */
-                        /* <video> */
-                        [default]:not(
-                            audio):not(
-                            video) {
-                            all: initial
-                        }
+                /* <audio> > Not > <video> */
+                [default]:not(
+                    audio):not(
+                    video) {
+                    all: initial
+                }
 
-                /* <button> */
-                    /* Not */
-                        /* <input> */
-                            /* Not */
-                                /* Button */
-                                :not(button):not(input):not(.btn):read-write:focus {
-                                    outline: 1px solid #0023FF
-                                }
+                /* <button> > Not > <input> > Not > Button */
+                :not(button):not(
+                    input):not(
+                    .btn):read-write:focus {
+                    outline: 1px solid #0023FF
+                }
 
         /* Pseudo */
             /* After */
             [after]::after {
                 content: attr(after)
+            }
+
+            [after]::after,
+            [before]::before {
+                pointer-events: all
             }
 
             /* After, Before */
@@ -575,13 +562,6 @@
                 }
 
         /* States */
-            /* Disabled */
-                /* Not */
-                    /* Default */
-                    :disabled:not([default]) {
-                        opacity: .9
-                    }
-
             /* Fullscreen */
             :fullscreen {
                 border: 0 !important;
@@ -600,53 +580,45 @@
                 transform: none !important;
                 z-index: 2147483646 !important
             }
-                /* Not */
-                    /* Pseudo */
-                        /* Root */
-                            /* Not */
-                                /* -moz- Browser Frame */
-                                *|*:fullscreen:not(
-                                    :root):not(
-                                    :-moz-browser-frame) {
-                                    -moz-top-layer: top !important
-                                }
+                /* Not > Pseudo > Root > Not > -moz- Browser Frame */
+                *|*:fullscreen:not(
+                    :root):not(
+                    :-moz-browser-frame) {
+                    -moz-top-layer: top !important
+                }
 
     /* <a> */
-        /* Not */
-            /* Default */
-            a:not([default]) {
-                color: #0023FF;
-                cursor: pointer;
-                fill: #0023FF;
-                line-height: inherit;
-                outline: 0;
-                text-align: inherit;
-                stroke: #0023FF;
-                text-decoration: none;
-                -webkit-text-decoration-skip: objects
-            }
-
+        /* Not > Default */
+        a:not([default]) {
+            color: #0023FF;
+            cursor: pointer;
+            fill: #0023FF;
+            line-height: inherit;
+            outline: 0;
+            text-align: inherit;
+            stroke: #0023FF;
+            text-decoration: none;
+            -webkit-text-decoration-skip: objects
+        }
             /* States */
-                /* Active, Focus, Unvisited, Visited */
-                    /* Not */
-                        /* Default */
-                        a:active:not([default]),
-                        a:focus:not([default]),
-                        a:unvisited:not([default]),
-                        a:visited:not([default]) {
-                            color: #0078FF
-                        }
+                /* (Active, Focus, Unvisited, Visited) > Not Default */
+                a:active:not([default]),
+                a:focus:not([default]),
+                a:unvisited:not([default]),
+                a:visited:not([default]) {
+                    color: #0078FF
+                }
 
-            /* <body> */
-                /* Not */
-                    /* Default */
-                    :not(body):not(
-                        [default]) a {
-                        /* --- NOTE ---
-                                <a> elements should inherit the color of their parents.
-                        */
-                        color: inherit
-                    }
+            /* Not > <body> > Not > Default */
+            :not(body):not(
+                [default]) a {
+                /* --- NOTE ---
+                        <a> elements should inherit the color of their parents
+                        since the majority of hyperlinks are buttons.
+                */
+                color: inherit;
+                text-decoration: underline
+            }
 
     /* <abbr> */
     abbr[abbr] {
@@ -686,7 +658,7 @@
     }
 
     /* --- NOTE ---
-            Lists of elements such as these are
+            Lists of selectors such as these are
             ordered alphabetically.
 
                 <address>, <article>, <aside>,
@@ -780,16 +752,15 @@
     }
 
     /* <applet>, <audio>, <embed>, <img>, <object>, <video> */
-        /* Not */
-            /* Default */
-            applet:not([default]),
-            audio:not([default]),
-            embed:not([default]),
-            img:not([default]),
-            object:not([default]),
-            video:not([default]) {
-                max-width: 100%
-            }
+        /* Not > Default */
+        applet:not([default]),
+        audio:not([default]),
+        embed:not([default]),
+        img:not([default]),
+        object:not([default]),
+        video:not([default]) {
+            max-width: 100%
+        }
 
     /* <area> */
     area {
@@ -841,12 +812,6 @@
         min-height: 32px;
         width: 300px
     }
-        /* Not */
-            /* Controls */
-            audio:not([controls]) {
-              display: none !important;
-              height: 0 !important
-            }
 
     /* <audio>, <video> */
     audio,
@@ -867,6 +832,10 @@
                 on other platforms than Chrome and Mozila.
         */
         font-weight: inherit
+    }
+
+    b {
+        font-weight: 600
     }
 
     /*
@@ -897,19 +866,18 @@
     }
 
     /* <bdi> */
-        /* States */
-            /* Direction */
-                /* Left-to-Right */
-                [dir="auto"]:dir(ltr),
-                bdi:dir(ltr) {
-                    direction: ltr
-                }
+        /* States > Direction */
+            /* Left-to-Right */
+            [dir="auto"]:dir(ltr),
+            bdi:dir(ltr) {
+                direction: ltr
+            }
 
-                /* Right-to-Left */
-                [dir="auto"]:dir(rtl),
-                bdi:dir(rtl) {
-                    direction: rtl
-                }
+            /* Right-to-Left */
+            [dir="auto"]:dir(rtl),
+            bdi:dir(rtl) {
+                direction: rtl
+            }
 
     /* <bdo> */
     bdo {
@@ -918,312 +886,302 @@
 
     /* <big> */
     big[small] {
-        font-size: 100%
+        font-size: 100% !important
     }
 
     /* <blockquote> */
-        /* Not */
-            /* Default */
-            blockquote:not([default]) {
-                border-left: thick solid rgba(127, 127, 127, .5);
-                display: block;
-                margin: 20px 0;
-                padding: 0;
-                padding-left: 1.5rem
-            }
+        /* Not > Default */
+        blockquote:not([default]) {
+            border-left: thick solid rgba(127, 127, 127, .5);
+            display: block;
+            margin: 20px 0;
+            padding: 0;
+            padding-left: 1.5rem
+        }
 
-            blockquote[cite]:not([default]),
-            blockquote[type="cite"]:not([default]) {
-                border: 0;
-                border-inline-start: solid;
-                display: block;
-                margin-block-end: 5px;
-                margin-block-start: 5px;
-                margin-inline-end: 0;
-                margin-inline-start: 0;
-                padding-inline-start: 5px
-            }
+        blockquote[cite]:not([default]),
+        blockquote[type="cite"]:not([default]) {
+            border: 0;
+            border-inline-start: solid;
+            display: block;
+            margin-block-end: 5px;
+            margin-block-start: 5px;
+            margin-inline-end: 0;
+            margin-inline-start: 0;
+            padding-inline-start: 5px
+        }
 
     /* <blockquote>, <figure> */
-        /* Not */
-            /* Default */
-            blockquote:not([default]),
-            figure:not([default]) {
-              display: block;
-              margin-block-end: 0;
-              margin-block-start: 0;
-              margin-inline-end: 40px;
-              margin-inline-start: 40px
-            }
+        /* Not > Default */
+        blockquote:not([default]),
+        figure:not([default]) {
+          display: block;
+          margin-block-end: 0;
+          margin-block-start: 0;
+          margin-inline-end: 40px;
+          margin-inline-start: 40px
+        }
 
     /* <blockquote>, <hgroup> */
-        /* Not */
-            /* Default */
-            blockquote:not([default]),
-            hgroup:not([default]) {
-                font-weight: lighter;
-                -webkit-margin-after: 1px;
-                -webkit-margin-before: 1px;
-                -webkit-margin-end: 0;
-                -webkit-margin-start: 0
-            }
+        /* Not > Default */
+        blockquote:not([default]),
+        hgroup:not([default]) {
+            font-weight: lighter;
+            -webkit-margin-after: 1px;
+            -webkit-margin-before: 1px;
+            -webkit-margin-end: 0;
+            -webkit-margin-start: 0
+        }
 
     /* <body> */
-        /* Not */
-            /* Default */
-            body:not([default]) {
-                background-color: #FFFFFF;
-                box-decoration-break: slice;
-                break-after: auto;
-                break-before: auto;
-                break-inside: auto;
-                caption-sidetopclear: none;
-                color: #333333;
-                color-adjust: economy;
-                color-interpolation: sRGB;
-                color-interpolation-filters: linearRGB;
-                counter-increment: none;
-                counter-reset: none;
-                fill: #FFFFFF;
-                fill-opacity: 1;
-                fill-rule: nonzero;
-                filter: none;
-                flex-wrap: nowrap;
-                flood-color: #000000;
-                flood-opacity: 1;
-                /* --- NOTE ---
-                        Just in case.
+        /* Not > Default */
+        body:not([default]) {
+            background-color: #FFFFFF;
+            box-decoration-break: slice;
+            break-after: auto;
+            break-before: auto;
+            break-inside: auto;
+            caption-sidetopclear: none;
+            color: #333333;
+            color-adjust: economy;
+            color-interpolation: sRGB;
+            color-interpolation-filters: linearRGB;
+            counter-increment: none;
+            counter-reset: none;
+            fill: #FFFFFF;
+            fill-opacity: 1;
+            fill-rule: nonzero;
+            filter: none;
+            flex-wrap: nowrap;
+            flood-color: #000000;
+            flood-opacity: 1;
+            /* --- CONSIDER ---
+                    Just in case.
 
-                    font-family: Roboto, Calibri, "Calibri Light", sans-serif;
-                */
-                font-feature-settings: inherit;
-                font-language-override: normal;
-                font-kerning: auto;
-                font-size-adjust: none;
-                font-synthesis: weight style;
-                font-variant-alternates: normal;
-                font-variant-caps: normal;
-                font-variant-east-asian: normal;
-                font-variant-ligatures: normal;
-                font-variant-numeric: normal;
-                font-variant-position: normal;
-                font-weight: 300;
-                height: 100%;
-                hyphens: manual;
-                image-orientation: 0deg;
-                image-rendering: auto;
-                ime-mode: auto;
-                isolation: auto;
-                letter-spacing: normal;
-                lighting-color: #FFFFFF;
-                list-style-image: none;
-                list-style-position: outside;
-                list-style-type: circle;
-                margin: 0;
-                marker-end: none;
-                marker-mid: none;
-                marker-offset: auto;
-                marker-start: none;
-                mask: none;
-                mask-type: luminance;
-                mix-blend-mode: normal;
-                order: 0;
-                orphans: 1;
-                pointer-events: all;
-                quotes: "“" "”" "‘" "’";
-                resize: none;
-                ruby-align: space-around;
-                ruby-position: over;
-                scroll-behavior: smooth;
-                scroll-snap-coordinate: none;
-                scroll-snap-points-x: none;
-                scroll-snap-points-y: none;
-                scroll-snap-type-x: none;
-                scroll-snap-type-y: none;
-                shape-rendering: auto;
-                speak: normal;
-                stop-color: #FFFFFF;
-                stop-opacity: 1;
-                stroke-dasharray: none;
-                stroke-dashoffset: 0px;
-                stroke-linecap: butt;
-                stroke-linejoin: miter;
-                stroke-miterlimit: 4;
-                stroke-opacity: 1;
-                stroke-width: 1px;
-                tab-size: 8;
-                table-layout: auto;
-                text-align: start;
-                text-align-last: auto;
-                text-anchor: start;
-                text-combine-upright: none;
-                text-decoration-color: rgb(0, 0, 0);
-                text-decoration-line: none;
-                text-decoration-style: solid;
-                text-emphasis-color: rgb(0, 0, 0);
-                text-emphasis-position: over right;
-                text-emphasis-style: none;
-                text-indent: 0;
-                text-orientation: mixed;
-                text-overflow: clip;
-                text-overflowcliptext-rendering: auto;
-                text-rendering: auto;
-                text-security: circle;
-                text-shadow: none;
-                text-size-adjust: auto;
-                text-transform: none;
-                touch-action: auto;
-                transform: matrix(0, 0, 0, 0);
-                transition-delay: 0s;
-                transition-duration: 0s;
-                transition-property: all;
-                transition-timing-function: linear;
-                unicode-bidi: normal;
-                user-select: text;
-                vector-effect: inherit;
-                vertical-align: baseline;
-                white-space: normal;
-                widows: 1;
-                word-break: normal;
-                word-wrap: normal;
-                z-index: 0;
-                zoom: 1;
-                -moz-border-bottom-colors: none;
-                -moz-border-left-colors: none;
-                -moz-border-right-colors: none;
-                -moz-border-top-colors: none;
-                -moz-box-align: stretch;
-                -moz-box-direction: normal;
-                -moz-box-flex: 0;
-                -moz-box-ordinal-group: 1;
-                -moz-box-orient: horizontal;
-                -moz-box-pack: start;
-                -moz-column-count: auto;
-                -moz-column-fill: balance;
-                -moz-column-gap: 8px;
-                -moz-column-rule-color: rgba(0, 120, 255, 1);
-                -moz-column-rule-style: none;
-                -moz-column-rule-width: 0px;
-                -moz-column-width: auto;
-                -moz-float-edge: content-box;
-                -moz-force-broken-image-icon: 0;
-                -moz-image-region: auto;
-                -moz-orient: inline;
-                -moz-outline-radius-bottomleft: 0px;
-                -moz-outline-radius-bottomright: 0px;
-                -moz-outline-radius-topleft: 0px;
-                -moz-outline-radius-topright: 0px;
-                -moz-stack-sizing: stretch-to-fit;
-                -moz-tab-size: 8;
-                -moz-text-size-adjust: auto;
-                -moz-user-focus: none;
-                -moz-user-input: auto;
-                -moz-user-modify: read-only;
-                -moz-user-select: auto;
-                -moz-window-dragging: default;
-                -webkit-text-combine: none;
-                -webkit-text-decorations-in-effect: none;
-                -webkit-text-emphasis-color: inherit;
-                -webkit-text-emphasis-position: over;
-                -webkit-text-emphasis-style: none;
-                -webkit-text-fill-color: inherit;
-                -webkit-locale: "en", "en-US", "en-UK", "en-NG";
-                -webkit-text-security: none;
-                -webkit-text-stroke-color: rgba(0, 0, 0, 1);
-                -webkit-text-stroke-width: 0px;
-                -webkit-writing-mode: horizontal-tb
-            }
-                /* @media */
-                    /* Mobile S & Mobile M View */
-                    @media only screen
-                        and (max-width: 375px)
-                        and (min-width: 0px) {
-                            /* Not */
-                                /* Default */
-                                body:not([default]) {
-                                    font-size: 14px
-                                }
-                    }
+                font-family: "Open Sans", Roboto, Calibri, "Calibri Light", sans-serif;
+            */
+            font-feature-settings: inherit;
+            font-language-override: normal;
+            font-kerning: auto;
+            font-size-adjust: none;
+            font-synthesis: weight style;
+            font-variant-alternates: normal;
+            font-variant-caps: normal;
+            font-variant-east-asian: normal;
+            font-variant-ligatures: normal;
+            font-variant-numeric: normal;
+            font-variant-position: normal;
+            font-weight: 300;
+            height: 100%;
+            hyphens: manual;
+            image-orientation: 0deg;
+            image-rendering: auto;
+            ime-mode: auto;
+            isolation: auto;
+            letter-spacing: normal;
+            lighting-color: #FFFFFF;
+            list-style-image: none;
+            list-style-position: outside;
+            list-style-type: circle;
+            margin: 0;
+            marker-end: none;
+            marker-mid: none;
+            marker-offset: auto;
+            marker-start: none;
+            mask: none;
+            mask-type: luminance;
+            mix-blend-mode: normal;
+            order: 0;
+            orphans: 1;
+            pointer-events: all;
+            quotes: "“" "”" "‘" "’";
+            resize: none;
+            ruby-align: space-around;
+            ruby-position: over;
+            scroll-behavior: smooth;
+            scroll-snap-coordinate: none;
+            scroll-snap-points-x: none;
+            scroll-snap-points-y: none;
+            scroll-snap-type-x: none;
+            scroll-snap-type-y: none;
+            shape-rendering: auto;
+            speak: normal;
+            stop-color: #FFFFFF;
+            stop-opacity: 1;
+            stroke-dasharray: none;
+            stroke-dashoffset: 0px;
+            stroke-linecap: butt;
+            stroke-linejoin: miter;
+            stroke-miterlimit: 4;
+            stroke-opacity: 1;
+            stroke-width: 1px;
+            tab-size: 8;
+            table-layout: auto;
+            text-align: start;
+            text-align-last: auto;
+            text-anchor: start;
+            text-combine-upright: none;
+            text-decoration-color: rgb(0, 0, 0);
+            text-decoration-line: none;
+            text-decoration-style: solid;
+            text-emphasis-color: rgb(0, 0, 0);
+            text-emphasis-position: over right;
+            text-emphasis-style: none;
+            text-indent: 0;
+            text-orientation: mixed;
+            text-overflow: clip;
+            text-overflowcliptext-rendering: auto;
+            text-rendering: auto;
+            text-security: circle;
+            text-shadow: none;
+            text-size-adjust: auto;
+            text-transform: none;
+            touch-action: auto;
+            transform: matrix(0, 0, 0, 0);
+            transition-delay: 0s;
+            transition-duration: 0s;
+            transition-property: all;
+            transition-timing-function: linear;
+            unicode-bidi: normal;
+            user-select: text;
+            vector-effect: inherit;
+            vertical-align: baseline;
+            white-space: normal;
+            widows: 1;
+            word-break: normal;
+            word-wrap: normal;
+            z-index: 0;
+            zoom: 1;
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            -moz-box-align: stretch;
+            -moz-box-direction: normal;
+            -moz-box-flex: 0;
+            -moz-box-ordinal-group: 1;
+            -moz-box-orient: horizontal;
+            -moz-box-pack: start;
+            -moz-column-count: auto;
+            -moz-column-fill: balance;
+            -moz-column-gap: 8px;
+            -moz-column-rule-color: rgba(0, 120, 255, 1);
+            -moz-column-rule-style: none;
+            -moz-column-rule-width: 0px;
+            -moz-column-width: auto;
+            -moz-float-edge: content-box;
+            -moz-force-broken-image-icon: 0;
+            -moz-image-region: auto;
+            -moz-orient: inline;
+            -moz-outline-radius-bottomleft: 0px;
+            -moz-outline-radius-bottomright: 0px;
+            -moz-outline-radius-topleft: 0px;
+            -moz-outline-radius-topright: 0px;
+            -moz-stack-sizing: stretch-to-fit;
+            -moz-tab-size: 8;
+            -moz-text-size-adjust: auto;
+            -moz-user-focus: none;
+            -moz-user-input: auto;
+            -moz-user-modify: read-only;
+            -moz-user-select: auto;
+            -moz-window-dragging: default;
+            -webkit-text-combine: none;
+            -webkit-text-decorations-in-effect: none;
+            -webkit-text-emphasis-color: inherit;
+            -webkit-text-emphasis-position: over;
+            -webkit-text-emphasis-style: none;
+            -webkit-text-fill-color: inherit;
+            -webkit-locale: "en", "en-US", "en-UK", "en-NG";
+            -webkit-text-security: none;
+            -webkit-text-stroke-color: rgba(0, 0, 0, 1);
+            -webkit-text-stroke-width: 0px;
+            -webkit-writing-mode: horizontal-tb
+        }
+            /* @media */
+                /* Mobile S & Mobile M View */
+                @media only screen
+                    and (max-width: 375px)
+                    and (min-width: 0px) {
+                        /* Not > Default */
+                        body:not([default]) {
+                            font-size: 14px
+                        }
+                }
 
-                    /* Mobile L & Tablet View */
-                    @media only screen
-                        and (max-width: 768px)
-                        and (min-width: 376px) {
-                            /* Not */
-                                /* Default */
-                                body:not([default]) {
-                                    font-size: 15px
-                                }
-                    }
+                /* Mobile L & Tablet View */
+                @media only screen
+                    and (max-width: 768px)
+                    and (min-width: 376px) {
+                        /* Not > Default */s
+                        body:not([default]) {
+                            font-size: 15px
+                        }
+                }
 
-                    /* Laptop & Laptop L View */
-                    @media only screen
-                        and (max-width: 1440px)
-                        and (min-width: 769px) {
-                            /* Not */
-                                /* Default */
-                                body:not([default]) {
-                                    font-size: 16px
-                                }
-                    }
+                /* Laptop & Laptop L View */
+                @media only screen
+                    and (max-width: 1440px)
+                    and (min-width: 769px) {
+                        /* Not > Default */
+                        body:not([default]) {
+                            font-size: 16px
+                        }
+                }
 
-                    /* 4K View */
-                    @media only screen
-                        and (max-width: 2560px)
-                        and (min-width: 1441px) {
-                            /* Not */
-                                /* Default */
-                                body:not([default]) {
-                                    font-size: 17px
-                                }
-                    }
+                /* 4K View */
+                @media only screen
+                    and (max-width: 2560px)
+                    and (min-width: 1441px) {
+                        /* Not > Default */
+                        body:not([default]) {
+                            font-size: 17px
+                        }
+                }
 
     /* <button>, <keygen>, <select>, <textarea>, Button */
-        /* Not */
-            /* Default */
-            [type="button"]:not([default]),
-            [type="reset"]:not([default]),
-            [type="submit"]:not([default]),
-            button:not([default]),
-            keygen:not([default]),
-            select:not([default]),
-            textarea:not([default]),
-            .btn:not([default]) {
-                background-color: #FFFFFF;
-                color: initial;
-                display: inline-block;
-                font-family: inherit;
-                line-height: 1.15;
-                text-align: center;
-                white-space: normal;
-                -webkit-appearance: button
-            }
+        /* Not > Default */
+        [type="button"]:not([default]),
+        [type="reset"]:not([default]),
+        [type="submit"]:not([default]),
+        button:not([default]),
+        keygen:not([default]),
+        select:not([default]),
+        textarea:not([default]),
+        .btn:not([default]) {
+            background-color: #FFFFFF;
+            color: initial;
+            display: inline-block;
+            font-family: inherit;
+            line-height: 1.15;
+            text-align: center;
+            white-space: normal;
+            -webkit-appearance: button
+        }
 
-            [type="button"]:not([default]),
-            [type="email"]:not([default]),
-            [type="number"]:not([default]),
-            [type="password"]:not([default]),
-            [type="reset"]:not([default]),
-            [type="submit"]:not([default]),
-            [type="tel"]:not([default]),
-            [type="text"]:not([default]),
-            [type="url"]:not([default]),
-            button:not([default]),
-            input:not([type]):not([default]),
-            keygen:not([default]),
-            select:not([default]),
-            textarea:not([default]),
-            .btn:not([default]) {
-                padding: 2.5px 7.5px
+        [type="button"]:not([default]),
+        [type="email"]:not([default]),
+        [type="number"]:not([default]),
+        [type="password"]:not([default]),
+        [type="reset"]:not([default]),
+        [type="submit"]:not([default]),
+        [type="tel"]:not([default]),
+        [type="text"]:not([default]),
+        [type="url"]:not([default]),
+        button:not([default]),
+        input:not([type]):not([default]),
+        keygen:not([default]),
+        select:not([default]),
+        textarea:not([default]),
+        .btn:not([default]) {
+            padding: 2.5px 7.5px
+        }
+            /* States > Focus */
+            button:not([default]):focus,
+            keygen:not([default]):focus,
+            select:not([default]):focus,
+            textarea:not([default]):focus {
+                outline: 1px solid #0023FF
             }
-                /* States */
-                    /* Focus */
-                    button:not([default]):focus,
-                    keygen:not([default]):focus,
-                    select:not([default]):focus,
-                    textarea:not([default]):focus {
-                        outline: 1px solid #0023FF
-                    }
 
     /* <button>, <select> */
     button,
@@ -1232,25 +1190,21 @@
     }
 
     /* <canvas> */
-        /* Not */
-            /* Default */
-            canvas:not([default]) {
-                display: inline-block;
-                min-height: 150px;
-                min-width: 300px;
-                user-select: none;
-                -moz-user-select: none;
-                -webkit-user-select: none
-            }
+        /* Not > Default */
+        canvas:not([default]) {
+            display: inline-block;
+            min-height: 150px;
+            min-width: 300px;
+            user-select: none
+        }
 
     /* <code> */
-        /* States */
-            /* Selection */
-            code::selection {
-                background-color: transparent;
-                color: #FF0000;
-                text-shadow: none
-            }
+        /* States > Selection */
+        code::selection {
+            background-color: transparent;
+            color: #FF0000;
+            text-shadow: none
+        }
 
     /* <code>, <kbd>, <tt>
             --- CONSIDER ---
@@ -1258,7 +1212,6 @@
                 should be used.
     */
     code,
-    kbd,
     tt {
         font-family: "Inconsolata", monospace, monospace;
         font-size: smaller
@@ -1270,151 +1223,141 @@
     }
 
     /* <details> */
+        /* Not > Default */
+            /* <summary> > Not > Default > Pseudo > -webkit- Details Marker */
+            details:not([default]) summary:not([default])::-webkit-details-marker {
+                /* --- NOTE ---
+                    Style the -webkit- <details> marker.
+                */
+                display: inline-block;
+                height: .6em;
+                width: .6em;
+                -webkit-margin-end: 0 !important
+            }
+
         /* <summary> */
         details summary {
             cursor: default;
             display: list-item;
             font-size: larger
         }
-            /* Not */
-                /* Default */
-                details:not([default]) summary:not([default])::-webkit-details-marker {
-                    /* --- NOTE ---
-                        Style the -webkit- <details> marker.
-                    */
-                    display: inline-block;
-                    height: .6em;
-                    width: .6em;
-                    -webkit-margin-end: 0 !important
-                }
-
-            /* States */
-                /* Active */
-                details summary:active {
-                    /* --- NOTE ---
-                        <summary>'s should be pointed at.
-                    */
-                    cursor: pointer
-                }
+            /* States > Active */
+            details summary:active {
+                /* --- NOTE ---
+                    <summary>'s should be pointed at.
+                */
+                cursor: pointer
+            }
 
     /* <dfn> */
-        /* Not */
-            /* Default */
-            dfn:not([default]) {
-                font-size: 110%
-            }
+        /* Not > Default */
+        dfn:not([default]) {
+            font-size: 110%
+        }
 
     /* <dir> */
-        /* Not */
-            /* Default */
-            dir:not([default]) {
-                unicode-bidi: isolate
-            }
+        /* Not > Default */
+        dir:not([default]) {
+            unicode-bidi: isolate
+        }
 
     /* <dir>, <menu>, <ul> */
-        /* Not */
-            /* Default */
-            dir:not([default]),
-            menu:not([default]),
-            ul:not([default]) {
-                margin-left: 5px
-            }
+        /* Not > Default */
+        dir:not([default]),
+        menu:not([default]),
+        ul:not([default]) {
+            margin-left: 5px
+        }
 
     /* <dd> */
-        /* Not */
-            /* Default */
-            dd:not([default]) {
-                display: block;
-                margin-inline-start: 40px
-            }
+        /* Not > Default */
+        dd:not([default]) {
+            display: block;
+            margin-inline-start: 40px
+        }
 
     /* <dl> */
-        /* Not */
-            /* Default */
-            dl:not([default]) {
-                list-style: none
-            }
+        /* Not > Default */
+        dl:not([default]) {
+            list-style: none
+        }
 
         /* <dd> */
-        dl dd:not([default]) {
-            text-indent: 25px;
-            -webkit-margin-start: 0
-        }
+            /* Not > Default */
+            dl dd:not([default]) {
+                text-indent: 25px;
+                -webkit-margin-start: 0
+            }
 
         /* <dt> */
-        dl dt:not([default]) {
-            font-size: larger;
-            margin: 1% 0
-        }
+            /* Not > Default */
+            dl dt:not([default]) {
+                font-size: larger;
+                margin: 1% 0
+            }
 
     /* Badge, <dl>, <ol>, <ul> */
-        /* <li> */
-            /* Pseudo */
-                /* After */
-                .badge,
-                .bdg,
-                dl li.btn.cmpnt[data-quantity]::after,
-                ol li.btn.cmpnt[data-quantity]::after,
-                ul li.btn.cmpnt[data-quantity]::after {
-                    background-color: #0078FF;
-                    border-radius: 50px;
-                    color: #FFFFFF;
-                    content: attr(data-quantity);
-                    display: inline;
-                    float: right;
-                    font-size: inherit;
-                    margin-left: 10px;
-                    padding: 2.5px 7.5px
-                }
+        /* <li> > Pseudo > After */
+        .badge,
+        .bdg,
+        dl li[data-badge]::after,
+        ol li[data-badge]::after,
+        ul li[data-badge]::after {
+            background-color: #0078FF;
+            border-radius: 50px;
+            color: #FFFFFF;
+            content: attr(data-badge);
+            display: inline;
+            float: right;
+            font-size: inherit;
+            margin-left: 10px;
+            padding: 2.5px 7.5px
+        }
 
     /* <dl>, <multicol>, <p> */
-        /* Not */
-            /* Default */
-            dl:not([default]),
-            multicol:not([default]),
-            p:not([default]) {
-                display: block;
-                margin-block-end: 1.75px;
-                margin-block-start: 1.75px
-            }
+        /* Not > Default */
+        dl:not([default]),
+        multicol:not([default]),
+        p:not([default]) {
+            display: block;
+            margin-block-end: 1.75px;
+            margin-block-start: 1.75px
+        }
 
     /* <em> */
-        /* Not */
-            /* Default */
-            [i],
-            [q],
-            em:not([default]),
-            .bend,
-            .em,
-            .i,
-            .q {
-                font-style: italic;
-                speak: literal-punctuation !important
-            }
+        /* Not > Default */
+        [i],
+        [q],
+        em:not([default]),
+        .bend,
+        .em,
+        .i,
+        .q {
+            font-style: italic;
+            speak: literal-punctuation !important
+        }
 
     /* <embed>, <iframe>, <object> */
-        /* Not */
-            /* Default */
-            embed[src="#"]:not([default]),
-            iframe:not([default]),
-            object[data="#"]:not([default]) {
-                animation: fadeIn .5s ease-in .5s 1 normal backwards running;
-                backface-visibility: visible;
-                border: 1px solid #000000;
-                border-image: initial;
-                display: block;
-                order: 0;
-                overflow: auto;
-                resize: scroll;
-                scroll-behavior: auto;
-                shape-rendering: auto;
-                speak: normal;
-                touch-action: auto;
-                unicode-bidi: embed;
-                user-select: text;
-                white-space: normal;
-                width: 80%
-            }
+        /* Not > Default */
+        embed[src="#"]:not([default]),
+        iframe:not([default]),
+        object[data="#"]:not([default]) {
+            backface-visibility: visible;
+            border: 1px solid #000000;
+            border-image: initial;
+            display: block;
+            order: 0;
+            overflow: auto;
+            resize: scroll;
+            scroll-behavior: auto;
+            shape-rendering: auto;
+            speak: normal;
+            touch-action: auto;
+            unicode-bidi: embed;
+            user-select: text;
+            white-space: normal;
+            width: 80%
+        }
 
     /* <fieldset> */
         /* Not */
@@ -1446,20 +1389,18 @@
             }
 
     /* <figure> */
-        /* Not */
-            /* Default */
-            figure:not([default]) {
-                display: inline-block;
-                margin: 1em 40px
-            }
+        /* Not > Default */
+        figure:not([default]) {
+            display: inline-block;
+            margin: 1em 40px
+        }
 
     /* <form> */
-        /* Not */
-            /* Default */
-            form:not([default]) {
-                display: block;
-                width: 100%
-            }
+        /* Not > Default */
+        form:not([default]) {
+            display: block;
+            width: 100%
+        }
 
     /* <frame> */
     frame {
@@ -1467,17 +1408,15 @@
     }
 
     /* <foreignObject>, <image>, <marker>, <pattern>, <svg>, <symbol> */
-        /* Not */
-            /* Pseudo */
-                /* Root */
-                foreignObject,
-                image,
-                marker,
-                pattern,
-                svg:not(:root),
-                symbol {
-                    overflow: hidden
-                }
+        /* Not > Pseudo > Root */
+        foreignObject,
+        image,
+        marker,
+        pattern,
+        svg:not(:root),
+        symbol {
+            overflow: hidden
+        }
 
     /* <frameset> */
     frameset {
@@ -1518,32 +1457,32 @@
         }
 
         /* Not */
-        html|applet[height=""],
-        html|applet:not([height]),
-        html|embed[height=""],
-        html|embed:not([height]),
-        html|object[height=""],
-        html|object:not([height]) {
-            height: 200px
-        }
+            /* Height */
+            html|applet[height=""],
+            html|applet:not([height]),
+            html|embed[height=""],
+            html|embed:not([height]),
+            html|object[height=""],
+            html|object:not([height]) {
+                height: 200px
+            }
 
-        html|applet[width=""],
-        html|applet:not([width]),
-        html|embed[width=""],
-        html|embed:not([width]),
-        html|object[width=""],
-        html|object:not([width]) {
-            width: 240px
-        }
+            /* Width */
+            html|applet[width=""],
+            html|applet:not([width]),
+            html|embed[width=""],
+            html|embed:not([width]),
+            html|object[width=""],
+            html|object:not([width]) {
+                width: 240px
+            }
 
     /* <hgroup>
             --- NOTE ---
                 Vertically stack headers within
                 header groups.
     */
-        /* Headers
-                <h1>, <h2>, <h3>, <h4>, <h5>, <h6>
-        */
+        /* <h1>, <h2>, <h3>, <h4>, <h5>, <h6> */
         hgroup:not([default]) h1:not([default]),
         hgroup:not([default]) h2:not([default]),
         hgroup:not([default]) h3:not([default]),
@@ -1564,81 +1503,73 @@
     }
 
     /* <h1> */
-        /* Not */
-            /* Default */
-            h1:not([default]) {
-                font-size: 350%;
-                margin: 1rem 0
-            }
+        /* Not > Default */
+        h1:not([default]) {
+            font-size: 350%;
+            margin: 1rem 0
+        }
 
     /* <h2> */
-        /* Not */
-            /* Default */
-            h2:not([default]) {
-                font-size: 300%;
-                margin: .5rem 0
-            }
+        /* Not > Default */
+        h2:not([default]) {
+            font-size: 300%;
+            margin: .5rem 0
+        }
 
     /* <h3> */
-        /* Not */
-            /* Default */
-            h3:not([default]) {
-                font-size: 250%;
-                margin: .25rem 0
-            }
+        /* Not > Default */
+        h3:not([default]) {
+            font-size: 250%;
+            margin: .25rem 0
+        }
 
     /* <h4> */
-        /* Not */
-            /* Default */
-            h4:not([default]) {
-                font-size: 200%;
-                margin: .125rem 0
-            }
+        /* Not > Default */
+        h4:not([default]) {
+            font-size: 200%;
+            margin: .125rem 0
+        }
 
     /* <h5> */
-        /* Not */
-            /* Default */
-            h5:not([default]) {
-                font-size: 150%;
-                margin: .0825rem 0
-            }
+        /* Not > Default */
+        h5:not([default]) {
+            font-size: 150%;
+            margin: .0825rem 0
+        }
 
     /* <h6> */
-        /* Not */
-            /* Default */
-            h6:not([default]) {
-                font-size: 100%;
-                margin: .04125rem 0
-            }
+        /* Not > Default */
+        h6:not([default]) {
+            font-size: 100%;
+            margin: .04125rem 0
+        }
 
     /* Headers
             <h1>, <h2>, <h3>, <h4>, <h5>, <h6>
     */
-        /* Not */
-            /* Default */
-            h1:not([default]),
-            h2:not([default]),
-            h3:not([default]),
-            h4:not([default]),
-            h5:not([default]),
-            h6:not([default]) {
-                margin-block-end: .67em;
-                margin-block-start: .67em
-            }
+        /* Not > Default */
+        h1:not([default]),
+        h2:not([default]),
+        h3:not([default]),
+        h4:not([default]),
+        h5:not([default]),
+        h6:not([default]) {
+            margin-block-end: .67em;
+            margin-block-start: .67em
+        }
 
     /* <h1>, <h2>, <h3>, <h4>, <h5>, <h6>, <p> */
-        /* Not */
-            /* Default */
-            h1:not([default]),
-            h2:not([default]),
-            h3:not([default]),
-            h4:not([default]),
-            h5:not([default]),
-            h6:not([default]),
-            p:not([default]) {
-                orphans: 3;
-                widows: 3
-            }
+        /* Not > Default */
+        h1:not([default]),
+        h2:not([default]),
+        h3:not([default]),
+        h4:not([default]),
+        h5:not([default]),
+        h6:not([default]),
+        p:not([default]) {
+            orphans: 3;
+            widows: 3
+        }
 
     /* <i> */
     i {
@@ -1651,12 +1582,11 @@
     }
 
     /* <img> */
-        /* Not */
-            /* Default */
-            img:not([default]) {
-                border: 0;
-                vertical-align: middle
-            }
+        /* Not > Default */
+        img:not([default]) {
+            border: 0;
+            vertical-align: middle
+        }
 
     /* <img>, <object> */
     img[usemap],
@@ -1670,29 +1600,27 @@
     }
 
     /* <listing> */
-        /* Not */
-            /* Default */
-            listing:not([default]) {
-                display: block;
-                font-family: monospace;
-                font-size: medium;
-                margin-block-start: 3px;
-                margin-block-end: 3px;
-                white-space: pre
-            }
+        /* Not > Default */
+        listing:not([default]) {
+            display: block;
+            font-family: monospace;
+            font-size: medium;
+            margin-block-start: 3px;
+            margin-block-end: 3px;
+            white-space: pre
+        }
 
     /* <listing>, <plaintext>, <pre>, <xmp> */
-        /* Not */
-            /* Default */
-            listing:not([default]),
-            plaintext:not([default]),
-            pre:not([default]),
-            xmp:not([default]) {
-                display: block;
-                font-family: monospace;
-                margin: 0;
-                white-space: pre
-            }
+        /* Not > Default */
+        listing:not([default]),
+        plaintext:not([default]),
+        pre:not([default]),
+        xmp:not([default]) {
+            display: block;
+            font-family: monospace;
+            margin: 0;
+            white-space: pre
+        }
 
     /* <input> */
     input[type="file"] {
@@ -1705,440 +1633,438 @@
     input[type="hidden"] {
         display: none !important
     }
-        /* Not */
-            input:not([default]) {
-                /* --- NOTE ---
-                        Regular <input> tags.
-                */
-                border-color: rgba(0, 0, 0, .1);
-                letter-spacing: normal;
-                line-height: normal;
-                overflow-clip-box: content-box;
-                padding: 1px;
-                text-indent: 0;
-                text-align: start;
-                text-rendering: optimizeLegibility;
-                text-shadow: none;
-                text-transform: none;
-                word-spacing: normal;
-                z-index: 3;
-                -moz-appearance: textfield;
-                -moz-user-select: text
-            }
+        /* Not > Default */
+        input:not([default]) {
+            /* --- NOTE ---
+                    Generic <input> tags.
+            */
+            border-color: rgba(0, 0, 0, .1);
+            letter-spacing: normal;
+            line-height: normal;
+            overflow-clip-box: content-box;
+            padding: 1px;
+            text-indent: 0;
+            text-align: start;
+            text-rendering: optimizeLegibility;
+            text-shadow: none;
+            text-transform: none;
+            word-spacing: normal;
+            z-index: 3;
+            -moz-appearance: textfield;
+            -moz-user-select: text
+        }
 
-            input[type*="date"]:not([default]),
-            input[type="email"]:not([default]),
-            input[type="month"]:not([default]),
-            input[type="number"]:not([default]),
-            input[type="password"]:not([default]),
-            input[type="search"]:not([default]),
-            input[type="tel"]:not([default]),
-            input[type="text"]:not([default]),
-            input[type="url"]:not([default]),
-            input[type="week"]:not([default]),
-            input[type="year"]:not([default]),
-            input:not([type]) {
-                /* --- NOTE ---
-                        All text-based <input>'s must seem
-                        text-based (the text cursor).
-                */
-                border: 1px solid;
-                cursor: text;
-                text-align: left
-            }
+        input[orient="block"][type="range"]:not([default]) {
+            block-size: 12em;
+            inline-size: 1.3em;
+            margin-inline-end: 0;
+            margin-inline-start: 0;
+            margin-block-end: .7em;
+            margin-block-start: .7em
+        }
 
-            input[type="number"]:not([default]) {
-                /* --- NOTE ---
-                        The height of numeric <input>'s should
-                        be automatic or inherited.
-                */
-                height: auto
-            }
+        input[orient="horizontal"][type="range"]:not([default]) {
+            height: 1.3em;
+            margin: 0 .7em;
+            width: 12em
+        }
 
-            input[type="radio"]:not([default]) {
-                border-radius: 50%;
-                outline: 0
-            }
+        input[orient="vertical"][type="range"]:not([default]) {
+            height: 12em;
+            margin: 0.7em 0;
+            width: 1.3em
+        }
 
-            input[type="range"]:not([default]) {
-                background: transparent;
-                width: 100%;
-                -webkit-appearance: none
-            }
+        input[type*="date"]:not([default]),
+        input[type="email"]:not([default]),
+        input[type="month"]:not([default]),
+        input[type="number"]:not([default]),
+        input[type="password"]:not([default]),
+        input[type="search"]:not([default]),
+        input[type="tel"]:not([default]),
+        input[type="text"]:not([default]),
+        input[type="url"]:not([default]),
+        input[type="week"]:not([default]),
+        input[type="year"]:not([default]),
+        input:not([type]) {
+            /* --- NOTE ---
+                    All text-based <input>'s must seem
+                    text-based (the text cursor).
+            */
+            border: 1px solid;
+            cursor: text;
+            text-align: left
+        }
 
-            input[type="search"]:not([default]) {
-                -webkit-appearance: textfield
-            }
+        input[type="number"]:not([default]) {
+            /* --- NOTE ---
+                    The height of numeric <input>'s should
+                    be automatic or inherited.
+            */
+            height: auto
+        }
 
-            /* Default */
-            input[orient="block"][type="range"]:not([default]) {
-                block-size: 12em;
-                inline-size: 1.3em;
-                margin-inline-end: 0;
-                margin-inline-start: 0;
-                margin-block-end: .7em;
-                margin-block-start: .7em
-            }
+        input[type="radio"]:not([default]) {
+            border-radius: 50%;
+            outline: 0
+        }
 
-            input[orient="horizontal"][type="range"]:not([default]) {
-                height: 1.3em;
-                margin: 0 .7em;
-                width: 12em
-            }
+        input[type="range"]:not([default]) {
+            background: transparent;
+            width: 100%;
+            -webkit-appearance: none
+        }
 
-            input[orient="vertical"][type="range"]:not([default]) {
-                height: 12em;
-                margin: 0.7em 0;
-                width: 1.3em
-            }
+        input[type="search"]:not([default]) {
+            -webkit-appearance: textfield
+        }
 
-            input[type="checkbox"]:not([default]),
-            input[type="radio"]:not([default]) {
-                /* --- NOTE ---
-                        Make checkboxes and radios simpler to style.
-                */
-                background-color: rgba(0, 0, 0, .1);
-                border: 1.75px solid #FFFFFF;
-                border-radius: 0;
-                box-sizing: border-box;
-                box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3),
-                            inset 0 0 0 1px rgba(0, 0, 0, .2);
-                padding: 6px;
-                opacity: .75;
-                outline: 1px solid rgba(0, 0, 0, .1);
-                -webkit-appearance: button
-            }
+        input[type="checkbox"]:not([default]),
+        input[type="radio"]:not([default]) {
+            /* --- NOTE ---
+                    Make checkboxes and radios simpler to style.
+            */
+            background-color: rgba(0, 0, 0, .1);
+            border: 1.75px solid #FFFFFF;
+            border-radius: 0;
+            box-sizing: border-box;
+            box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3),
+                        inset 0 0 0 1px rgba(0, 0, 0, .2);
+            padding: 6px;
+            opacity: .75;
+            outline: 1px solid rgba(0, 0, 0, .1);
+            -webkit-appearance: button
+        }
 
-            input[type="color"]:not([default]) {
-                /* --- NOTE ---
-                        Make color swatches simpler to style.
-                */
-                border: 0;
-                border-radius: 50%;
-                box-shadow: 0 0 0 5px rgba(0, 0, 0, .75);
-                height: 15px;
-                outline: 0 !important;
-                padding: 0;
-                width: 15px
-            }
+        input[type="color"]:not([default]) {
+            /* --- NOTE ---
+                    Make color swatches simpler to style.
+            */
+            border: 0;
+            border-radius: 50%;
+            box-shadow: 0 0 0 5px rgba(0, 0, 0, .75);
+            height: 15px;
+            outline: 0 !important;
+            padding: 0;
+            width: 15px
+        }
 
-            input[type*="date"]:not([default]) {
-                /* --- NOTE ---
-                        Default browser styles are removed here
-                        for the user to change them.
-                */
-                font-family: inherit
-            }
+        input[type*="date"]:not([default]) {
+            /* --- NOTE ---
+                    Default browser styles are removed here
+                    for the user to change them.
+            */
+            font-family: inherit
+        }
 
-            input[type="submit"]:not([default]) {
-                /* --- NOTE ---
-                        For forms specifically.
-                */
-                display: block
-            }
-                /* Pseudo */
-                    /* Before */
-                    input[type*="date"]:not([default])::before {
-                        /* --- NOTE ---
-                                A small snippet for date-type <input>'s.
-                        */
-                        border: 1px solid;
-                        border-radius: 2.5px;
-                        border-top-width: 5px;
-                        box-shadow: 0 1.75px 1.75px 0 rgba(0, 0, 0, .5);
-                        color: rgba(0, 0, 0, .5);
-                        content: "08";
-                        cursor: default;
-                        font-family: Calibri, sans-serif;
-                        font-size: 15px;
-                        height: 17.5px;
-                        letter-spacing: -1px;
-                        margin: 1px 1.5px 0 0;
-                        overflow: hidden;
-                        pointer-events: all;
-                        text-align: center;
-                        text-overflow: clip;
-                        white-space: pre;
-                        width: 20px
-                    }
+        input[type="submit"]:not([default]) {
+            /* --- NOTE ---
+                    For forms specifically.
+            */
+            display: block
+        }
+            /* Pseudo */
+                /* Before */
+                input[type*="date"]:not([default])::before {
+                    /* --- NOTE ---
+                            A small snippet for date-type <input>'s.
+                    */
+                    border: 1px solid;
+                    border-radius: 2.5px;
+                    border-top-width: 5px;
+                    box-shadow: 0 1.75px 1.75px 0 rgba(0, 0, 0, .5);
+                    color: rgba(0, 0, 0, .5);
+                    content: "08";
+                    cursor: default;
+                    font-family: Calibri, sans-serif;
+                    font-size: 15px;
+                    height: 17.5px;
+                    letter-spacing: -1px;
+                    margin: 1px 1.5px 0 0;
+                    overflow: hidden;
+                    pointer-events: all;
+                    text-align: center;
+                    text-overflow: clip;
+                    white-space: pre;
+                    width: 20px
+                }
 
-                    /* -moz- Range Thumb */
-                    input[type="range"]:not([default])::-moz-range-thumb {
-                        background-color: #FFFFFF;
-                        border: 1px solid;
-                        border-radius: 50%;
-                        box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3);
-                        cursor: pointer;
-                        height: 15px;
-                        transition: .5s ease;
-                        width: 15px
-                    }
-
-                    /* -moz- Range Track */
-                    input[type="range"]:not([default])::-moz-range-track {
-                        background-color: #EFEFEF;
-                        box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3);
-                        cursor: default;
-                        height: 2px;
-                        width: 100%
-                    }
-
-                    /* -ms- Thumb */
-                    input[type="range"]:not([default])::-ms-thumb {
-                        background-color: #FFFFFF;
-                        border: 1px solid;
-                        border-radius: 50%;
-                        box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3);
-                        cursor: pointer;
-                        height: 15px;
-                        transition: .5s ease;
-                        width: 15px
-                    }
-
-                    /* -ms- Track */
-                    input[type="range"]:not([default])::-ms-track {
-                        background-color: #EFEFEF;
-                        box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3);
-                        cursor: default;
-                        height: 2px;
-                        width: 100%
-                    }
-
-                    /* -webkit- Color Swatch */
-                    input[type="color"]:not([default])::-webkit-color-swatch {
-                        /* --- NOTE ---
-                                Style the -webkit- <input type="color"> swatch.
-                        */
-                        border: 0;
-                        border-radius: 50%
-                    }
-
-                    /* -webkit- Color Swatch Wrapper */
-                    input[type="color"]:not([default])::-webkit-color-swatch-wrapper {
-                        /* --- NOTE ---
-                                Style the -webkit- <input type="color"> swatch container.
-                        */
-                        padding: 0
-                    }
-
-                    /* -webkit- Datetime Edit Day Field, -webkit- Datetime Edit Month Field, -webkit- Datetime Edit Year Field */
-                    input[type*="date"]:not([default])::-webkit-datetime-edit-day-field,
-                    input[type*="date"]:not([default])::-webkit-datetime-edit-month-field,
-                    input[type*="date"]:not([default])::-webkit-datetime-edit-year-field {
-                        /* --- NOTE ---
-                                Style the -webkit- date options
-                                within the date <input> field.
-                        */
-                        font-family: inherit;
-                        text-transform: uppercase
-                    }
-
-                    /* -webkit- File Upload Button */
-                    input[type="file"]:not([default])::-webkit-file-upload-button {
-                        /* --- NOTE ---
-                                Style the -webkit- <input type="file">
-                                file upload button.
-                        */
-                        border: 1px solid;
-                        color: inherit;
-                        cursor: pointer;
-                        font-size: 13px;
-                        height: 20px;
-                        padding: 2.5px 7.5px
-                    }
-
-                    /* -webkit- Slider Runnable Track */
-                    input[type="range"]:not([default])::-webkit-slider-runnable-track {
-                        background-color: transparent;
-                        /* --- CONSIDER ---
-                                The "box-shadow" property
-                                without the "border-radius" creates
-                                the illusion of an existing track
-                                on a solid backdrop.
-                        */
-                        background-color: #000000;
-                        border-radius: 15px;
-                        /*
-                            box-shadow: inset 0 0 0 5px #000000,
-                                                inset 0 0 0 5000px #FFFFFF;
-                        */
-                        cursor: default;
-                        width: 100%
-                    }
-
-
-                    /* -webkit- Slider Thumb */
-                    input[type="range"]:not([default])::-webkit-slider-thumb {
-                        background-color: #FFFFFF;
-                        border: 1px solid;
-                        border-radius: 50%;
-                        box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3);
-                        cursor: pointer;
-                        height: 15px;
-                        transition: .5s ease;
-                        width: 15px;
-                        -webkit-appearance: none
-                    }
-
-                /* States */
-                    /* Active */
-                    input:not([default]):active {
-                        /* --- NOTE ---
-                                For the varying types of <input>,
-                                activated <input>'s' cursors are not pointers.
-                        */
-                        cursor: default
-                    }
-
-                    input[type="button"]:not([default]):active,
-                    input[type="checkbox"]:not([default]):active,
-                    input[type="color"]:not([default]),
-                    input[type="radio"]:not([default]):active,
-                    input[type="reset"]:not([default]):active,
-                    input[type="submit"]:not([default]):active {
-                        /* --- NOTE ---
-                                All input buttons are click-able.
-                        */
-                        cursor: pointer
-                    }
-
-                    input[type="checkbox"]:not([default]):active,
-                    input[type="radio"]:not([default]):active {
-                        /* --- NOTE ---
-                            The padding increases marginally
-                            when clicked.
-                        */
-                        padding: 6.5px
-                    }
-
-                    /* Checked */
-                    input[type="checkbox"]:not([default]):checked,
-                    input[type="radio"]:not([default]):checked {
-                        /* --- NOTE ---
-                                Styles for selected checkboxes and radios.
-                        */
-                        border-color: #00FF00
-                    }
-
-                    /* Disabled */
-                    input[type="checkbox"]:not([default]):disabled,
-                    input[type="radio"]:not([default]):disabled {
-                        /*
-                            --- NOTE ---
-                                Styles for disabled checkboxes and radios.
-                        */
-                        border-color: #787878
-                    }
-
-                    /* Focus */
-                    input:not([default]):focus {
-                        /* --- NOTE ---
-                                Set a default for all browsers to follow
-                                on focused <inputs>'s.
-                        */
-                        outline-offset: 0;
-                        outline-style: solid;
-                        outline-width: 1px
-                    }
-
-                    input[type="checkbox"]:not([default]):focus,
-                    input[type="color"]:not([default]):focus,
-                    input[type="radio"]:not([default]):focus {
-                        /* --- NOTE ---
-                            All checkboxes, colors swatches and radios have no outline.
-                        */
-                        outline: 0
-                    }
-                        /* Pseudo */
-                            /* Placeholder */
-                            input:not([default])::placeholder {
-                                line-height: -moz-block-height;
-                                white-space: pre;
-                                word-wrap: normal !important
-                            }
-
-                        /* States */
-                            /* Invalid */
-                            input:not([default]):focus:invalid {
-                                /* --- NOTE ---
-                                        Style for invalid value <input>'s.
-                                */
-                                outline-color: rgba(255, 0, 0, .25)
-                            }
-
-                            /* Valid */
-                            input:not([default]):focus:valid {
-                                /* --- NOTE ---
-                                        Style for valid value <input>'s.
-                                */
-                                outline-color: rgba(0, 255, 0, .25)
-                            }
-
-                    /* In Range */
-                    input[type="number"]:not([default]):in-range,
-                    :invalid:active:not(button):not(
-                        keygen):not(
-                        select):not(
-                        textarea),
-                    :invalid:focus:not(button):not(
-                        keygen):not(
-                        select):not(
-                        textarea) {
-                        /* --- NOTE ---
-                                Style for invalid value <input>'s.
-                        */
-                        outline-color: rgba(255, 0, 0, .25) !important
-                    }
-
-                    /* Out of Range */
-                    input[type="number"]:not([default]):out-of-range,
-                    :valid:active:not(button):not(
-                        keygen):not(
-                        select):not(
-                        textarea),
-                    :valid:focus:not(button, keygen) {
-                        /* --- NOTE ---
-                                Style for valid value <input>'s.
-                        */
-                        outline-color: rgba(0, 255, 0, .25) !important
-                    }
-
-                /* -moz- System Metric */
-                    /* Color Picker Available */
-                        /* Pseudo */
-                            /* -moz- Color Swatch */
-                            input[type="color"]:not([default]):-moz-system-metric(
-                                color-picker-available)::-moz-color-swatch {
-                                /* --- NOTE ---
-                                    Style the -moz- <input type="color"> swatch.
-                                */
-                                border: 0 !important;
-                                border-radius: 50%;
-                                box-sizing: border-box;
-                                display: block;
-                                height: 100%;
-                                margin-inline-end: auto;
-                                margin-inline-start: auto;
-                                min-height: 3px;
-                                min-width: 3px;
-                                width: 100%
-                            }
-
-                /* <button> */
-                input[type="file"]:not([default]) > button[type="button"] {
-                    block-size: inherit;
+                /* -moz- Range Thumb */
+                input[type="range"]:not([default])::-moz-range-thumb {
+                    background-color: #FFFFFF;
+                    border: 1px solid;
+                    border-radius: 50%;
+                    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3);
                     cursor: pointer;
-                    letter-spacing: inherit
+                    height: 15px;
+                    transition: .5s ease;
+                    width: 15px
                 }
 
-                /* <xul> */
-                input[type="file"]:not([default]) > xul|label {
-                    direction: ltr !important;
-                    letter-spacing: inherit;
-                    min-inline-size: 12em;
-                    padding-inline-start: 5px;
-                    text-align: match-parent
+                /* -moz- Range Track */
+                input[type="range"]:not([default])::-moz-range-track {
+                    background-color: #EFEFEF;
+                    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3);
+                    cursor: default;
+                    height: 2px;
+                    width: 100%
                 }
+
+                /* -ms- Thumb */
+                input[type="range"]:not([default])::-ms-thumb {
+                    background-color: #FFFFFF;
+                    border: 1px solid;
+                    border-radius: 50%;
+                    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3);
+                    cursor: pointer;
+                    height: 15px;
+                    transition: .5s ease;
+                    width: 15px
+                }
+
+                /* -ms- Track */
+                input[type="range"]:not([default])::-ms-track {
+                    background-color: #EFEFEF;
+                    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3);
+                    cursor: default;
+                    height: 2px;
+                    width: 100%
+                }
+
+                /* -webkit- Color Swatch */
+                input[type="color"]:not([default])::-webkit-color-swatch {
+                    /* --- NOTE ---
+                            Style the -webkit- <input type="color"> swatch.
+                    */
+                    border: 0;
+                    border-radius: 50%
+                }
+
+                /* -webkit- Color Swatch Wrapper */
+                input[type="color"]:not([default])::-webkit-color-swatch-wrapper {
+                    /* --- NOTE ---
+                            Style the -webkit- <input type="color"> swatch container.
+                    */
+                    padding: 0
+                }
+
+                /* -webkit- Datetime Edit Day Field, -webkit- Datetime Edit Month Field, -webkit- Datetime Edit Year Field */
+                input[type*="date"]:not([default])::-webkit-datetime-edit-day-field,
+                input[type*="date"]:not([default])::-webkit-datetime-edit-month-field,
+                input[type*="date"]:not([default])::-webkit-datetime-edit-year-field {
+                    /* --- NOTE ---
+                            Style the -webkit- date options
+                            within the date <input> field.
+                    */
+                    font-family: inherit;
+                    text-transform: uppercase
+                }
+
+                /* -webkit- File Upload Button */
+                input[type="file"]:not([default])::-webkit-file-upload-button {
+                    /* --- NOTE ---
+                            Style the -webkit- <input type="file">
+                            file upload button.
+                    */
+                    border: 1px solid;
+                    color: inherit;
+                    cursor: pointer;
+                    font-size: 13px;
+                    height: 20px;
+                    padding: 2.5px 7.5px
+                }
+
+                /* -webkit- Slider Runnable Track */
+                input[type="range"]:not([default])::-webkit-slider-runnable-track {
+                    background-color: transparent;
+                    /* --- CONSIDER ---
+                            The "box-shadow" property
+                            without the "border-radius" creates
+                            the illusion of an existing track
+                            on a solid backdrop.
+                    */
+                    background-color: #000000;
+                    border-radius: 15px;
+                    /*
+                        box-shadow: inset 0 0 0 5px #000000,
+                                            inset 0 0 0 5000px #FFFFFF;
+                    */
+                    cursor: default;
+                    width: 100%
+                }
+
+                /* -webkit- Slider Thumb */
+                input[type="range"]:not([default])::-webkit-slider-thumb {
+                    background-color: #FFFFFF;
+                    border: 1px solid;
+                    border-radius: 50%;
+                    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3);
+                    cursor: pointer;
+                    height: 15px;
+                    transition: .5s ease;
+                    width: 15px;
+                    -webkit-appearance: none
+                }
+
+            /* States */
+                /* Active */
+                input:not([default]):active {
+                    /* --- NOTE ---
+                            For the varying types of <input>,
+                            activated <input>'s' cursors are not pointers.
+                    */
+                    cursor: default
+                }
+
+                input[type="button"]:not([default]):active,
+                input[type="checkbox"]:not([default]):active,
+                input[type="color"]:not([default]),
+                input[type="radio"]:not([default]):active,
+                input[type="reset"]:not([default]):active,
+                input[type="submit"]:not([default]):active {
+                    /* --- NOTE ---
+                            All input buttons are click-able.
+                    */
+                    cursor: pointer
+                }
+
+                input[type="checkbox"]:not([default]):active,
+                input[type="radio"]:not([default]):active {
+                    /* --- NOTE ---
+                        The padding increases marginally
+                        when clicked.
+                    */
+                    padding: 6.5px
+                }
+
+                /* Checked */
+                input[type="checkbox"]:not([default]):checked,
+                input[type="radio"]:not([default]):checked {
+                    /* --- NOTE ---
+                            Styles for selected checkboxes and radios.
+                    */
+                    border-color: #00FF00
+                }
+
+                /* Disabled */
+                input[type="checkbox"]:not([default]):disabled,
+                input[type="radio"]:not([default]):disabled {
+                    /*
+                        --- NOTE ---
+                            Styles for disabled checkboxes and radios.
+                    */
+                    border-color: #787878
+                }
+
+                /* Focus */
+                input:not([default]):focus {
+                    /* --- NOTE ---
+                            Set a default for all browsers to follow
+                            on focused <inputs>'s.
+                    */
+                    outline-offset: 0;
+                    outline-style: solid;
+                    outline-width: 1px
+                }
+
+                input[type="checkbox"]:not([default]):focus,
+                input[type="color"]:not([default]):focus,
+                input[type="radio"]:not([default]):focus {
+                    /* --- NOTE ---
+                        All checkboxes, colors swatches and radios have no outline.
+                    */
+                    outline: 0
+                }
+                    /* Pseudo */
+                        /* Placeholder */
+                        input:not([default])::placeholder {
+                            line-height: -moz-block-height;
+                            white-space: pre;
+                            word-wrap: normal !important
+                        }
+
+                    /* States */
+                        /* Invalid */
+                        input:not([default]):focus:invalid {
+                            /* --- NOTE ---
+                                    Style for invalid value <input>'s.
+                            */
+                            outline-color: rgba(255, 0, 0, .25)
+                        }
+
+                        /* Valid */
+                        input:not([default]):focus:valid {
+                            /* --- NOTE ---
+                                    Style for valid value <input>'s.
+                            */
+                            outline-color: rgba(0, 255, 0, .25)
+                        }
+
+                /* In Range */
+                input[type="number"]:not([default]):in-range,
+                :invalid:active:not(button):not(
+                    keygen):not(
+                    select):not(
+                    textarea),
+                :invalid:focus:not(button):not(
+                    keygen):not(
+                    select):not(
+                    textarea) {
+                    /* --- NOTE ---
+                            Style for invalid value <input>'s.
+                    */
+                    outline-color: rgba(255, 0, 0, .25) !important
+                }
+
+                /* Out of Range */
+                input[type="number"]:not([default]):out-of-range,
+                :valid:active:not(button):not(
+                    keygen):not(
+                    select):not(
+                    textarea),
+                :valid:focus:not(button, keygen) {
+                    /* --- NOTE ---
+                            Style for valid value <input>'s.
+                    */
+                    outline-color: rgba(0, 255, 0, .25) !important
+                }
+
+            /* -moz- System Metric */
+                /* Color Picker Available */
+                    /* Pseudo */
+                        /* -moz- Color Swatch */
+                        input[type="color"]:not([default]):-moz-system-metric(
+                            color-picker-available)::-moz-color-swatch {
+                            /* --- NOTE ---
+                                Style the -moz- <input type="color"> swatch.
+                            */
+                            border: 0 !important;
+                            border-radius: 50%;
+                            box-sizing: border-box;
+                            display: block;
+                            height: 100%;
+                            margin-inline-end: auto;
+                            margin-inline-start: auto;
+                            min-height: 3px;
+                            min-width: 3px;
+                            width: 100%
+                        }
+
+            /* <button> */
+            input[type="file"]:not([default]) > button[type="button"] {
+                block-size: inherit;
+                cursor: pointer;
+                letter-spacing: inherit
+            }
+
+            /* <xul> */
+            input[type="file"]:not([default]) > xul|label {
+                direction: ltr !important;
+                letter-spacing: inherit;
+                min-inline-size: 12em;
+                padding-inline-start: 5px;
+                text-align: match-parent
+            }
 
     /* <input>, <kbd>, <textarea>
             --- NOTE ---
@@ -2148,67 +2074,45 @@
                 Also alternate the color of their outline
                 based on their status.
     */
-        /* Not */
-            /* Default */
-                /* States */
-                    /* Read Only */
-                    input:not([default]):read-only,
-                    kbd:not([default]):read-only,
-                    textarea:not([default]):read-only {
-                        outline-color: #EFEFEF
-                    }
+        /* Not > Default > States */
+            /* Read Only */
+            input:not([default]):read-only,
+            kbd:not([default]):read-only,
+            textarea:not([default]):read-only {
+                outline-color: #EFEFEF
+            }
 
-                    /* Required */
-                    kbd:not([default]):required,
-                    textarea:not([default]):required {
-                        outline-color: #00ABFF
-                    }
-
-    /* <input>, <select>, <textarea>
-            --- NOTE ---
-                Style for -webkit- autofill background color.
-    */
-        /* Not */
-            /* Default */
-                /* States */
-                    /* -webkit- Autofill */
-                    input:not([default]):-webkit-autofill,
-                    select:not([default]):-webkit-autofill,
-                    textarea:not([default]):-webkit-autofill {
-                        background-color: inherit;
-                        background-image: inherit;
-                        color: inherit
-                    }
+            /* Required */
+            kbd:not([default]):required,
+            textarea:not([default]):required {
+                outline-color: #00ABFF
+            }
 
     /* <input>, <textarea> */
-        /* Not */
-            /* Default */
-                /* Pseudo */
-                    /* Placeholder */
-                    input:not([default])::placeholder,
-                    textarea:not([default])::placeholder {
-                        border: 0 !important;
-                        display: inline-block !important;
-                        ime-mode: inherit;
-                        margin: 0;
-                        padding: inherit !important;
-                        overflow: hidden !important;
-                        overflow-clip-box: inherit;
-                        pointer-events: none !important;
-                        resize: none !important;
-                        text-decoration: inherit;
-                        text-decoration-color: inherit;
-                        text-decoration-style: inherit;
-                        -moz-control-character-visibility: visible
-                    }
+        /* Not > Default > Pseudo > Placeholder */
+        input:not([default])::placeholder,
+        textarea:not([default])::placeholder {
+            border: 0 !important;
+            display: inline-block !important;
+            ime-mode: inherit;
+            margin: 0;
+            padding: inherit !important;
+            overflow: hidden !important;
+            overflow-clip-box: inherit;
+            pointer-events: none !important;
+            resize: none !important;
+            text-decoration: inherit;
+            text-decoration-color: inherit;
+            text-decoration-style: inherit;
+            -moz-control-character-visibility: visible
+        }
 
     /* <input>, <optgroup>, <option>, <select>, <textarea>
             --- NOTE ---
                 These disabled elements inherit
                 their parents cursor to seem not click-able.
     */
-        /* States */
-            /* Disabled */
+        /* States > Disabled */
             input:disabled,
             optgroup:disabled,
             option:disabled,
@@ -2256,190 +2160,179 @@
     }
 
     /* <kbd> */
-        /* Not */
-            /* Default */
-            kbd:not([default]) {
-                background-color: #232323;
-                border: 1px solid #FFFFFF;
-                border-radius: 3px;
-                color: #FFFFFF;
-                display: inline-block;
-                font-size: inherit;
-                padding: 2.5px 7.5px;
-                word-break: break-all;
-                word-wrap: break-word
-            }
+        /* Not > Default */
+        kbd:not([default]) {
+            background-color: #FAFAFA;
+            border: 1px solid #FFFFFF;
+            border-radius: 3px;
+            box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3),
+                                inset 0 0 0 1px rgba(0, 0, 0, .01);
+            color: #565656;
+            font-family: inherit;
+            padding: 5px 10px
+        }
 
     /* <marquee> */
-        /* Not */
-            /* Default */
-            marquee:not([default]) {
-                display: inline-block;
-                inline-size: -moz-available;
-                text-align: start;
-                vertical-align: text-bottom
-            }
+        /* Not > Default */
+        marquee:not([default]) {
+            display: inline-block;
+            inline-size: -moz-available;
+            text-align: start;
+            vertical-align: text-bottom
+        }
 
-            marquee[direction="down"]:not([default]),
-            marquee[direction="up"]:not([default]) {
-                block-size: 200px
-            }
+        marquee[direction="down"]:not([default]),
+        marquee[direction="up"]:not([default]) {
+            block-size: 200px
+        }
 
     /* <mark>
-            --- NOTE ---
+            --- CONSIDER ---
                 Markers aren't yellow, they now resemble
                 selected text. Hence, marking them for selection.
     */
-        /* Not */
-            /* Default */
-            mark:not([default]) {
-                background-color: #0078FF;
-                color: #FFFFFF;
-                padding: 0;
-                text-shadow: none
-            }
-                /* States */
-                    /* Read Write */
-                        /* States */
-                            /* Selection */
-                            mark:not([default]):read-write::selection {
-                                background-color: #FF7823;
-                                color: #FFFFFF;
-                                text-shadow: none
-                            }
+        /* Not > Default */
+        mark:not([default]) {
+            background-color: #0078FF;
+            color: #FFFFFF;
+            padding: 0;
+            text-shadow: none
+        }
+            /* States */
+                /* Read Write > States > Selection */
+                mark:not([default]):read-write,
+                mark:not([default]):read-write::selection {
+                    background-color: #FF7823;
+                    color: #FFFFFF;
+                    text-shadow: none
+                }
 
-                    /* Selection */
-                    mark:not([default])::selection {
-                        /* --- NOTE ---
-                                <mark>'s must not have a selection
-                                background.
-                        */
-                        background-color: #0078FF;
-                        color: #FFFFFF;
-                        text-shadow: none
-                    }
+                /* Selection */
+                mark:not([default])::selection {
+                    /* --- NOTE ---
+                            <mark>'s must not have a selection
+                            background.
+                    */
+                    background-color: #0078FF;
+                    color: #FFFFFF;
+                    text-shadow: none
+                }
 
     /* <menu> */
-        /* Not */
-            /* Default */
-            menu[type="context"]:not([default]) {
-                display: none !important
-            }
+        /* Not > Default */
+        menu[type="context"]:not([default]) {
+            display: none !important
+        }
 
     /* <meter> */
-        /* Not */
-            /* Default */
-            meter:not([default]) {
-                background-color: #FFFFFF;
-                display: inline-block;
-                height: 15px;
-                outline: 1px solid #000000;
-                width: 300px;
-                -moz-appearance: meterbar;
-                -webkit-appearance: meter
-            }
-                /* Pseudo */
-                    /* -moz- Meter Bar */
-                    meter:not([default])::-moz-meter-bar {
+        /* Not > Default */
+        meter:not([default]) {
+            background-color: #FFFFFF;
+            display: inline-block;
+            height: 15px;
+            outline: 1px solid #000000;
+            width: 300px;
+            -moz-appearance: meterbar;
+            -webkit-appearance: meter
+        }
+            /* Pseudo */
+                /* -moz- Meter Bar */
+                meter:not([default])::-moz-meter-bar {
+                    /* --- NOTE ---
+                            Style -moz- meter bars.
+                    */
+                    display: inline-block !important;
+                    float: none !important;
+                    height: 100%;
+                    overflow: visible !important;
+                    position: static !important;
+                    -moz-appearance: meterchunk
+                }
+
+                /* -moz- Meter Optimum */
+                    /* Pseudo > -moz- Meter Bar */
+                    meter:not([default])::-moz-meter-optimum::-moz-meter-bar {
                         /* --- NOTE ---
-                                Style -moz- meter bars.
+                                Style default value -moz- meter bars.
                         */
-                        display: inline-block !important;
-                        float: none !important;
-                        height: 100%;
-                        overflow: visible !important;
-                        position: static !important;
-                        -moz-appearance: meterchunk
+                        background: #00FF00 !important
                     }
 
-                    /* -moz- Meter Optimum */
-                        /* Pseudo */
-                            /* -moz- Meter Bar */
-                            meter:not([default])::-moz-meter-optimum::-moz-meter-bar {
-                                /* --- NOTE ---
-                                        Style default value -moz- meter bars.
-                                */
-                                background: #00FF00 !important
-                            }
-
-                    /* -moz- Meter Sub Optimum */
-                        /* Pseudo */
-                            /* -moz- Meter Bar */
-                            meter:not([default])::-moz-meter-sub-optimum::-moz-meter-bar {
-                                /* --- NOTE ---
-                                        Style low value -moz- meter bars.
-                                */
-                                background: #FFFF00 !important
-                            }
-
-                    /* -moz- Meter Sub Optimum */
-                        /* Pseudo */
-                            /* -moz- Meter Bar */
-                            meter:not([default])::-moz-meter-sub-sub-optimum::-moz-meter-bar {
-                                /* --- NOTE ---
-                                        Style extreme value -moz- meter bars.
-                                */
-                                background: #FF0000 !important
-                            }
-
-                    /* -webkit- Meter Bar */
-                    meter:not([default])::-webkit-meter-bar {
+                /* -moz- Meter Sub Optimum */
+                    /* Pseudo > -moz- Meter Bar */
+                    meter:not([default])::-moz-meter-sub-optimum::-moz-meter-bar {
                         /* --- NOTE ---
-                                Style -webkit- meter bars.
+                                Style low value -moz- meter bars.
                         */
-                        background: #FFFFFF;
-                        height: 100%;
-                        width: 100%;
-                        -webkit-user-modify: read-only !important
+                        background: #FFFF00 !important
                     }
 
-                    /* -webkit- Meter Even Less Good Value */
-                    meter:not([default])::-webkit-meter-even-less-good-value {
+                /* -moz- Meter Sub Optimum */
+                    /* Pseudo > -moz- Meter Bar */
+                    meter:not([default])::-moz-meter-sub-sub-optimum::-moz-meter-bar {
                         /* --- NOTE ---
-                                Style extreme value -webkit- meter bars.
+                                Style extreme value -moz- meter bars.
                         */
-                       background: #FF0000;
-                        height: 100%;
-                        -webkit-user-modify: read-only !important
+                        background: #FF0000 !important
                     }
 
-                    /* -webkit- Meter Inner Element */
-                    meter:not([default])::-webkit-meter-inner-element {
-                        /* --- NOTE ---
-                                Style -webkit- meter bars value.
-                        */
-                        height: 100%;
-                        width: 100%;
-                        -webkit-appearance: inherit;
-                        -webkit-user-modify: read-only !important
-                    }
+                /* -webkit- Meter Bar */
+                meter:not([default])::-webkit-meter-bar {
+                    /* --- NOTE ---
+                            Style -webkit- meter bars.
+                    */
+                    background: #FFFFFF;
+                    height: 100%;
+                    width: 100%;
+                    -webkit-user-modify: read-only !important
+                }
 
-                    /* -webkit- Meter Optimum Value */
-                    meter:not([default])::-webkit-meter-optimum-value {
-                        /* --- NOTE ---
-                                Style default value -webkit- meter bars.
-                        */
-                        background: #00FF00;
-                        height: 100%;
-                        -webkit-user-modify: read-only !important
-                    }
+                /* -webkit- Meter Even Less Good Value */
+                meter:not([default])::-webkit-meter-even-less-good-value {
+                    /* --- NOTE ---
+                            Style extreme value -webkit- meter bars.
+                    */
+                   background: #FF0000;
+                    height: 100%;
+                    -webkit-user-modify: read-only !important
+                }
 
-                    /* -webkit- Meter Sub-Optimum Value */
-                    meter:not([default])::-webkit-meter-suboptimum-value {
-                        /* --- NOTE ---
-                                Style low value -webkit- meter bars.
-                        */
-                        background: #FFFF00;
-                        height: 100%;
-                        -webkit-user-modify: read-only !important
-                    }
+                /* -webkit- Meter Inner Element */
+                meter:not([default])::-webkit-meter-inner-element {
+                    /* --- NOTE ---
+                            Style -webkit- meter bars value.
+                    */
+                    height: 100%;
+                    width: 100%;
+                    -webkit-appearance: inherit;
+                    -webkit-user-modify: read-only !important
+                }
+
+                /* -webkit- Meter Optimum Value */
+                meter:not([default])::-webkit-meter-optimum-value {
+                    /* --- NOTE ---
+                            Style default value -webkit- meter bars.
+                    */
+                    background: #00FF00;
+                    height: 100%;
+                    -webkit-user-modify: read-only !important
+                }
+
+                /* -webkit- Meter Sub-Optimum Value */
+                meter:not([default])::-webkit-meter-suboptimum-value {
+                    /* --- NOTE ---
+                            Style low value -webkit- meter bars.
+                    */
+                    background: #FFFF00;
+                    height: 100%;
+                    -webkit-user-modify: read-only !important
+                }
 
     /* <nobr> */
-        /* Not */
-            /* Default */
-            nobr:not([default]) {
-                white-space: nowrap
-            }
+        /* Not > Default */
+        nobr:not([default]) {
+            white-space: nowrap
+        }
 
     /* <optgroup> */
     optgroup {
@@ -2453,12 +2346,11 @@
         word-wrap: normal !important;
         -moz-user-select: none
     }
-        /* Pseudo */
-            /* Before */
-            optgroup:before {
-                content: attr(label);
-                display: block
-            }
+        /* Pseudo > Before */
+        optgroup:before {
+            content: attr(label);
+            display: block
+        }
 
         /* <option> */
         optgroup > option {
@@ -2480,125 +2372,97 @@
     }
 
     /* <p> */
-        /* Not */
-            /* Default */
-            p:not([default]) {
-                position: relative;
-                -webkit-margin-after: 0;
-                -webkit-margin-before: 0
-            }
-
-    /* <parsererror> */
-    parsererror|parsererror {
-        border-width: thin;
-        color: #000;
-        display: block;
-        font-family: sans-serif;
-        font-weight: bold;
-        margin: 1em;
-        padding: 1em;
-        font-size: 14pt;
-        white-space: pre
-    }
-    parsererror|sourcetext {
-        display: block;
-        font-family: -moz-fixed;
-        font-size: 12pt;
-        font-weight: bold;
-        margin-bottom: 1em;
-        margin-top: 2em;
-        white-space: pre
-    }
+        /* Not > Default */
+        p:not([default]) {
+            line-height: 1.1;
+            position: relative;
+            -webkit-margin-after: 0;
+            -webkit-margin-before: 0
+        }
 
     /* <plaintext>, <pre> */
-        /* Not */
-            /* Default */
-            plaintext:not([default]),
-            pre:not([default]) {
-                background-color: #CECECE;
-                border-radius: 5px;
-                display: inline-block;
-                font-size: smaller;
-                margin: 0 auto;
-                padding: .25%;
-                page-break-inside: avoid
-            }
+        /* Not > Default */
+        plaintext:not([default]),
+        pre:not([default]) {
+            background-color: #CFCFCF;
+            border-radius: 3px;
+            color: #454545;
+            display: inline-block;
+            page-break-inside: avoid;
+            width: auto
+        }
 
     /* <pre> */
-        /* Not */
-            /* Default */
-            pre:not([default]) {
-                font-family: monospace;
-                overflow: auto
-            }
+        /* Not > Default */
+        pre:not([default]) {
+            font-family: monospace;
+            overflow: auto
+        }
 
     /* <pre>, <span> */
-        /* Not */
-            /* Default */
-            pre[_moz_quote="true"]:not([default]),
-            span[_moz_quote="true"]:not([default]) {
-                color: #0000FF
-            }
+        /* Not > Default */
+        pre[_moz_quote="true"]:not([default]),
+        span[_moz_quote="true"]:not([default]) {
+            color: #0000FF
+        }
 
     /* <pre>, <textarea> */
-        /* Not */
-            /* Default */
-            pre[dir="auto"]:not([default]),
-            textarea[dir="auto"]:not([default]) {
-                unicode-bidi: plaintext
-            }
+        /* Not > Default */
+        pre[dir="auto"]:not([default]),
+        textarea[dir="auto"]:not([default]) {
+            unicode-bidi: plaintext
+        }
 
     /* <progress> */
-        /* Not */
-            /* Default */
-            progress:not([default]) {
-                display: block;
-                height: 15px;
-                display: inline-block;
-                outline: 1px solid rgba(0, 0, 0, .1);
-                vertical-align: baseline;
-                width: 300px;
-                -moz-appearance: progressbar
+        /* Not > Default */
+        progress:not([default]) {
+            display: block;
+            height: 15px;
+            display: inline-block;
+            outline: 1px solid rgba(0, 0, 0, .1);
+            vertical-align: baseline;
+            width: 300px;
+            -moz-appearance: progressbar
+        }
+
+        progress[value]:not([default]) {
+            appearance: none;
+            background-color: #FFFFFF;
+            min-height: 3px;
+            min-width: 5px;
+            max-height: 20px;
+            -moz-appearance: none;
+            -webkit-appearance: none
+        }
+
+        /* Pseudo */
+            /* -moz- Progress Bar */
+            progress[value]:not([default])::-moz-progress-bar {
+                /* --- NOTE ---
+                        Style -moz- progress bars.
+                */
+                background-color: #0000FF;
+                object-fit: contain;
+                overflow: hidden
             }
 
-            progress[value]:not([default]) {
-                appearance: none;
-                background-color: #FFFFFF;
-                min-height: 3px;
-                min-width: 5px;
-                max-height: 20px;
-                -moz-appearance: none;
-                -webkit-appearance: none
+            /* -webkit- Progress Bar */
+            progress[value]:not([default])::-webkit-progress-bar {
+                /* --- NOTE ---
+                        Style -webkit- progress bars.
+                */
+                background-color: transparent;
+                object-fit: contain;
+                overflow: hidden
             }
 
-            /* Pseudo */
-                /* -moz- Progress Bar */
-                progress[value]:not([default])::-moz-progress-bar {
-                    /* --- NOTE ---
-                            Style -moz- progress bars.
-                    */
-                    background-color: #0000FF;
-                    object-fit: contain;
-                    overflow: hidden
-                }
-
-                /* -webkit- Progress Bar */
-                progress[value]:not([default])::-webkit-progress-bar {
-                    /* --- NOTE ---
-                            Style -webkit- progress bars.
-                    */
-                    background-color: transparent;
-                    object-fit: contain;
-                    overflow: hidden
-                }
-
-                /* -webkit- Progress Value */
-                progress[value]:not([default])::-webkit-progress-value {
-                    /* --- NOTE ---
-                            Style -webkit- progress bar values.
-                    */
-                    background-color: #0000FF
-                }
+            /* -webkit- Progress Value */
+            progress[value]:not([default])::-webkit-progress-value {
+                /* --- NOTE ---
+                        Style -webkit- progress bar values.
+                */
+                background-color: #0000FF
+            }
 
     /* <q> */
     q {
@@ -2606,53 +2470,52 @@
         font-style: italic;
         padding: 0
     }
-        /* Not */
-            /* Default */
-                /* Pseudo */
-                    /* After */
-                    [data-quotes="false"] q::after,
-                    q[data-quotes="false"]:not([default])::after {
-                        /*
-                            --- NOTE ---
-                                Quotes can be "turned off" in
-                                <q> elements.
-                        */
-                        content: ""
-                    }
+        /* Not > Default */
+            /* Pseudo */
+                /* After */
+                [data-quotes="false"] q::after,
+                q[data-quotes="false"]:not([default])::after {
+                    /*
+                        --- NOTE ---
+                            Quotes can be "turned off" in
+                            <q> elements.
+                    */
+                    content: ""
+                }
 
-                    [data-quotes="single"] q::after,
-                    q[data-quotes="single"]:not([default])::after {
-                        /*
-                            --- NOTE ---
-                                Quotes can be singled in
-                                <q> elements.
-                        */
-                        content: "’" !important
-                    }
+                [data-quotes="single"] q::after,
+                q[data-quotes="single"]:not([default])::after {
+                    /*
+                        --- NOTE ---
+                            Quotes can be singled in
+                            <q> elements.
+                    */
+                    content: "’" !important
+                }
 
-                    [q]::after,
-                    q:not([default])::after {
-                        /* --- WARN ---
-                                Special characters are not recommended.
-                        */
-                        content: "”" !important
-                    }
+                [q]::after,
+                q:not([default])::after {
+                    /* --- WARN ---
+                            Special characters are not recommended.
+                    */
+                    content: "”" !important
+                }
 
-                    /* Before */
-                    [data-quotes="false"] q::before,
-                    q[data-quotes="false"]:not([default])::before {
-                        content: ""
-                    }
+                /* Before */
+                [data-quotes="false"] q::before,
+                q[data-quotes="false"]:not([default])::before {
+                    content: ""
+                }
 
-                    [data-quotes="single"] q::before,
-                    q[data-quotes="single"]:not([default])::before {
-                        content: "‘" !important
-                    }
+                [data-quotes="single"] q::before,
+                q[data-quotes="single"]:not([default])::before {
+                    content: "‘" !important
+                }
 
-                    [q]::before,
-                    q:not([default])::before {
-                        content: "“" !important
-                    }
+                [q]::before,
+                q:not([default])::before {
+                    content: "“" !important
+                }
 
     /* <ruby> */
     ruby {
@@ -2693,12 +2556,11 @@
             text-emphasis: none;
             white-space: nowrap
         }
-            /* States */
-                /* Language */
-                ruby rt:lang(zh),
-                ruby rtc:lang(zh) {
-                    ruby-align: center
-                }
+            /* States > Language */
+            ruby rt:lang(zh),
+            ruby rtc:lang(zh) {
+                ruby-align: center
+            }
 
     /* <samp>
             --- NOTE ---
@@ -2710,88 +2572,79 @@
     }
 
     /* <select> */
-        /* Not */
-            /* Default */
-            select:not([default]) {
-                border-width: 1.5px;
-                box-sizing: border-box;
-                cursor: default;
-                display: inline-block;
-                line-height: normal !important;
-                margin: 0;
-                overflow: -moz-hidden-unscrollable;
-                overflow-clip-box: padding-box !important;
-                page-break-inside: avoid;
-                text-align: start;
-                text-indent: 0;
-                text-shadow: none;
-                white-space: nowrap !important;
-                word-wrap: normal !important;
-                -moz-appearance: menulist;
-                -moz-user-select: none
+        /* Not > Default */
+        select:not([default]) {
+            border-width: 1.5px;
+            box-sizing: border-box;
+            cursor: default;
+            display: inline-block;
+            line-height: normal !important;
+            margin: 0;
+            overflow: -moz-hidden-unscrollable;
+            overflow-clip-box: padding-box !important;
+            page-break-inside: avoid;
+            text-align: start;
+            text-indent: 0;
+            text-shadow: none;
+            white-space: nowrap !important;
+            word-wrap: normal !important;
+            -moz-appearance: menulist;
+            -moz-user-select: none
+        }
+
+        select[size]:not([default]),
+        select[multiple]:not([default]),
+        select[multiple][size]:not([default]) {
+            padding-block-end: 1px;
+            padding-block-start: 1px;
+            padding-inline-end: 0;
+            padding-inline-start: 0;
+            vertical-align: text-bottom;
+            -moz-appearance: listbox
+        }
+        select[size="0"]:not([default]),
+        select[size="1"]:not([default]) {
+            padding: 0;
+            vertical-align: baseline;
+            -moz-appearance: menulist
+        }
+
+        /* Pseudo > Internal List Box */
+        select:not(:-internal-list-box) {
+            visibility: visible !important
+        }
+            /* <button> */
+            select:not([default]) > button {
+                block-size: 100% !important;
+                box-sizing: border-box !important;
+                inline-size: 12px;
+                position: static !important;
+                vertical-align: top !important;
+                white-space: nowrap;
+                -moz-appearance: menulist-button
             }
 
-            select[size]:not([default]),
-            select[multiple]:not([default]),
-            select[multiple][size]:not([default]) {
-                padding-block-end: 1px;
-                padding-block-start: 1px;
-                padding-inline-end: 0;
-                padding-inline-start: 0;
-                vertical-align: text-bottom;
-                -moz-appearance: listbox
-            }
-            select[size="0"]:not([default]),
-            select[size="1"]:not([default]) {
-                padding: 0;
-                vertical-align: baseline;
-                -moz-appearance: menulist
-            }
-                /* <button> */
-                select:not([default]) > button {
-                    block-size: 100% !important;
-                    box-sizing: border-box !important;
-                    inline-size: 12px;
-                    position: static !important;
-                    vertical-align: top !important;
-                    white-space: nowrap;
-                    -moz-appearance: menulist-button
-                }
-
-                /* <option> */
-                select:not([default]) > option {
-                    padding-block-end: 0;
-                    padding-block-start: 0;
-                    padding-inline-end: 5px;
-                    padding-inline-start: 3px
-                }
-
-            /* Internal List Box */
-            select:not(:-internal-list-box) {
-                visibility: visible !important
+            /* <option> */
+            select:not([default]) > option {
+                padding-block-end: 0;
+                padding-block-start: 0;
+                padding-inline-end: 5px;
+                padding-inline-start: 3px
             }
 
-        /* States */
-            /* Empty */
-            select:empty {
-                inline-size: 2.5em
-            }
+        /* States > Empty */
+        select:empty {
+            inline-size: 2.5em
+        }
 
     /* <small> */
-        /* Font | Text, Not */
-            /* --- NOTE ---
-                    Size;
-                    Default
-            */
-            [small],
-            small:not([default]),
-            .small {
-                font-size: 80%
-            }
-
-            small[big] {
-                font-size: 100%
-            }
+    small[big] {
+        font-size: 100% !important
+    }
+        /* Not > Default */
+        small:not([default]) {
+            font-size: 80%
+        }
 
     /* <spacer> */
     spacer {
@@ -2944,7 +2797,7 @@
                 letter-spacing: normal;
                 margin-block-end: 1px;
                 margin-block-start: 1px;
-                max-height: 500px;
+                max-height: 80vh;
                 max-width: 100%;
                 min-height: 40px;
                 min-width: 180px;
@@ -2991,7 +2844,7 @@
     /* <u> */
     [u],
     u {
-        text-decoration: underline
+        text-decoration: underline !important
     }
 
     /* <ul> */
@@ -3014,13 +2867,11 @@
         max-width: 95%;
         object-fit: contain !important
     }
-        /* <img> */
-            /* States */
-                /* -moz- Native Anonymous */
-                video > img:-moz-native-anonymous {
-                    object-fit: inherit !important;
-                    object-position: inherit !important
-                }
+        /* <img> > States > -moz- Native Anonymous */
+        video > img:-moz-native-anonymous {
+            object-fit: inherit !important;
+            object-position: inherit !important
+        }
 
     /* <xmp> */
     xmp {
@@ -3036,47 +2887,44 @@
             Remove all preset outlines for focused elements
             for users to style their own.
 */
-    /* States */
-        /* Focus, Host */
-        [contenteditable="false"]:not([default]),
-        :focus,
-        :host {
-            outline: 0
-        }
+    /*
+            Not > Default > States > Selection > Pseudo > Selection,
+            States > Read-Write > Not > Default
+    */
+    [contenteditable="true"]:not([default])::selection,
+    :read-write:not([default])::selection:not(:disabled) {
+        /* --- NOTE ---
+                Editable text takes an orange outset.
+        */
+        background-color: #FF7823;
+        color: #FFFFFF;
+        text-shadow: none
+    }
 
-    /* Not, States */
-        /* Default; Read-Write */
-            /* States; Not */
-                /* Selection; Default */
-                    /* Pseudo */
-                        /* Selection */
-                        [contenteditable="true"]:not([default])::selection,
-                        :read-write:not([default])::selection {
-                            /* --- NOTE ---
-                                    Editable text takes an orange outset.
-                            */
-                            background-color: #FF7823;
-                            color: #FFFFFF;
-                            text-shadow: none
-                        }
+    /*
+            Default > Not > Default > Pseudo > Selection,
+            Default > Pseudo > Selection,
+            Not > Default > Pseudo > Selection
+    */
+    [default]::selection,
+    :not([default])::selection {
+        /* --- NOTE ---
+                Static text takes a blue outset.
+        */
+        background-color: #0078FF;
+        color: #FFFFFF;
+        text-shadow: none
+    }
 
-    /* Default, Not */
-        /* Pseudo; Default */
-            /* Selection; Pseudo */
-                /* Selection */
-                [contenteditable="true"][default]:not([default])::selection,
-                [default]::selection,
-                :not([default])::selection {
-                    /* --- NOTE ---
-                            Static text takes a blue outset.
-                    */
-                    background-color: #0078FF;
-                    color: #FFFFFF;
-                    text-shadow: none
-                }
+    /* States > (Focus, Host) */
+    [contenteditable="false"]:not([default]),
+    :focus,
+    :host {
+        outline: 0
+    }
 
 /* LapysJS Class Sets
-    --- NOTE ---
+    --- CONSIDER ---
         For common & useful CSS declarations only.
 */
     /* Bottom Preset */
@@ -5667,8 +5515,6 @@
 
             /* Shadow Level 0 */
                 /* Outset */
-                .btn-C,
-                .btn-card,
                 .bx-s-0,
                 .crd,
                 .card {
@@ -15586,7 +15432,7 @@
             .otln-c-blood,
             .otln-c-blud,
             .outline-color-blood,
-            .outoutlineolor-blud {
+            .outline-color-blud {
                 outline-color: #CC0000 !important
             }
 
@@ -15604,7 +15450,7 @@
             .otln-c-skyb,
             .otln-c-skyblue,
             .outline-color-lightblue,
-            .outoutlineolor-skyblue {
+            .outline-color-skyblue {
                 outline-color: #00FFFF !important
             }
 
@@ -15681,7 +15527,7 @@
             .otln-c-darkgrey,
             .otln-c-dkgry,
             .outline-color-darkgray,
-            .outoutlineolor-darkgrey {
+            .outline-color-darkgrey {
                 outline-color: #555555 !important
 
             }
@@ -15692,7 +15538,7 @@
             .otln-c-dkgrn,
             .otln-c-marsh,
             .outline-color-darkgreen,
-            .outoutlineolor-marsh {
+            .outline-color-marsh {
                 outline-color: #336600 !important
             }
 
@@ -15701,7 +15547,7 @@
             .otln-c-dkr,
             .otln-c-wine,
             .outline-color-darkred,
-            .outoutlineolor-wine {
+            .outline-color-wine {
                 outline-color: #780000 !important
             }
             /* Whitish-Gray */
@@ -15746,7 +15592,7 @@
             .otln-c-y,
             .otln-c-yellow,
             .outline-color-simpson,
-            .outoutlineolor-yellow {
+            .outline-color-yellow {
                 outline-color: #FFFF00 !important
             }
 
@@ -15755,7 +15601,7 @@
             .otln-c-grey,
             .otln-c-gry,
             .outline-color-gray,
-            .outoutlineolor-grey {
+            .outline-color-grey {
                 outline-color: #787878 !important
             }
 
@@ -15805,7 +15651,7 @@
             .otln-c-lightgrey,
             .otln-c-lgtgry,
             .outline-color-lightgray,
-            .outoutlineolor-lightgrey {
+            .outline-color-lightgrey {
                 outline-color: #AAAAAA !important
             }
 
@@ -15849,7 +15695,7 @@
             .otln-c-vlt,
             .otln-c-violet,
             .outline-color-purple,
-            .outoutlineolor-violet {
+            .outline-color-violet {
                 outline-color: #7800FF !important
             }
 
@@ -20013,211 +19859,34 @@
         float: none
     }
 
-    /* Button Components (Widgets), Stack Tables */
-        /* Not */
-            /* <tr> */
-            .btn.cmpnt:not(tr) {
-                display: inline-block
-            }
-
-            /* Content */
-                /* Not */
-                    /* <tr> */
-                    table.cmpnt :not(tr),
-                    .btn.cmpnt:not(tr) {
-                        border: 1px solid #DEDEDE;
-                        border-radius: 2.5px;
-                        cursor: default;
-                        line-height: 40px;
-                        margin: 0;
-                        outline: 0;
-                        min-height: 40px;
-                        min-width: 75px;
-                        object-fit: contain;
-                        overflow: hidden;
-                        padding: 5px;
-                        transition: .675s;
-                        width: auto
-                    }
-
-        /* Block Lists */
-        li.btn.cmpnt {
+    /* Block Lists */
+        /* <li> */
+        dl.block-list > li,
+        ol.block-list > li,
+        ul.block-list > li {
+            border: 1px solid rgba(0, 0, 0, .1);
+            border-radius: 3px;
             display: block;
             float: none;
             line-height: initial;
             list-style: none;
+            margin-bottom: 5px;
+            margin-top: 5px;
             min-height: 0;
             min-width: 75px;
             padding: 10px 5px;
             text-align: left
         }
-            /* States */
-                /* Empty */
-                li.btn.cmpnt:empty {
-                    min-height: 20px
-                }
+            /* States > Empty */
+            dl.block-list > li:empty,
+            ol.block-list > li:empty,
+            ul.block-list > li:empty {
+                min-height: 20px
+            }
 
-        /* Stack Tables */
-        table.cmpnt {
-            border: 1px solid #454545;
-            border-radius: 2.5px;
-            margin: 0 auto;
-            overflow: hidden;
-            width: 100%
-        }
-            /* Cells */
-                /* Not */
-                    /* <tr> */
-                        /* States */
-                            /* Empty */
-                            table.cmpnt :not(tr):empty {
-                                min-height: 0
-                            }
-
-                            /* Hover */
-                            table.cmpnt :not(tr):hover {
-                                border-color: #787878
-                            }
-
-            /* Active Grids */
-                /* Cells */
-                table.cmpnt td.btn,
-                table.cmpnt th.btn {
-                    display: table-cell !important
-                }
-
-                /* Rows */
-                table.cmpnt tr.btn.cmpnt {
-                    display: table-row !important;
-                    padding: 0
-                }
-
-                table.cmpnt td.btn,
-                table.cmpnt th.btn,
-                table.cmpnt tr.btn.cmpnt {
-                    border-radius: 2.5px;
-                    outline: 1px solid rgba(0, 50, 255, .75);
-                    outline-offset: 3px;
-                    text-align: inherit;
-                    zoom: 1.15;
-                    -webkit-appearance: initial
-                }
-
-    /* Button Types */
-    [class*="btn-"] {
-        background-color: #0023FF;
-        color: #FFFFFF;
-        cursor: pointer;
-        outline: 0 !important;
-        user-select: none;
-        z-index: 3
-    }
-        /* Button Type A | Tile */
-        .btn-A,
-        .btn-tile,
-        button.btn-A,
-        button.btn-tile {
-            border: 0;
-            border-bottom-color: rgba(0, 0, 0, .1);
-            border-bottom-style: solid;
-            border-bottom-width: 4.25px;
-            box-shadow: 0 0 1px 0 rgba(0, 0, 0, .25);
-            cursor: pointer;
-            display: inline-block;
-            padding: 5px 10px
-        }
-            /* States */
-                /* Focus, Hover */
-                .btn-A:focus,
-                .btn-A:hover,
-                .btn-tile:focus,
-                .btn-tile:hover,
-                button.btn-A:focus,
-                button.btn-A:hover,
-                button.btn-tile:focus,
-                button.btn-tile:hover {
-                    border-bottom-color: rgba(0, 0, 0, .1)
-                }
-
-        /* Button Type B | Transparent */
-        .btn-B,
-        .btn-transparent,
-        .btn-trnsp,
-        button.btn-B,
-        button.btn-transparent,
-        button.btn-trnsp {
-            background-color: none;
-            border: 1.5px solid;
-            border-radius: 50px;
-            color: #04F;
-            cursor: pointer;
-            display: inline-block;
-            padding: 2.5px 5px;
-            text-shadow: none;
-            transition: .75s
-        }
-
-        /* Button Type C | Card */
-        .btn-C,
-        .btn-card,
-        button.btn-C,
-        button.btn-card {
-            border: 1px solid #FFFFFF;
-            cursor: pointer;
-            transition: .675s
-        }
-
-        /* Button Type D | Pad */
-        .btn-D,
-        .btn-pad,
-        button.btn-D,
-        button.btn-pad {
-            background-color: #FFFFFF;
-            border: 1px solid rgba(0, 0, 0, .1);
-            border-radius: 3px;
-            padding: 5px
-        }
-
-        /* Button Type E | Pane */
-        .btn-E,
-        .btn-glass,
-        .btn-pane,
-        button.btn-E,
-        button.btn-glass,
-        button.btn-pane {
-            background-color: rgba(255, 255, 255, .75);
-            border: 0;
-            opacity: .875;
-            outline-style: solid !important;
-            outline-width: 1px !important;
-            padding: 2.5px 5px
-        }
-            /* States */
-                /* Hover */
-                .btn-E:hover,
-                .btn-glass:hover,
-                .btn-pane:hover,
-                button.btn-E:hover,
-                button.btn-glass:hover,
-                button.btn-pane:hover {
-                    opacity: 1
-                }
-
-    /* Cards */
-    .btn-C,
-    .btn-card,
-    .crd,
-    .card,
-    button.card {
-        /* --- NOTE ---
-                For cards and card-ified elements.
-        */
-        background-color: #0078FF;
-        border: 0;
-        border-radius: 2.5px;
-        color: #FFFFFF;
-        display: inline-block;
-        padding: 5px 10px
+    /* Center */
+    .center {
+        text-align: center !important
     }
 
     /* Center CSS */
@@ -20257,13 +19926,27 @@
             .t-del):not(
             .l-del):not(
             .ll-del):not(
+            .fourk-del),
+        .center-flex-reverse:not(.m-del):not(
+            .ms-del):not(
+            .mm-del):not(
+            .ml-del):not(
+            .t-del):not(
+            .l-del):not(
+            .ll-del):not(
             .fourk-del) {
             display: flex !important;
             flex-flow: column wrap
         }
 
-        .center-flex-inline {
+        .center-flex-inline,
+        .center-flex-inline-reverse {
             display: inline-flex !important
+        }
+
+        .center-flex-reverse,
+        .center-flex-inline-reverse {
+            flex-direction: row !important
         }
             /* Content */
             [class*="center-flex"] > * {
@@ -20375,7 +20058,7 @@
     /* Pane */
     .pane {
         background-color: #FFFFFF;
-        outline: 1px solid rgba(0, 0, 0, .1)
+        outline: 1px solid rgba(0, 0, 0, .15)
     }
 
     /* Row */
@@ -20513,43 +20196,6 @@
     .dropdown {
         cursor: pointer
     }
-
-    /* Loader */
-    #documentLoader {
-        align-items: center;
-        background-color: rgba(255, 255, 255, .9875);
-        cursor: wait;
-        display: flex;
-        left: 0;
-        justify-content: center;
-        min-height: 500px;
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 2147483647 !important
-    }
-        /* Content */
-        #documentLoader > :first-child {
-            animation: rotateDocumentLoaderElement 1s linear 0s infinite backwards running;
-            border: 15px solid rgba(0, 0, 0, .75);
-            border-top: 15px solid #0078FF;
-            border-radius: 50%;
-            height: 50px;
-            opacity: .875;
-            padding: 20px;
-            width: 50px
-        }
-            /* @keyframes */
-                /* Rotate Document Loader Element */
-                @keyframes rotateDocumentLoaderElement {
-                    0% {
-                        transform: rotate(0deg)
-                    }
-
-                    to {
-                        transform: rotate(360deg)
-                    }
-                }
 
     /* Media */
     audio.media,
@@ -20744,545 +20390,88 @@
     }
 
 /* LapysJS Responsive Elements */
-/* All
-        *
-            --- NOTE ---
-                Responsive elements must not have
-                an equal or greater width of their containers.
-*/
-.responsive,
-.rspnv {
-    max-width: 100%
-}
-
-/* Responsive Embed
-        <audio>, <embed>, <iframe>, <object>, <video>
-*/
-    /*  Not */
-    audio.responsive:not(.no-responsive),
-    audio.rspnv:not(.no-rspnv),
-    embed.responsive:not(.no-responsive),
-    embed.rspnv:not(.no-rspnv),
-    iframe.responsive:not(.no-responsive),
-    iframe.rspnv:not(.no-rspnv),
-    object.responsive:not(.no-responsive),
-    object.rspnv:not(.no-rspnv),
-    video.responsive:not(.no-responsive),
-    video.rspnv:not(.no-rspnv),
-    .responsive audio:not(.no-responsive),
-    .responsive-audio audio:not(.no-responsive),
-    .rspnv audio:not(.no-rspnv),
-    .rspnv-audio audio:not(.no-rspnv),
-    .responsive embed:not(.no-responsive),
-    .responsive-embed embed:not(.no-responsive),
-    .rspnv embed:not(.no-rspnv),
-    .rspnv-embed embed:not(.no-rspnv),
-    .responsive iframe:not(.no-responsive),
-    .responsive-iframe iframe:not(.no-responsive),
-    .rspnv iframe:not(.no-rspnv),
-    .rspnv-iframe iframe:not(.no-rspnv),
-    .responsive object:not(.no-responsive),
-    .responsive-object object:not(.no-responsive),
-    .rspnv object:not(.no-rspnv),
-    .rspnv-object object:not(.no-rspnv),
-    .responsive video:not(.no-responsive),
-    .responsive-video video:not(.no-responsive),
-    .rspnv video:not(.no-rspnv),
-    .rspnv-video video:not(.no-rspnv) {
-        height: auto
-    }
-
-/* Responsive Images
-        <img>
-*/
-    /*  Not */
-    img.responsive:not(.no-responsive),
-    img.rspnv:not(.no-rspnv),
-    .responsive img:not(.no-responsive),
-    .responsive-img img:not(.no-responsive),
-    .rspnv img:not(.no-rspnv),
-    .rspnv-img img:not(.no-rspnv) {
-        display: block;
-        height: auto
-    }
-
-/* Responsive Tables
-        <table>
-*/
-    /*  Not */
-    table.responsive:not(.no-responsive),
-    table.rspnv:not(.no-rspnv),
-    .responsive table:not(.no-responsive),
-    .responsive-table table:not(.no-responsive)
-    .rspnv table:not(.no-rspnv),
-    .rspnv-table table:not(.no-rspnv) {
-        display: block;
-        overflow-x: auto;
-        width: 100%;
-        -ms-overflow-style: -ms-autohiding-scrollbar
-    }
-
-/* LapysJS Icons
-    --- NOTE ---
-        Icons are made via fonts.
-*/
-[class*="icn-"] {
-    display: inline-block;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 1;
-    position: relative;
-    top: 1px;
-    transform: scale(1.25);
-    user-select: none;
-    -webkit-font-smoothing: antialiased
-}
-    /* Pseudo */
-        /* After */
-        [class*="icn-"]::after {
-            pointer-events: all !important;
-            user-select: text !important
-        }
-            /* Pseudo */
-                /* Selection */
-                [class*="icn-"]::after::selection {
-                    background-color: #0078FF !important
-                }
-
-    /* Icon Classes
-            --- CONSIDER ---
-                More icons need to be added to the set.
+    /* All
+            *
+                --- NOTE ---
+                    Responsive elements must not have
+                    an equal or greater width of their containers.
     */
-        /* Commercial At */
-        .icn-5-at::after {
-            content: "\0040"
-        }
-
-        /* Black Chess Bishop */
-        .icn-5-blackchessbishop::after {
-            content: "\265D"
-        }
-
-        /* Black Chess King */
-        .icn-5-blackchessking::after {
-            content: "\265B"
-        }
-
-        /* Black Chess Knight */
-        .icn-5-blackchessknight::after {
-            content: "\265E"
-        }
-
-        /* Black Chess Pawn */
-        .icn-5-blackchesspawn::after {
-            content: "\265F"
-        }
-
-        /* Black Chess Queen */
-        .icn-5-blackchessqueen::after {
-            content: "\265A"
-        }
-
-        /* Black Chess Rook */
-        .icn-5-blackchessrook::after {
-            content: "\265C"
-        }
-
-        /* Bullet Point */
-        .icn-5-bulletpoint::after {
-            content: "\2022"
-        }
-
-        /* Cent Sign */
-        .icn-5-cent::after {
-            content: "\00A2"
-        }
-
-        /* Cloud */
-        .icn-5-cloud::after {
-            content: "\2601"
-        }
-
-        /* Comma */
-        .icn-5-comma::after {
-            content: "\002C"
-        }
-
-        /* Copyright Sign */
-        .icn-5-copyright::after {
-            content: "\00A9"
-        }
-
-        /* Dagger */
-        .icn-5-crucifix::after {
-            content: "\2020"
-        }
-
-        /* Cruzeiro Sign */
-        .icn-5-cruzeiro::after {
-            content: "\20A2"
-        }
-
-        /* Currency Sign */
-        .icn-5-currency::after {
-            content: "\00A4"
-        }
-
-        /* Degree Sign */
-        .icn-5-degree::after {
-            content: "\00B0"
-        }
-
-        /* Diaeresis Sign */
-        .icn-5-diaeresis::after {
-            content: "\00A8"
-        }
-
-        /* Die with First Face */
-        .icn-5-die1::after {
-            content: "\2680"
-        }
-
-        /* Die with Second Face */
-        .icn-5-die2::after {
-            content: "\2681"
-        }
-
-        /* Die with Third Face */
-        .icn-5-die3::after {
-            content: "\2682"
-        }
-
-        /* Die with Fourth Face */
-        .icn-5-die4::after {
-            content: "\2683"
-        }
-
-        /* Die with Fifth Face */
-        .icn-5-die5::after {
-            content: "\2684"
-        }
-
-        /* Die with Sixth Face */
-        .icn-5-die6::after {
-            content: "\2685"
-        }
-
-        /* Dollar Sign */
-        .icn-5-dollar::after {
-            content: "\0024"
-        }
-
-        /* Double Exclamation Mark */
-        .icn-5-doubleexclamation::after,
-        .icn-5-exclamations::after {
-            content: "\203C"
-        }
-
-        /* Down Arrow */
-        .icn-5-downarrow::after {
-            content: "\2193"
-        }
-
-        /* Euro Sign */
-        .icn-5-euro::after {
-            content: "\20AC"
-        }
-
-        /* Euro-Currency */
-        .icn-5-eurocurrency::after {
-            content: "\20A0"
-        }
-
-        /* Exclamation Mark */
-        .icn-5-exclamation::after {
-            content: "\0021"
-        }
-
-        /* French Franc Sign */
-        .icn-5-frenchfranc::after {
-            content: "\20A3"
-        }
-
-        /* Hash or Number Sign */
-        .icn-5-hash::after {
-            content: "\0023"
-        }
-
-        /* One-Half */
-        .icn-5-half::after {
-            content: "\00BD"
-        }
-
-        /* Hyphen */
-        .icn-5-hyphen::after {
-            content: "\002D"
-        }
-
-        /* Interrobang */
-        .icn-5-interrobang::after {
-            content: "\203D"
-        }
-
-        /* Inverted Exclamation Mark */
-        .icn-5-invertedexclamation::after {
-            content: "\00A1"
-        }
-
-        /* Inverted Question Mark */
-        .icn-5-invertedquestion::after {
-            content: "\00BF"
-        }
-
-        /* Left Arrow */
-        .icn-5-leftarrow::after {
-            content: "\2190"
-        }
-
-        /* Left-Right Arrow */
-        .icn-5-leftrightarrow::after {
-            content: "\2194"
-        }
-
-        /* Macron Sign */
-        .icn-5-macron::after {
-            content: "\00AF"
-        }
-
-        /* Magnifier facing Left */
-        .icn-5-magnifier::after,
-        .icn-5-magnifierleft::after {
-            content: "\1F50D"
-        }
-
-        /* Magnifier facing Right */
-        .icn-5-magnifierright::after {
-            content: "\1F50E"
-        }
-
-        /* Micro Sign */
-        .icn-5-micro::after {
-            content: "\00B5"
-        }
-
-        /* Naira Sign */
-        .icn-5-naira::after {
-            content: "\20A6"
-        }
-
-        /* North-East Arrow */
-        .icn-5-northeastarrow::after {
-            content: "\2197"
-        }
-
-        /* North-West Arrow */
-        .icn-5-northwestarrow::after {
-            content: "\2196"
-        }
-
-        /* Percent Sign */
-        .icn-5-percent::after {
-            content: "\0025"
-        }
-
-        /* Full Stop */
-        .icn-5-period::after {
-            content: "\002E"
-        }
-
-        /* Per Mille */
-        .icn-5-permille::after {
-            content: "\2030"
-        }
-
-        /* Per Ten Thousand */
-        .icn-5-pertenthousand::after {
-            content: "\2031"
-        }
-
-        /* Pilcrow */
-        .icn-5-pilcrow::after {
-            content: "\00B6"
-        }
-
-        /* Pinwheel Star */
-        .icn-5-pinwheelstar::after {
-            content: "\272F"
-        }
-
-        /* Vertical Line */
-        .icn-5-pipe::after {
-            content: "\007C"
-        }
-
-        /* Double Vertical Lines */
-        .icn-5-pipes::after {
-            content: "\2016"
-        }
-
-        /* Plus Sign */
-        .icn-5-plus::after {
-            content: "\002B"
-        }
-
-        /* Plus-Minus Sign */
-        .icn-5-plusminus::after {
-            content: "\00B1"
-        }
-
-        /* Pound Sign */
-        .icn-5-pound::after {
-            content: "\00A3"
-        }
-
-        /* One-Quarter */
-        .icn-5-quart::after {
-            content: "\00BC"
-        }
-
-        /* Apostrophe */
-        .icn-5-quotes::after {
-            content: "\0027"
-        }
-
-        /* Quotation Mark */
-        .icn-5-quotes::after {
-            content: "\0022"
-        }
-
-        /* Reference Mark */
-        .icn-5-referencemark::after {
-            content: "\203B"
-        }
-
-        /* Registered Sign */
-        .icn-5-registered::after {
-            content: "\00AE"
-        }
-
-        /* Right Arrow */
-        .icn-5-rightarrow::after {
-            content: "\2192"
-        }
-
-        /* Rupee Sign */
-        .icn-5-rupee::after {
-            content: "\20A8"
-        }
-
-        /* Section Sign */
-        .icn-5-section::after {
-            content: "\00A7"
-        }
-
-        /* New Sheqel Sign */
-        .icn-5-sheqel::after {
-            content: "\20AA"
-        }
-
-        /* Snowman without Snow */
-        .icn-5-snowman::after {
-            content: "\26C4"
-        }
-
-        /* South-East Arrow */
-        .icn-5-southeastarrow::after {
-            content: "\2198"
-        }
-
-        /* South-West Arrow */
-        .icn-5-southwestarrow::after {
-            content: "\2198"
-        }
-
-        /* Sparkles */
-        .icn-5-sparkles::after {
-            content: "\2728"
-        }
-
-        /* Star */
-        .icn-5-star::after {
-            content: "\2729"
-        }
-
-        /* Star_Fill */
-        .icn-5-star_fill::after {
-            content: "\2605"
-        }
-
-        /* Sun Behind Cloud */
-        .icn-5-sunbehindcloud::after {
-            content: "\26C5"
-        }
-
-        /* Three-Quarter */
-        .icn-5-threequart::after {
-            content: "\00BE"
-        }
-
-        /* Tilde */
-        .icn-5-tilde::after {
-            content: "\007E"
-        }
-
-        /* Multiplication Sign */
-        .icn-5-times::after {
-            content: "\2716"
-        }
-
-        /* Trigram for Heaven */
-        .icn-5-trigramheaven::after {
-            content: "\2630"
-        }
-
-        /* Up Arrow */
-        .icn-5-uparrow::after {
-            content: "\2191"
-        }
-
-        /* Up-Down Arrow */
-        .icn-5-updownarrow::after {
-            content: "\2195"
-        }
-
-        /* White Chess Bishop */
-        .icn-5-whitechessbishop::after {
-            content: "\2657"
-        }
-
-        /* White Chess King */
-        .icn-5-whitechessking::after {
-            content: "\2654"
-        }
-
-        /* White Chess Knight */
-        .icn-5-whitechessknight::after {
-            content: "\2658"
-        }
-
-        /* White Chess Pawn */
-        .icn-5-whitechesspawn::after {
-            content: "\2659"
-        }
-
-        /* White Chess Queen */
-        .icn-5-whitechessqueen::after {
-            content: "\2655"
-        }
-
-        /* White Chess Rook */
-        .icn-5-whitechessrook::after {
-            content: "\2656"
-        }
-
-        /* Won Sign */
-        .icn-5-won::after {
-            content: "\20A9"
-        }
-
-        /* Yen Sign */
-        .icn-5-yen::after {
-            content: "\00A5"
+    .responsive,
+    .rspnv {
+        max-width: 100%
+    }
+
+    /* Responsive Embed
+            <audio>, <embed>, <iframe>, <object>, <video>
+    */
+        /*  Not */
+        audio.responsive:not(.no-responsive),
+        audio.rspnv:not(.no-rspnv),
+        embed.responsive:not(.no-responsive),
+        embed.rspnv:not(.no-rspnv),
+        iframe.responsive:not(.no-responsive),
+        iframe.rspnv:not(.no-rspnv),
+        object.responsive:not(.no-responsive),
+        object.rspnv:not(.no-rspnv),
+        video.responsive:not(.no-responsive),
+        video.rspnv:not(.no-rspnv),
+        .responsive audio:not(.no-responsive),
+        .responsive-audio audio:not(.no-responsive),
+        .rspnv audio:not(.no-rspnv),
+        .rspnv-audio audio:not(.no-rspnv),
+        .responsive embed:not(.no-responsive),
+        .responsive-embed embed:not(.no-responsive),
+        .rspnv embed:not(.no-rspnv),
+        .rspnv-embed embed:not(.no-rspnv),
+        .responsive iframe:not(.no-responsive),
+        .responsive-iframe iframe:not(.no-responsive),
+        .rspnv iframe:not(.no-rspnv),
+        .rspnv-iframe iframe:not(.no-rspnv),
+        .responsive object:not(.no-responsive),
+        .responsive-object object:not(.no-responsive),
+        .rspnv object:not(.no-rspnv),
+        .rspnv-object object:not(.no-rspnv),
+        .responsive video:not(.no-responsive),
+        .responsive-video video:not(.no-responsive),
+        .rspnv video:not(.no-rspnv),
+        .rspnv-video video:not(.no-rspnv) {
+            height: auto
+        }
+
+    /* Responsive Images
+            <img>, <picture>
+    */
+        /*  Not */
+        img.responsive:not(.no-responsive),
+        img.rspnv:not(.no-rspnv),
+        picture.responsive:not(.no-responsive),
+        picture.rspnv:not(.no-rspnv),
+        .responsive img:not(.no-responsive),
+        .responsive-img img:not(.no-responsive),
+        .responsive picture:not(.no-responsive),
+        .responsive-picture picture:not(.no-responsive),
+        .rspnv img:not(.no-rspnv),
+        .rspnv-img img:not(.no-rspnv),
+        .rspnv picture:not(.no-rspnv),
+        .rspnv-picture picture:not(.no-rspnv) {
+            display: block;
+            height: auto
+        }
+
+    /* Responsive Tables
+            <table>
+    */
+        /*  Not */
+        table.responsive:not(.no-responsive),
+        table.rspnv:not(.no-rspnv),
+        .responsive table:not(.no-responsive),
+        .responsive-table table:not(.no-responsive)
+        .rspnv table:not(.no-rspnv),
+        .rspnv-table table:not(.no-rspnv) {
+            display: block;
+            overflow-x: auto;
+            width: 100%;
+            -ms-overflow-style: -ms-autohiding-scrollbar
         }
 
 /* LapysJS Grid System */

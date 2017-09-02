@@ -9,7 +9,7 @@
                         "setEvent()" needs to be defined before this function runs.
             */
             setTimeout(function() {
-                window.setEvent("blur", function() {
+                setEvent("blur", function() {
                     /* Loop
                             Index all Select Boxes.
                     */
@@ -23,12 +23,12 @@
 
     /* Location */
         // Query Parameters
-        location.queryParameters = (location.queryParameters || (function() {
+        location.queryParameters || (location.queryParameters = (function() {
             /* Logic
                     If
                         Location > Search is not 'empty'.
             */
-            if (!!location.search.trim()) {
+            if (location.search.trim()) {
                 // Initialization
                     // URL
                     var url = [];
@@ -57,9 +57,12 @@
         })());
 
     // Name
-    window.name = (window.name || document.title);
+    window.name || (window.name = document.title);
 
 /* Custom Data */
+    /* Version Number */
+    const VER_NUMBER = "0.0.1";
+
     /* LapysJS */
         // Initialization
         var LapysJS = new (function LapysJS() {
@@ -67,25 +70,30 @@
             this.author = "Lapys Dev Team";
 
             // Error
-            this.error = function(data, metadata) {
+            this.error = (data, metadata) => {
                 /* Function */
                     // Log LapysJS Error
-                    function logLapysJSError(data) {
-                        console.error("[LapysJS v0.0.1]: " + data)
+                    const logLapysJSError = (data) => {
+                        console.error("[LapysJS v" + VER_NUMBER + "]: " + data)
                     };
                         // Log Help Sheet
-                        function logLapysJSErrorLogHelpSheet() {
-                            console.group("[LapysJS v0.0.1]: LapysJS Error Log Help Sheet: ");
-                                console.info("~: Log this help sheet into the browser console.");
-                                console.info("~h: Log this help sheet into the browser console.");
-                                console.info("~help: Log this help sheet into the browser console.");
-                                console.info("~0000: Log this help sheet into the browser console.");
-                            console.groupEnd()
+                        const logLapysJSErrorLogHelpSheet = () => {
+                            /* Console */
+                                // Group
+                                    // LapysJS Error Log Help Sheet
+                                    console.group("[LapysJS v" + VER_NUMBER + "]: LapysJS Error Log Help Sheet: ");
+                                        console.info("~: Log this help sheet into the browser console.");
+                                        console.info("~h: Log this help sheet into the browser console.");
+                                        console.info("~help: Log this help sheet into the browser console.");
+                                        console.info("~0000: Log this help sheet into the browser console.");
+                                    console.groupEnd()
                         };
 
                 /* Logic
                         If
-                            the specified Data or "~" does not have a "~" character.
+                            the specified Data does not have a "~" character
+                                or
+                            "~" does not have a "~" character.
                 */
                 if ((data || "~").indexOf("~") <= -1)
                     // Log LapysJS Error
@@ -136,6 +144,9 @@
             // Name (Title)
             this.name = "LapysJS";
 
+            // Script
+            this.script = document.querySelectorAll("script")[document.querySelectorAll("script").length - 1];
+
             // Strict Mode
             this.strictMode = (function() {
                 // Return
@@ -143,10 +154,112 @@
             })();
 
             // Version
-            this.version = "0.0.1"
+            this.version = VER_NUMBER;
+
+            // Warn
+            this.warn = (data, metadata) => {
+                /* Function */
+                    // Log LapysJS Warning
+                    const logLapysJSWarning = (data) => {
+                        console.warn("[LapysJS v" + VER_NUMBER + "]: " + data)
+                    };
+                        // Log Help Sheet
+                        const logLapysJSWarningLogHelpSheet = () => {
+                            /* Console */
+                                // Group
+                                    // LapysJS Warning Log Help Sheet
+                                    console.group("[LapysJS v" + VER_NUMBER + "]: LapysJS Warning Log Help Sheet: ");
+                                        console.info("~: Log this help sheet into the browser console.");
+                                        console.info("~h: Log this help sheet into the browser console.");
+                                        console.info("~help: Log this help sheet into the browser console.");
+                                        console.info("~0000: Log this help sheet into the browser console.");
+                                    console.groupEnd()
+                        };
+
+                /* Logic
+                        If
+                            the specified Data does not have a "~" character
+                                or
+                            "~" does not have a "~" character.
+                */
+                if ((data || "~").indexOf("~") <= -1)
+                    // Log LapysJS Warning
+                    logLapysJSWarning(data);
+
+                else {
+                    /* Logic
+                            Switch Data case to
+                                "~", "~h", "~help" and "~0000".
+                    */
+                    switch (data) {
+                        // ~
+                        case "~":
+                            // Log LapysJS Warning > Log Help Sheet
+                            logLapysJSWarningLogHelpSheet();
+                            break;
+
+                        // ~h
+                        case "~h":
+                            // Log LapysJS Warning > Log Help Sheet
+                            logLapysJSWarningLogHelpSheet();
+                            break;
+
+                        // ~help
+                        case "~help":
+                            // Log LapysJS Warning > Log Help Sheet
+                            logLapysJSWarningLogHelpSheet();
+                            break;
+
+                        // ~0000
+                        case "~0000":
+                            // Log LapysJS Warning > Log Help Sheet
+                            logLapysJSWarningLogHelpSheet();
+                            break;
+
+                        // [Default]
+                        default:
+                            // Log LapysJS Warning > Log Help Sheet
+                            logLapysJSWarningLogHelpSheet();
+                            break;
+                    }
+                }
+            }
         });
 
 /* Array Data */
+    // Add Element
+    Array.prototype.addElement || (Array.prototype.addElement = function(element) {
+        // Return
+        return [element].concat(this)
+    });
+
+    // Add Element To Back
+    Array.prototype.addElementToBack || (Array.prototype.addElementToBack = function(element) {
+        // Return
+        return [element].concat(this)
+    });
+
+    // Add Element To Front
+    Array.prototype.addElementToFront || (Array.prototype.addElementToFront = function(element) {
+        // Return
+        return this.concat([element])
+    });
+
+    // First Element
+    Array.prototype.firstElement || Object.defineProperty(Array.prototype, "firstElement", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Return
+            return this[0]
+        }
+    });
+
     // Get Repeated Elements
      Array.prototype.getRepeatedElements || (Array.prototype.getRepeatedElements = function() {
         // Initialization
@@ -165,6 +278,21 @@
         return repeatedElements
     });
 
+     // Has Member
+     Array.prototype.hasElement || (Array.prototype.hasElement = function(element) {
+        /* Logic
+                If
+                    the Array has the specified Element.
+        */
+        if (this.indexOf(element) >= 0)
+            // Return
+            return true;
+
+        else
+            // Return
+            return false
+    });
+
     /* Index Of
             --- NOTE ---
                 Build for Internet Explorer 7 and 8.
@@ -174,6 +302,21 @@
                 This is a minified polyfill version of "indexOf" in non-supporting browsers.
         */
         if(null==this)throw new TypeError("'this' is null or not defined");var a,c=Object(this),b=c.length>>>0;if(0===b)return -1;a=+end||0;Infinity===Math.abs(a)&&(a=0);if(a>=b)return -1;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){if(a in c&&c[a]===start)return a;a++}return -1
+    });
+
+    // Last Element
+    Array.prototype.lastElement || Object.defineProperty(Array.prototype, "lastElement", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Return
+            return this[this.length - 1]
+        }
     });
 
     /* Last Index Of
@@ -201,7 +344,14 @@
     });
 
     // Remove Element From Back
-    Array.prototype.removeElementFromBack || (Array.prototype.removeElementFromBack = (function() { return Array.prototype.removeElement })());
+    Array.prototype.removeElementFromBack || (Array.prototype.removeElementFromBack = function(element) {
+        // Update
+            // Target
+            !(this.indexOf(element) > -1) || this.splice(this.indexOf(element), 1);
+
+        // Return
+        return this
+    });
 
     /* Remove Element From Front
             --- NOTE ---
@@ -254,6 +404,51 @@
     });
 
 /* Object Data */
+    // Is Array
+    Object.prototype.isArray || (Object.defineProperty(Object.prototype, "isArray", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Return
+            return (this.constructor.name == "Array")
+        }
+    }));
+
+    // Is Function
+    Object.prototype.isFunction || (Object.defineProperty(Object.prototype, "isFunction", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Return
+            return (this.constructor.name == "Function")
+        }
+    }));
+
+    // Is Object
+    Object.prototype.isObject || (Object.defineProperty(Object.prototype, "isObject", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Return
+            return (this.constructor.name == "Object")
+        }
+    }));
+
     /* Lapys
             --- UPDATE REQUIRED ---
                 Should be functional.
@@ -280,23 +475,7 @@
                 and should not serve as a replacement for "this" except
                 in cutting down code or other severe cases.
     */
-    // Object.defineProperty(Object.prototype, "lapys", {
-    //     // Configurable
-    //     configurable: true,
-
-    //     // Enumerable
-    //     enumerable: true,
-
-    //     // Get
-    //     get: function() {
-    //         /* Do something… */
-    //     },
-
-    //     // Set
-    //     set: function() {
-    //         /* Do something… */
-    //     }
-    // });
+    const lapys = window;
 
 /* String Data */
     // Function
@@ -307,6 +486,18 @@
                 // Return
                 return data.toUpperCase()
             })
+        });
+
+        // First Character
+        String.prototype.firstChar || Object.defineProperty(String.prototype, "firstChar", {
+            // Configurable
+            configurable: true,
+
+            // Enumerable
+            enumerable: true,
+
+            // Get
+            get: function() { return this[0] }
         });
 
         // Get After Character
@@ -351,6 +542,34 @@
             }
         });
 
+        // Has Text
+        String.prototype.hasText || (String.prototype.hasText = function(data) {
+            /* Logic
+                    If
+                        the Target has the Data.
+            */
+            if (this.indexOf(data) >= 0)
+                return true;
+
+            else
+                return false
+        });
+
+        // HTML
+        String.prototype.html || Object.defineProperty(String.prototype, "html", {
+            // Configurable
+            configurable: true,
+
+            // Enumerable
+            enumerable: true,
+
+            // Get
+            get: function() {
+                // Return
+                return document.createElement(this)
+            }
+        });
+
         /* Is Registered
                 --- NOTE ---
                     Check if an element is registered.
@@ -363,7 +582,22 @@
             enumerable: true,
 
             // Get
-            get: function() { return (document.createElement(this).constructor !== HTMLElement) }
+            get: function() {
+                // Return
+                return (document.createElement(this.toLowerCase()).constructor !== HTMLElement)
+            }
+        });
+
+        // Last Character
+        String.prototype.lastChar || Object.defineProperty(String.prototype, "lastChar", {
+            // Configurable
+            configurable: true,
+
+            // Enumerable
+            enumerable: true,
+
+            // Get
+            get: function() { return this[this.length - 1] }
         });
 
         /* Lower
@@ -393,7 +627,7 @@
         // To Object
         String.prototype.toObject || (String.prototype.toObject = function() {
             // Return
-            return JSON.parse(this.replace(/'/g, "\""))
+            return JSON.parse("{" + this.replace(/'/g, "\"") + "}")
         });
 
         // To String Array
@@ -419,7 +653,7 @@
     constructor.prototype.clear || (constructor.prototype.clear = console.clear);
 
     // Create Element
-     constructor.prototype.createElement || (constructor.prototype.createElement = function(element, CSSSelector, innerHTML) {
+     constructor.prototype.createElement || (constructor.prototype.createElement = (element, CSSSelector, innerHTML) => {
         // Initialization
             // New Element
             var newElement = document.createElement(element);
@@ -437,29 +671,22 @@
     });
 
     // Get Query String By Name
-    constructor.prototype.getQueryParameterByName || (constructor.prototype.getQueryParameterByName = function(name, url) {
+    constructor.prototype.getQueryParameterByName || (constructor.prototype.getQueryParameterByName = (name, url) => {
         // Return
-        !(new RegExp("[?&]" + name.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)").exec(url || location.href)) || (function() { return null })();
+        !(new RegExp("[?&]" + name.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)").exec(url || location.href)) || (() => { return null })();
 
         // Return
-        !(new RegExp("[?&]" + name.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)").exec(url || location.href))[2] || (function() { return "" })();
+        !(new RegExp("[?&]" + name.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)").exec(url || location.href))[2] || (() => { return "" })();
 
         // Return
         return decodeURIComponent((new RegExp("[?&]" + name.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)").exec(url || location.href))[2].replace(/\+/g, " "))
-    });
-
-    // Go To
-    constructor.prototype.goTo || (constructor.prototype.goTo = function(directory) {
-        // Location
-            // Assign
-            location.assign(directory)
     });
 
     // Log
     constructor.prototype.log || (constructor.prototype.log = console.log);
 
     // On DOM Change
-    constructor.prototype.onDOMChange || (constructor.prototype.onDOMChange = function(func) {
+    constructor.prototype.onDOMChange || (constructor.prototype.onDOMChange = (func) => {
         /* Logic
                 If
                     "func" is a function.
@@ -495,7 +722,7 @@
     });
 
     // On DOM Node Added
-    constructor.prototype.onDOMNodeAdded || (constructor.prototype.onDOMNodeAdded = function(func) {
+    constructor.prototype.onDOMNodeAdded || (constructor.prototype.onDOMNodeAdded = (func) => {
         /* Logic
                 If
                     "func" is a function.
@@ -530,7 +757,7 @@
     });
 
     // On DOM Node Count Change
-    constructor.prototype.onDOMNodeCountChange || (constructor.prototype.onDOMNodeCountChange = function(func) {
+    constructor.prototype.onDOMNodeCountChange || (constructor.prototype.onDOMNodeCountChange = (func) => {
         /* Logic
                 If
                     "func" is a function.
@@ -565,7 +792,7 @@
     });
 
     // On DOM Node Removed
-    constructor.prototype.onDOMNodeRemoved || (constructor.prototype.onDOMNodeRemoved = function(func) {
+    constructor.prototype.onDOMNodeRemoved || (constructor.prototype.onDOMNodeRemoved = (func) => {
         /* Logic
                 If
                     "func" is a function.
@@ -600,7 +827,7 @@
     });
 
     // On DOM Ready
-    constructor.prototype.onDOMReady || (constructor.prototype.onDOMReady = function(func) {
+    constructor.prototype.onDOMReady || (constructor.prototype.onDOMReady = (func, timeout) => {
         // Event
         !(typeof func == "function") ||
             // [if]
@@ -608,14 +835,21 @@
                 // [true]
                     // DOM Content Loaded
                     document.addEventListener("DOMContentLoaded", function() {
-                        // Function
-                        func()
+                        // Set Timeout
+                        setTimeout(function() {
+                            // Function
+                            func()
+                        }, (parseFloat(timeout) || 0))
                     }) :
 
+                // [false]
                     // On Ready State Change
                     document.attachEvent("onreadystatechange", function() {
-                        // Function
-                        !(document.readyState === "complete") || func()
+                        // Set Timeout
+                        setTimeout(function() {
+                            // Function
+                            !(document.readyState === "complete") || func()
+                        }, (parseFloat(timeout) || 0))
                     })
     });
 
@@ -626,7 +860,7 @@
             --- WARN ---
                 This function will not return any falsy data except 0.
     */
-    constructor.prototype.parseNumber || (constructor.prototype.parseNumber = function(data) {
+    constructor.prototype.parseNumber || (constructor.prototype.parseNumber = (data) => {
         // Return
         return (parseFloat(
             data.toString().replace(
@@ -635,8 +869,15 @@
         ) || 0)
     });
 
+    // Redirect
+    constructor.prototype.redirect || (constructor.prototype.redirect = (directory) => {
+        // Location
+            // Assign
+            location.assign(directory)
+    });
+
     // Register Element
-    constructor.prototype.registerElement || (constructor.prototype.registerElement = function(element) {
+    constructor.prototype.registerElement || (constructor.prototype.registerElement = (element) => {
         // Return
         return window.customElements.define(element, class customElement extends HTMLElement {})
     });
@@ -646,114 +887,6 @@
         // Location
             // Reload
             location.reload()
-    });
-
-    // Smooth Scroll To
-    constructor.prototype.smoothScrollTo || (constructor.prototype.smoothScrollTo = function(element, scrollAmount) {
-        // Events
-            // <body>
-                // Key Down, Mouse Down
-                document.body.setEvent("keydown, mousedown", function clearSmoothScroll() {
-                    // Clear Interval
-                        // Smooth Scroll Top to Bottom
-                        !smoothScrollTopToBottom || clearInterval(smoothScrollTopToBottom);
-
-                    // Clear Interval
-                        // Smooth Scroll Bottom to Top
-                        !smoothScrollBottomToTop || clearInterval(smoothScrollBottomToTop);
-
-                    // Clear Interval
-                        // Smooth Scroll Left to Right
-                        !smoothScrollLeftToRight || clearInterval(smoothScrollLeftToRight);
-
-                    // Clear Interval
-                        // Smooth Scroll Right to Left
-                        !smoothScrollRightToLeft || clearInterval(smoothScrollRightToLeft);
-
-                    // Events
-                        // <body>
-                            // Key Down
-                            document.body.removeEventListener("keydown", clearSmoothScroll);
-
-                            // Mouse Down
-                            document.body.removeEventListener("mousedown", clearSmoothScroll)
-                });
-
-        /* Logic
-                If
-                    the Element is below the Target Element.
-        */
-        if (element.getBoundingClientRect().top > (this || event.target).getBoundingClientRect().top)
-            // Initialization
-                // Smooth Scroll Top to Bottom
-                var smoothScrollTopToBottom = setInterval(function() {
-                    // [if]
-                    (window.scrollY >= element.getBoundingClientRect().top) ?
-                        // [true]
-                            // Clear Interval
-                            clearInterval(smoothScrollTopToBottom) :
-
-                        // [false]
-                            // Scroll By
-                            window.scrollBy(0, scrollAmount)
-                }, 1);
-
-        /* Logic
-                If
-                    the Element is above the Target Element.
-        */
-        if (element.getBoundingClientRect().top < (this || event.target).getBoundingClientRect().top)
-            // Initialization
-                // Smooth Scroll Bottom to Top
-                var smoothScrollBottomToTop = setInterval(function() {
-                    // [if]
-                    (window.scrollY <= element.getBoundingClientRect().top) ?
-                        // [true]
-                            // Clear Interval
-                            clearInterval(smoothScrollBottomToTop) :
-
-                        // [false]
-                            // Scroll By
-                            window.scrollBy(0, -scrollAmount)
-                }, 1);
-
-        /* Logic
-                If
-                    the Element is in front of the Target Element.
-        */
-        if (element.getBoundingClientRect().left > (this || event.target).getBoundingClientRect().left)
-            // Initialization
-                // Smooth Scroll Left to Right
-                var smoothScrollLeftToRight = setInterval(function() {
-                    // [if]
-                    (window.scrollX >= element.getBoundingClientRect().left) ?
-                        // [true]
-                            // Clear Interval
-                            clearInterval(smoothScrollLeftToRight) :
-
-                        // [false]
-                            // Scroll By
-                            window.scrollBy(scrollAmount, 0)
-                }, 1);
-
-        /* Logic
-                If
-                    the Element is behind the Target Element.
-        */
-        if (element.getBoundingClientRect().left < (this || event.target).getBoundingClientRect().left)
-            // Initialization
-                // Smooth Scroll Right to Left
-                var smoothScrollRightToLeft = setInterval(function() {
-                    // [if]
-                    (window.scrollY <= element.getBoundingClientRect().left) ?
-                        // [true]
-                            // Clear Interval
-                            clearInterval(smoothScrollRightToLeft) :
-
-                        // [false]
-                            // Scroll By
-                            window.scrollBy(scrollAmount, 0)
-                }, 1)
     });
 
     // Warn
@@ -794,6 +927,12 @@ if (
     )
 ) {
     /* Custom Data */
+        // App
+        constructor.prototype.app || (constructor.prototype.app = new (function App() {
+            // Return
+            return (navigator || window.navigator)
+        })());
+
         // Browser
         constructor.prototype.browser || (constructor.prototype.browser = new (function Browser() {
             // Is Chrome?
@@ -835,6 +974,7 @@ if (
                         // [Attribute]
                             // Update
                                 // Array
+                                ((array.indexOf(".css") >= 0) || LapysJS.warn("The 'css.link()' method is meant for importing stylesheets."));
                                 array = array.replace(/\'|\"/g, "").split(/,/g);
 
                                 /* Loop
@@ -873,7 +1013,7 @@ if (
                     Switch "element" case to
                         "link", "style" and "script".
             */
-            switch (element) {
+            switch (element.toLowerCase()) {
                 // <link>
                 case "link":
                     // Deletion
@@ -972,7 +1112,7 @@ if (
             )
         })());
 
-        // Javascript
+        // JavaScript
         constructor.prototype.js || (constructor.prototype.js = new (function JS() {
             // Script
             this.script = function(dataID, innerHTML) {
@@ -1011,6 +1151,7 @@ if (
                         // [Attribute]
                             // Update
                                 // Array
+                                ((array.indexOf(".js") >= 0) || LapysJS.warn("The 'css.link()' method is meant for importing JavaScript files."));
                                 array = array.replace(/\'|\"/g, "").split(/,/g);
 
                                 /* Loop
@@ -1045,31 +1186,1275 @@ if (
     /* Document */
         // Function
             // Get Elements By Attribute Name
-            Document.prototype.getElementsByAttributeName || (Document.prototype.getElementsByAttributeName = function(name) { return this.querySelectorAll("[" + name + "]") });
+            Document.prototype.getElementsByAttributeName || (Document.prototype.getElementsByAttributeName = function(name) {
+                /* Logic
+                        If
+                            the Name is not "*".
+                */
+                if (name != "*")
+                    // Return
+                    return this.querySelectorAll("[" + name + "]");
+
+                else {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            // Update
+                                // Array
+                                array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+            });
 
             // Get Elements By Attribute Name and Value
-            Document.prototype.getElementsByAttributeNameAndValue || (Document.prototype.getElementsByAttributeNameAndValue = function(name, value) { return this.querySelectorAll('[' + name + '="' + value + '"]') });
+            Document.prototype.getElementsByAttributeNameAndValue || (Document.prototype.getElementsByAttributeNameAndValue = function(name, value) {
+                /* Logic
+                        If
+                            the Name is not "*",
+
+                        else if
+                            the Name is "*" and
+                            the Value is specified.
+                */
+                if (name != "*")
+                    // Return
+                    return this.querySelectorAll('[' + name + '="' + value + '"]');
+
+                else if (
+                    name == "*" &&
+                    (value || "").toString()
+                ) {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute value is Value.
+                                */
+                                if (document.querySelectorAll("*")[i].attributes[j].value == value)
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+
+                else {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute has a value.
+                                */
+                                if (document.querySelectorAll("*")[i].attributes[j].value)
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+            });
 
             // Get Elements By Attribute Name and Value except Value
-            Document.prototype.getElementsByAttributeNameAndValueExceptValue || (Document.prototype.getElementsByAttributeNameAndValueExceptValue = function(name, value1, value2) { return this.querySelectorAll('[' + name + '="' + value1 + '"]:not([' + name + '="' + value2 + '"])') });
+            Document.prototype.getElementsByAttributeNameAndValueExceptValue || (Document.prototype.getElementsByAttributeNameAndValueExceptValue = function(name, value1, value2) {
+                /* Logic
+                        If
+                            the Name is not "*",
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value 1 is specified
+                                and
+                            Value 2 is not specified,
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value 1 is not specified
+                                and
+                            Value 2 is specified,
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value 1 is specified
+                                and
+                            Value 2 is specified.
+                */
+                if (name != "*")
+                    // Return
+                    return this.querySelectorAll('[' + name + '="' + value1 + '"]:not([' + name + '="' + value2 + '"])');
+
+                else if (
+                    name == "*" &&
+                    (value1 || "").toString() &&
+                    !value2
+                )
+                    // Return
+                    return document.getElementsByAttributeNameAndValue(name, value1);
+
+                else if (
+                    name == "*" &&
+                    (value2 || "").toString() &&
+                    !value1
+                ) {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute value is not Value 2.
+                                */
+                                if (document.querySelectorAll("*")[i].attributes[j].value != value2)
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+
+                else if (
+                    name == "*" &&
+                    (value1 || "").toString() &&
+                    (value2 || "").toString()
+                ) {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute value is Value 1
+                                                and
+                                            the attribute value is not Value 2.
+                                */
+                                if (
+                                    document.querySelectorAll("*")[i].attributes[j].value == value1 &&
+                                    document.querySelectorAll("*")[i].attributes[j].value != value2
+                                )
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+
+                else {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute has a value.
+                                */
+                                if (document.querySelectorAll("*")[i].attributes[j].value)
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+            });
 
             // Get Elements By Attribute Name and Value without Value
-            Document.prototype.getElementsByAttributeNameAndValueWithoutValue || (Document.prototype.getElementsByAttributeNameAndValueWithoutValue = function(name, value1, value2) { return this.querySelectorAll('[' + name + '="' + value1 + '"]:not([' + name + '*="' + value2 + '"])') });
+            Document.prototype.getElementsByAttributeNameAndValueWithoutValue || (Document.prototype.getElementsByAttributeNameAndValueWithoutValue = function(name, value1, value2) {
+                /* Logic
+                        If
+                            the Name is not "*",
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value 1 is specified
+                                and
+                            Value 2 is not specified,
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value 1 is not specified
+                                and
+                            Value 2 is specified,
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value 1 is specified
+                                and
+                            Value 2 is specified.
+                */
+                if (name != "*")
+                    // Return
+                    return this.querySelectorAll('[' + name + '="' + value1 + '"]:not([' + name + '*="' + value2 + '"])');
+
+                else if (
+                    name == "*" &&
+                    (value1 || "").toString() &&
+                    !value2
+                )
+                    // Return
+                    return document.getElementsByAttributeNameAndValue(name, value1);
+
+                else if (
+                    name == "*" &&
+                    (value2 || "").toString() &&
+                    !value1
+                ) {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute value does not have Value 2 in it.
+                                */
+                                if (document.querySelectorAll("*")[i].attributes[j].value.indexOf(value2) <= -1)
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+
+                else if (
+                    name == "*" &&
+                    (value1 || "").toString() &&
+                    (value2 || "").toString()
+                ) {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute value is Value 1
+                                                and
+                                            the attribute Value does not have Value 2 in it.
+                                */
+                                if (
+                                    document.querySelectorAll("*")[i].attributes[j].value == value1 &&
+                                    document.querySelectorAll("*")[i].attributes[j].value.indexOf(value2) <= -1
+                                )
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+
+                else {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute has a value.
+                                */
+                                if (document.querySelectorAll("*")[i].attributes[j].value)
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+            });
 
             // Get Elements By Attribute Name except Value
-            Document.prototype.getElementsByAttributeNameExceptValue || (Document.prototype.getElementsByAttributeNameExceptValue = function(name, value) { return this.querySelectorAll('[' + name + ']:not([' + name + '="' + value + '"])') });
+            Document.prototype.getElementsByAttributeNameExceptValue || (Document.prototype.getElementsByAttributeNameExceptValue = function(name, value) {
+                /* Logic
+                        If
+                            the Name is not "*",
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value is specified.
+                */
+                if (name != "*")
+                    // Return
+                    return this.querySelectorAll('[' + name + ']:not([' + name + '="' + value + '"])');
+
+                else if (
+                    name == "*" &&
+                    (value || "").toString()
+                ) {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute value is not Value.
+                                */
+                                if (document.querySelectorAll("*")[i].attributes[j].value != value)
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+
+                else {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            // Update
+                                // Array
+                                array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+            });
 
             // Get Elements By Attribute Name with Value
-            Document.prototype.getElementsByAttributeNameWithValue || (Document.prototype.getElementsByAttributeNameWithValue = function(name, value) { return this.querySelectorAll('[' + name + '*="' + value + '"]') });
+            Document.prototype.getElementsByAttributeNameWithValue || (Document.prototype.getElementsByAttributeNameWithValue = function(name, value) {
+                /* Logic
+                        If
+                            the Name is not "*",
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value is specified.
+                */
+                if (name != "*")
+                    // Return
+                    return this.querySelectorAll('[' + name + '*="' + value + '"]');
+
+                else if (
+                    name == "*" &&
+                    (value || "").toString()
+                ) {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute value has Value in it.
+                                */
+                                if (document.querySelectorAll("*")[i].attributes[j].value.indexOf(value))
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+
+                else {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            // Update
+                                // Array
+                                array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+            });
 
             // Get Elements By Attribute Name with Value except Value
-            Document.prototype.getElementsByAttributeNameWithValueExceptValue || (Document.prototype.getElementsByAttributeNameWithValueExceptValue = function(name, value1, value2) { return this.querySelectorAll('[' + name + '*="' + value1 + '"]:not([' + name + '="' + value2 + '"])') });
+            Document.prototype.getElementsByAttributeNameWithValueExceptValue || (Document.prototype.getElementsByAttributeNameWithValueExceptValue = function(name, value1, value2) {
+                /* Logic
+                        If
+                            the Name is not "*",
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value 1 is specified
+                                and
+                            Value 2 is not specified,
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value 1 is not specified
+                                and
+                            Value 2 is specified,
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value 1 is specified
+                                and
+                            Value 2 is specified.
+                */
+                if (name != "*")
+                    // Return
+                    return this.querySelectorAll('[' + name + '*="' + value1 + '"]:not([' + name + '="' + value2 + '"])');
+
+                else if (
+                    name == "*" &&
+                    (value1 || "").toString() &&
+                    !value2
+                ) {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute value is Value 1.
+                                */
+                                if (document.querySelectorAll("*")[i].attributes[j].value == value1)
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+
+                else if (
+                    name == "*" &&
+                    (value2 || "").toString() &&
+                    !value1
+                ) {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute value is not Value 2.
+                                */
+                                if (document.querySelectorAll("*")[i].attributes[j].value != value2)
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+
+                else if (
+                    name == "*" &&
+                    (value1 || "").toString() &&
+                    (value2 || "").toString()
+                ) {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute value is Value 1
+                                                and
+                                            the attribute value is not Value 2.
+                                */
+                                if (
+                                    document.querySelectorAll("*")[i].attributes[j].value == value1 &&
+                                    document.querySelectorAll("*")[i].attributes[j].value != value2
+                                )
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+
+                else {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            // Update
+                                // Array
+                                array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+            });
 
             // Get Elements By Attribute Name with Value without Value
-            Document.prototype.getElementsByAttributeNameWithValueWithoutValue || (Document.prototype.getElementsByAttributeNameWithValueWithoutValue = function(name, value1, value2) { return this.querySelectorAll('[' + name + '*="' + value1 + '"]:not([' + name + '*="' + value2 + '"])') });
+            Document.prototype.getElementsByAttributeNameWithValueWithoutValue || (Document.prototype.getElementsByAttributeNameWithValueWithoutValue = function(name, value1, value2) {
+                /* Logic
+                        If
+                            the Name is not "*",
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value 1 is specified
+                                and
+                            Value 2 is not specified,
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value 1 is not specified
+                                and
+                            Value 2 is specified,
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value 1 is specified
+                                and
+                            Value 2 is specified.
+                */
+                if (name != "*")
+                    // Return
+                    return this.querySelectorAll('[' + name + '*="' + value1 + '"]:not([' + name + '*="' + value2 + '"])');
+
+                else if (
+                    name == "*" &&
+                    (value1 || "").toString() &&
+                    !value2
+                ) {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute value is Value 1.
+                                */
+                                if (document.querySelectorAll("*")[i].attributes[j].value == value1)
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+
+                else if (
+                    name == "*" &&
+                    (value2 || "").toString() &&
+                    !value1
+                ) {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute value does not have Value 2.
+                                */
+                                if (document.querySelectorAll("*")[i].attributes[j].value.indexOf(value2) <= -1)
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+
+                else if (
+                    name == "*" &&
+                    (value1 || "").toString() &&
+                    (value2 || "").toString()
+                ) {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute value is Value 1
+                                                and
+                                            the attribute value does not have Value 2.
+                                */
+                                if (
+                                    document.querySelectorAll("*")[i].attributes[j].value == value1 &&
+                                    document.querySelectorAll("*")[i].attributes[j].value.indexOf(value2) <= -1
+                                )
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+
+                else {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            // Update
+                                // Array
+                                array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+            });
 
             // Get Elements By Attribute Name without Value
-            Document.prototype.getElementsByAttributeNameWithoutValue || (Document.prototype.getElementsByAttributeNameWithoutValue = function(name, value) { return this.querySelectorAll('[' + name + ']:not([' + name + '*="' + value + '"])') });
+            Document.prototype.getElementsByAttributeNameWithoutValue || (Document.prototype.getElementsByAttributeNameWithoutValue = function(name, value) {
+                /* Logic
+                        If
+                            the Name is not "*",
+
+                        else if
+                            the Name is "*"
+                                and
+                            Value is specified.
+                */
+                if (name != "*")
+                    // Return
+                    return this.querySelectorAll('[' + name + ']:not([' + name + '*="' + value + '"])');
+
+                else if (
+                    name == "*" &&
+                    (value || "").toString()
+                ) {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            /* Loop
+                                    Index all the element's attributes.
+                            */
+                            for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
+                                /* Logic
+                                        If
+                                            the attribute value does not have Value.
+                                */
+                                if (document.querySelectorAll("*")[i].attributes[j].value.indexOf(value) <= -1)
+                                    // Update
+                                        // Array
+                                        array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+
+                else {
+                    // Initialization
+                        // Array, Count
+                        var array = [],
+                            count = 0;
+
+                    /* Loop
+                            Index all DOM Elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
+                        // Update
+                            // Count
+                            count++;
+
+                        /* Logic
+                                If
+                                    the element has an attribute.
+                        */
+                        if (document.querySelectorAll("*")[i].attributes.length > 0)
+                            // Update
+                                // Array
+                                array[count] = document.querySelectorAll("*")[i];
+
+                        else
+                            // Update
+                                // Array
+                                array[count] = "falsy"
+                    };
+
+                    // Return
+                    return array.filter(function(data) {
+                        // Return
+                        return (data !== "falsy")
+                    })
+                }
+            });
 
             // <main>
             Document.prototype.main || (Document.prototype.main = document.querySelector("main"));
@@ -1080,7 +2465,7 @@ if (
     /* [Main]
             --- NOTE ---
                 This serves as the main module
-                housing all LapysJS' Javascript functions.
+                housing all LapysJS' JavaScript functions.
     */
         /* DOM Elements */
             // Initialization
@@ -1111,8 +2496,11 @@ if (
                     // Registration
                     (document.createElement("lorem-ipsum").constructor !== HTMLElement) || window.customElements.define("lorem-ipsum", class LoremIpsum extends HTMLElement {});
 
-                    // On DOM Ready
-                    onDOMReady(function() {
+                    /* Set Timeout
+                            --- NOTE ---
+                                delAttr() method should be defined.
+                    */
+                    setTimeout(function() {
                         /* Loop
                                 Index all <lorem-ipsum> elements.
                         */
@@ -1179,7 +2567,7 @@ if (
                                 // Loop Counter
                                 i--
                         }
-                    });
+                    }, 0);
 
                 // <fav-icon>
                     // Registration
@@ -1274,27 +2662,44 @@ if (
                     // <body>
                         // Event
                             // Mouse Up
-                                /* Set Timeout
-                                        --- NOTE ---
-                                            Allow "setEvent()" method to be defined.
+                                /* Loop
+                                        Index all items of the LapysJS script's "data-enable" attribute.
                                 */
-                                setTimeout(function() {
-                                    document.body.setEvent("mouseup", function() {
-                                        /* Loop
-                                                Index all elements.
+                                for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
+                                    /* Logic
+                                            If
+                                                the LapysJS script has "_all" enabled or
+                                                the LapysJS script has "dataFocus" enabled.
+                                    */
+                                    if (
+                                        (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "dataFocus" ||
+                                        (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "dataFocus"
+                                    ) {
+                                        /* Set Timeout
+                                                --- NOTE ---
+                                                    "setEvent()" method should be defined.
                                         */
-                                        for (var i = 0; i < document.querySelectorAll("*").length; i++)
-                                            // Modification
-                                                // Element
-                                                    // Data Focus
-                                                    document.querySelectorAll("*")[i].removeAttribute("data-focus");
+                                        setTimeout(function() {
+                                            document.body.setEvent("mouseup", function() {
+                                                /* Loop
+                                                        Index all elements.
+                                                */
+                                                for (var i = 0; i < document.querySelectorAll("[data-focus]").length; i++)
+                                                    // Modification
+                                                        // Element
+                                                            // Data Focus
+                                                            document.querySelectorAll("[data-focus]")[i].removeAttribute("data-focus");
 
-                                        // Modification
-                                            // Event Target
-                                                // Data Focus
-                                                event.path[0].setAttribute("data-focus", "")
-                                    })
-                                }, 100);
+                                                // Modification
+                                                    // Event Target
+                                                        // Data Focus
+                                                        event.path[0].setAttribute("data-focus", "")
+                                            })
+                                        }, 100);
+
+                                        // Break
+                                        break
+                                    };
 
                     // <br>
                         /* Loop
@@ -2353,17 +3758,6 @@ if (
                                 return hasClass
                             };
 
-                            // Close
-                            Element.prototype.close = function() {
-                                // Modification
-                                    // Target Element
-                                        // Data Open
-                                        this.removeAttribute("data-open");
-
-                                        // Data Close
-                                        this.setAttribute("data-close", "")
-                            };
-
                             // Add Class
                             Element.prototype.addClass = function(name) {
                                 // Target Element
@@ -2401,6 +3795,17 @@ if (
                                             "class",
                                             ((this.getAttribute("class") || "") + " " + name).trim()
                                         )
+                            };
+
+                            // Close
+                            Element.prototype.close = function() {
+                                // Modification
+                                    // Target Element
+                                        // Data Open
+                                        this.removeAttribute("data-open");
+
+                                        // Data Close
+                                        this.setAttribute("data-close", "")
                             };
 
                             // Delete Attribute
@@ -2618,10 +4023,10 @@ if (
                                             If
                                                 the element's "style" is 'empty'.
                                     */
-                                    if (that.getAttribute("style") == "")
-                                    // Modification
-                                        // Style
-                                        that.removeAttribute("style")
+                                    if (!that.getAttribute("style"))
+                                        // Modification
+                                            // Style
+                                            that.removeAttribute("style")
                                 }
 
                                 else
@@ -2664,9 +4069,20 @@ if (
                                 else if (typeof data == "string")
                                     /* Logic
                                             If
+                                                Data is "_all" and
+                                                the element does not have an "_all" attribute,
+
+                                            else if
                                                 Data does not have a comma.
                                     */
-                                    if (data.indexOf(",") <= -1)
+                                    if (
+                                        data == "_all" &&
+                                        !this.hasAttribute("_all")
+                                    )
+                                        // Return
+                                        return this.attributes;
+
+                                    else if (data.indexOf(",") <= -1)
                                         // Return
                                         return this.getAttribute(data);
 
@@ -2751,6 +4167,31 @@ if (
                                 return !!this.querySelector(selector)
                             };
 
+                            // Node Index
+                                /* Loop
+                                        Index all items of the LapysJS script's "data-enable" attribute.
+                                */
+                                for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
+                                    /* Logic
+                                            If
+                                                the LapysJS script has "_all" enabled or
+                                                the LapysJS script has "nodeIndex" enabled.
+                                    */
+                                    if (
+                                        (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "_all" ||
+                                        (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "nodeIndex"
+                                    ) {
+                                        /* Loop
+                                                Index all DOM Elements.
+                                        */
+                                        for (var i = 0; i < document.querySelectorAll("*").length; i++)
+                                            // Modification > DOM Element > Node Index
+                                            document.querySelectorAll("*")[i].nodeIndex = i;
+
+                                        // Break
+                                        break
+                                    };
+
                             // Open
                             Element.prototype.open = function() {
                                 // Modification
@@ -2783,7 +4224,7 @@ if (
                                     // Modification
                                         // Target Element
                                             // [Name]
-                                            this.setAttribute(name.split(/,/g)[i], (value.split(/,/g)[i] || ""));
+                                            this.setAttribute(name.split(/,/g)[i], (((value || "").split(/,/g) || [])[i] || ""));
 
                                 // Modification (if Name is "class" or "style")
                                     // Target Element
@@ -2846,6 +4287,20 @@ if (
                                                 (this || window).detachEvent(("on" + type.replace(/ /g, "").split(/,/g)[i]), listener)
                             };
 
+                            // Event Listeners
+                            EventTarget.prototype.eventListeners = function() {
+                                /* Logic
+                                        If
+                                            getEventListeners() is defined.
+                                */
+                                if (getEventListeners)
+                                    // Return
+                                    return getEventListeners(this);
+
+                                else
+                                    LapysJS.error("Sorry, your browser does not support the 'getEventListeners()' function.")
+                            };
+
                             // [Query Selector (All)]
                             EventTarget.prototype.$$ || (EventTarget.prototype.$$ = function(selector, index) {
                                 // Update
@@ -2860,56 +4315,95 @@ if (
                                 if (typeof selector == "string")
                                     /* Logic
                                             If
-                                                "index" is not 0,
+                                                Selector is not ("[]", "[=]", "[=]:not([])", "[=]:not([=])"),
 
                                             else if
-                                                the returned node list does not have a second member
+                                                Selector is "[=]",
+
+                                            else if
+                                                Selector is "[=]:not([])",
+
+                                            else if
+                                                Selector is "[=]:not([=])",
+
+                                            else if
+                                                Selector is "[]".
                                     */
-                                    if (index != 0) {
-                                        /* Logic
-                                                Switch "index" case to
-                                                    "array", "length" and "_length".
-                                        */
-                                        switch (index) {
-                                            case "array":
-                                                // Return
-                                                return that.querySelectorAll(selector);
-                                                break;
-
-                                            case "length":
-                                                // Return
-                                                return that.querySelectorAll(selector).length;
-                                                break;
-
-                                            case "_length":
-                                                // Return
-                                                return (that.querySelectorAll(selector).length - 1);
-                                                break;
-                                        };
-
+                                    if (
+                                        selector != "[]" &&
+                                        selector != "[=]" &&
+                                        selector != "[=]:not([])" &&
+                                        selector != "[=]:not([=])"
+                                    ) {
                                         /* Logic
                                                 If
-                                                    "index" is a number,
+                                                    "index" is not 0,
 
                                                 else if
-                                                    multiple instances of the specified element is not defined.
+                                                    the returned node list does not have a second member
                                         */
-                                        if (typeof index == "number")
-                                            // Return
-                                            return that.querySelectorAll(selector)[index];
+                                        if (index != 0) {
+                                            /* Logic
+                                                    Switch "index" case to
+                                                        "array", "length" and "_length".
+                                            */
+                                            switch (index) {
+                                                case "array":
+                                                    // Return
+                                                    return that.querySelectorAll(selector);
+                                                    break;
 
-                                        else if (!that.querySelectorAll(selector)[1])
-                                            // Return
-                                            return that.querySelector(selector);
+                                                case "length":
+                                                    // Return
+                                                    return that.querySelectorAll(selector).length;
+                                                    break;
+
+                                                case "_length":
+                                                    // Return
+                                                    return (that.querySelectorAll(selector).length - 1);
+                                                    break;
+                                            };
+
+                                            /* Logic
+                                                    If
+                                                        "index" is a number,
+
+                                                    else if
+                                                        multiple instances of the specified element is not defined.
+                                            */
+                                            if (typeof index == "number")
+                                                // Return
+                                                return that.querySelectorAll(selector)[index];
+
+                                            else if (!that.querySelectorAll(selector)[1])
+                                                // Return
+                                                return that.querySelector(selector);
+
+                                            else
+                                                // Return
+                                                return that.querySelectorAll(selector);
+                                        }
 
                                         else
                                             // Return
-                                            return that.querySelectorAll(selector);
+                                            return that.querySelector(selector)
                                     }
 
-                                    else
+                                    else if (selector == "[=]")
                                         // Return
-                                        return that.querySelector(selector)
+                                        return document.getElementsByAttributeNameAndValue("*");
+
+                                    else if (selector == "[=]:not([])")
+                                        // Return
+                                        return [];
+
+                                    else if (selector == "[=]:not([=])")
+                                        // Return
+                                        return document.getElementsByAttributeNameAndValueExceptValue("*");
+
+                                    else if (selector == "[]")
+                                        // Return
+                                        return document.getElementsByAttributeName("*")
                             });
 
                             // Run Event
@@ -2922,20 +4416,72 @@ if (
 
                             // Set Event
                             EventTarget.prototype.setEvent || (EventTarget.prototype.setEvent = function(type, listener, useCapture, wantsUntrusted) {
+                                // Modification > Target > Events
+                                (this || window).events = ((this || window).events || new (function  LapysJSEventMap() {  }));
+
                                 /* Loop
                                         Index all Types.
                                 */
-                                for (var i = 0; i < type.replace(/ /g, "").split(/,/g).length; i++)
-                                    // Event
-                                        // [if]
-                                        (window.addEventListener) ?
-                                            // [true]
-                                                // [Type]
-                                                (this || window).addEventListener(type.replace(/ /g, "").split(/,/g)[i], listener, useCapture, wantsUntrusted) :
+                                for (var i = 0; i < type.replace(/ /g, "").split(/,/g).length; i++) {
+                                    // Modification > Target > Events
+                                    (this || window).events[
+                                        (function() {
+                                            /* Logic
+                                                    If
+                                                        the Type is not "online".
+                                            */
+                                            if (type.replace(/ /g, "").split(/,/g)[i] != "online")
+                                                // Return
+                                                return type.replace(/ /g, "").split(/,/g)[i].replace("on", "");
 
-                                            // [false]
-                                                // On [Type]
-                                                (this || window).attachEvent(("on" + type.replace(/ /g, "").split(/,/g)[i]), listener, useCapture, wantsUntrusted)
+                                            else
+                                                // Return
+                                                return type.replace(/ /g, "").split(/,/g)[i]
+                                        })()
+                                    ] = ((this || window).events[(function() { if (type.replace(/ /g, "").split(/,/g)[i] != "online") return type.replace(/ /g, "").split(/,/g)[i].replace("on", ""); else return type.replace(/ /g, "").split(/,/g)[i] })()] || []);
+
+                                    // Update > Target > Events
+                                    (this || window).events[(function() { if (type.replace(/ /g, "").split(/,/g)[i] != "online") return type.replace(/ /g, "").split(/,/g)[i].replace("on", ""); else return type.replace(/ /g, "").split(/,/g)[i] })()].push({
+                                        // Listener
+                                        listener: (function() { return listener })(),
+
+                                        // Type
+                                        type: (function() { return (function() { if (type.replace(/ /g, "").split(/,/g)[i] != "online") return type.replace(/ /g, "").split(/,/g)[i].replace("on", ""); else return type.replace(/ /g, "").split(/,/g)[i] })() })(),
+
+                                        // Use Capture
+                                        useCapture: (function() { return (useCapture || false) })(),
+
+                                        // Wants Untrusted
+                                        wantsUntrusted: (function() { return (wantsUntrusted || false) })()
+                                    });
+
+                                    // Event > [if]
+                                    (window.addEventListener) ?
+                                        // [true] > [Type]
+                                        (this || window).addEventListener(type.replace(/ /g, "").split(/,/g)[i], listener, useCapture, wantsUntrusted) :
+
+                                        // [false] > On [Type]
+                                        (this || window).attachEvent(("on" + type.replace(/ /g, "").split(/,/g)[i]), listener, useCapture, wantsUntrusted)
+                                }
+                            });
+
+                            // Load
+                            HTMLHeadElement.prototype.load || (HTMLHeadElement.prototype.load = function(dataID, array) {
+                                /* Logic
+                                        If
+                                            Array has ".css" in it,
+
+                                        else if
+                                            Array has ".js" in it.
+                                */
+                                if (array.indexOf(".css") >= 0)
+                                    css.link(dataID, array);
+
+                                else if (array.indexOf(".js") >= 0)
+                                    js.src(dataID, array);
+
+                                else
+                                    LapysJS.warn("The 'load()' method can only call to '.css' and '.js' files.")
                             });
 
                             // Add Class
@@ -3005,6 +4551,18 @@ if (
                                     // Target Element
                                         // Close
                                         this[i].close()
+                            };
+
+                            // CSS Selector
+                            HTMLCollection.prototype.CSSSelector = function(value) {
+                                /* Loop
+                                        Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Modification
+                                        // Target Element
+                                            // CSS Selector
+                                            this[i].CSSSelector = value
                             };
 
                             // Delete
@@ -3079,43 +4637,6 @@ if (
                                         // Target Element
                                             // Style
                                             this[i].delStyle(style)
-                            };
-
-                            /* Every
-                                    --- CONSIDER ---
-                                        Should be able to access DOM Elements within the NodeList
-                                            or
-                                        should have a global index to work with.
-                            */
-                            HTMLCollection.prototype.every = function(func, start, end) {
-                                // Update
-                                    // Start
-                                        /* Logic
-                                                If
-                                                    Start is less than 0.
-                                        */
-                                        if (start < 0)
-                                            start = 0;
-
-                                    // End
-                                        /* Logic
-                                                If
-                                                    End is greater than the Node List's length.
-                                        */
-                                        if (end > this.length)
-                                            end = this.length;
-
-                                /* Logic
-                                        If
-                                            Function data type is "function".
-                                */
-                                if (typeof func == "function")
-                                    /* Loop
-                                            [for]
-                                    */
-                                    for (var k = (start || 0); k < (end || this.length); k++)
-                                        // Function
-                                        func()
                             };
 
                             // Get Attr[ibute]
@@ -3603,6 +5124,24 @@ if (
                                                 this[i].style[declaration] = value
                             };
 
+                            // To Array
+                            HTMLCollection.prototype.toArray = function() {
+                                // Initialization
+                                    // Array
+                                    var array = [];
+
+                                /* Loop
+                                        Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update
+                                        // Array
+                                        array[i] = this[i];
+
+                                // Return
+                                return array
+                            };
+
                             // Hide
                             HTMLElement.prototype.hide = function() {
                                 // Modification
@@ -3697,6 +5236,9 @@ if (
                             // Close
                             NodeList.prototype.close = HTMLCollection.prototype.close;
 
+                            // CSS Selector
+                            NodeList.prototype.CSSSelector = HTMLCollection.prototype.CSSSelector;
+
                             // Delete Attr[ibute]
                             NodeList.prototype.delAttr = HTMLCollection.prototype.delAttr;
 
@@ -3711,9 +5253,6 @@ if (
 
                             // Delete Style
                             NodeList.prototype.delStyle = HTMLCollection.prototype.delStyle;
-
-                            // Every
-                            NodeList.prototype.every = HTMLCollection.prototype.every;
 
                             // Get Attr[ibute]
                             NodeList.prototype.getAttr = HTMLCollection.prototype.getAttr;
@@ -3808,63 +5347,8 @@ if (
                             // Style
                             NodeList.prototype.style = HTMLCollection.prototype.style;
 
-                            // Child ID
-                            Object.defineProperty(Element.prototype, "childID", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Value
-                                get: function() {
-                                    // Initialization
-                                        // Target Element
-                                        var that = this.cloneNode();
-
-                                    // Modification
-                                        // Target Element
-                                            // Child ID
-                                            that.childElementsByID = new Object();
-
-                                            // Inner HTML
-                                            that.innerHTML = this.innerHTML;
-
-                                    /* Loop
-                                            Index all the Target Element's child elements.
-                                    */
-                                    for (var j = 0; j < that.querySelectorAll("*").length; j++)
-                                        /* Logic
-                                                If
-                                                    the element has the "data-id" attribute,
-
-                                                else if
-                                                    the element has the "id" attribute.
-                                        */
-                                        if (!!(that.querySelectorAll("*")[j].getAttribute("data-id") || "").replace(/ /g, ""))
-                                            // Update
-                                                // Target Element
-                                                    // Child ID
-                                                    that.childElementsByID[
-                                                        that.querySelectorAll("*")[j].getAttribute("data-id")
-                                                    ] = that.querySelectorAll("*")[j];
-
-                                        else if (!!(that.querySelectorAll("*")[j].getAttribute("id") || "").replace(/ /g, ""))
-                                            // Update
-                                                // Target Element
-                                                    // Child ID
-                                                    that.childElementsByID[
-                                                        that.querySelectorAll("*")[j].getAttribute("id")
-                                                    ] = that.querySelectorAll("*")[j];
-
-                                    // Return
-                                    return that.childElementsByID
-                                },
-
-                                set: function() {
-                                    /* Do nothing… */
-                                }
-                            });
+                            // To Array
+                            NodeList.prototype.toArray = HTMLCollection.prototype.toArray;
 
                             // CSS Selector
                             Object.defineProperty(Element.prototype, "CSSSelector", {
@@ -3890,13 +5374,13 @@ if (
                                                 /* Logic
                                                         If the element has a class.
                                                 */
-                                                if (that.getAttribute("class").indexOf(" ") <= -1)
+                                                if ((that.getAttribute("class") || " ").indexOf(" ") <= -1)
                                                     /* Loop
                                                             Index the element's class nodes.
                                                     */
-                                                    for (var i = 0; i < that.getAttribute("class").trim().split(/ /g).length; i++)
+                                                    for (var i = 0; i < (that.getAttribute("class") || " ").trim().split(/ /g).length; i++)
                                                         // Return
-                                                        return ("." + that.getAttribute("class").trim().split(/ /g)[i]);
+                                                        return ("." + (that.getAttribute("class") || " ").trim().split(/ /g)[i]);
 
                                                 else
                                                     // Return
@@ -3909,7 +5393,7 @@ if (
                                                         If
                                                             the element has an ID.
                                                 */
-                                                if (!!that.id)
+                                                if (that.id)
                                                     // Return
                                                     return ("#" + that.id);
 
@@ -3931,16 +5415,15 @@ if (
                                                 for (var i = 0; i < that.attributes.length; i++)
                                                     /* Logic
                                                             If
-                                                                the attribute name is not "class" and "id" and "style".
+                                                                the attribute name is not "class" and "id".
                                                     */
                                                     if (
                                                         that.attributes[i].name != "class" &&
-                                                        that.attributes[i].name != "id" &&
-                                                        that.attributes[i].name != "style"
+                                                        that.attributes[i].name != "id"
                                                     )
                                                         // Update
                                                             // Attributes
-                                                            thatAttributes = ('[' + that.attributes[i].name + '="' + that.attributes[i].value + '"]');
+                                                            thatAttributes += ('[' + that.attributes[i].name + '="' + (that.attributes[i].value || "").replace(/"/g, '\'') + '"]');
 
                                                 // Return
                                                     // Attributes
@@ -3966,11 +5449,11 @@ if (
                                             /* Loop
                                                     For all existing class nodes.
                                             */
-                                            for (var i = 0; i < CSSSelector.replace(/(\[([a-zA-Z0-9]|_|-|\=|"|'|){1,}\]|\#([a-zA-Z0-9]|_|-){1,})/g, "").trim().split(/\./).filter(function(data) { return !!data }).length; i++)
+                                            for (var i = 0; i < CSSSelector.replace(/(\[([a-zA-Z0-9]|_|-|\=|){1,}\]|\#([a-zA-Z0-9]|_|-){1,})/g, "").trim().split(/\./).filter(function(data) { return !!data }).length; i++)
                                                 // Modification
                                                     // Target Element
                                                         // Class
-                                                        this.addClass(CSSSelector.replace(/(\[([a-zA-Z0-9]|_|-|\=|"|'|){1,}\]|\#([a-zA-Z0-9]|_|-){1,})/g, "").trim().split(/\./).filter(function(data) { return !!data })[i]);
+                                                        this.addClass(CSSSelector.replace(/(\[([a-zA-Z0-9]|_|-|\=|){1,}\]|\#([a-zA-Z0-9]|_|-){1,})/g, "").trim().replace(/\[style\=([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|){1,}\]/g, "").split(/\./).filter(function(data) { return !!data })[i]);
 
                                     /* Logic
                                             If
@@ -3981,7 +5464,7 @@ if (
                                             // Modification
                                                 // Target Element
                                                     // ID
-                                                    this.id = CSSSelector.replace(/(\[([a-zA-Z0-9]|_|-|\=|"|'|){1,}\]|\.([a-zA-Z0-9]|_|-){1,})|#/g, "");
+                                                    this.id = CSSSelector.replace(/(\[([a-zA-Z0-9]|_|-|\=|"|'|){1,}\]|\.([a-zA-Z0-9]|_|-){1,})|#/g, "").replace(/\[style\=([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|){1,}\]/g, "");
 
                                     /* Logic
                                             If
@@ -4155,6 +5638,38 @@ if (
                                             // Target Element
                                                 // Height
                                                 this[i].style.height = (number + "px");
+                                }
+                            });
+
+                            // Node Index
+                            Object.defineProperty(HTMLCollection.prototype, "nodeIndex", {
+                                // Configurable
+                                configurable: true,
+
+                                // Enumerable
+                                enumerable: true,
+
+                                // Get
+                                get: function() {
+                                    // Initialization
+                                        // Array
+                                        var array = [];
+
+                                    /* Loop
+                                        Index all members of the HTML Collection.
+                                    */
+                                    for (var i = 0; i < this.length; i++)
+                                        // Update
+                                            // Array
+                                            array[i] = this[i].nodeIndex;
+
+                                    // Return
+                                    return array
+                                },
+
+                                // Set
+                                set: function(number) {
+                                    /* Do nothing... */
                                 }
                             });
 
@@ -4443,6 +5958,38 @@ if (
                                 }
                             });
 
+                            // Node Index
+                            Object.defineProperty(NodeList.prototype, "nodeIndex", {
+                                // Configurable
+                                configurable: true,
+
+                                // Enumerable
+                                enumerable: true,
+
+                                // Get
+                                get: function() {
+                                    // Initialization
+                                        // Array
+                                        var array = [];
+
+                                    /* Loop
+                                        Index all members of the HTML Collection.
+                                    */
+                                    for (var i = 0; i < this.length; i++)
+                                        // Update
+                                            // Array
+                                            array[i] = this[i].nodeIndex;
+
+                                    // Return
+                                    return array
+                                },
+
+                                // Set
+                                set: function(number) {
+                                    /* Do nothing... */
+                                }
+                            });
+
                             // Offset
                             Object.defineProperty(NodeList.prototype, "offset", {
                                 // Configurable
@@ -4629,177 +6176,270 @@ if (
                                 }
                             });
 
-                    /* Loop
-                            Index all elements.
-                    */
-                    for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Modification
-                            // Class Sets
-                                // On DOM Ready
-                                onDOMReady(function() {
-                                    // Set Timeout
-                                    setTimeout(function() {
-                                        /* Loop
-                                                Index all DOM Elements.
+                    // Class Sets
+                        /* Loop
+                                Index all items of the LapysJS script's "data-enable" attribute.
+                        */
+                        for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
+                            /* Logic
+                                    If
+                                        the LapysJS script has "_all" enabled or
+                                        the LapysJS script has "classSets" enabled.
+                            */
+                            if (
+                                (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "_all" ||
+                                (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "classSets"
+                            ) {
+                                function classSets() {
+                                    /* Loop
+                                            Index all DOM Class Elements.
+                                    */
+                                    for (var i = 0; i < document.querySelectorAll("[class]").length; i++)
+                                        /* Logic
+                                                If
+                                                    the DOM Class Element has "-" in its class
+                                                        and
+                                                    the DOM Class Element has "_" in its class.
                                         */
-                                        for (var i = 0; i < document.querySelectorAll("*").length; i++)
-                                            /* Logic
-                                                    If
-                                                        the element has the "class" attribute.
+                                        if (document.querySelectorAll("[class]")[i].getAttribute("class").indexOf("_") >= 0)
+                                            /* Loop
+                                                    Index all the DOM Class Element's class nodes.
                                             */
-                                            if (document.querySelectorAll("*")[i].hasAttribute("class")) {
-                                                // Initialization
-                                                    // Class Style
-                                                    var classStyle = {
-                                                        // Size
-                                                        size: []
-                                                    };
-
-                                                /* Loop
-                                                        Index all the element's class nodes.
+                                            for (var k = 0; k < document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g).length; k++) {
+                                                /* Logic
+                                                        Switch case to
+                                                            Flex, Maximum and Minimum.
                                                 */
-                                                for (var j = 0; j < document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g).length; j++) {
-                                                    // Flex-Basis Preset
-                                                    if (
-                                                        document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[j].indexOf("flx-b_") == 0 ||
-                                                        document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[j].indexOf("flex-basis_") == 0
-                                                    )
-                                                        classStyle.size = classStyle.size.concat(["flexBasis"]);
+                                                switch (document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].replace(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_")), "").slice(0, document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].replace(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice( document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_")), "").indexOf("-"))) {
+                                                    // Flex
+                                                    case ("flex" || "flx"):
+                                                        document.querySelectorAll("[class]")[i].classSetMetadata = "flex";
+                                                        break;
 
-                                                    // Height Preset
-                                                    if (
-                                                        document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[j].indexOf("h_") == 0 ||
-                                                        document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[j].indexOf("height_") == 0
-                                                    )
-                                                        classStyle.size = classStyle.size.concat(["height"]);
+                                                    // Maximum
+                                                    case "max":
+                                                        document.querySelectorAll("[class]")[i].classSetMetadata = "max";
+                                                        break;
 
-                                                    // Max-Height Preset
-                                                    if (
-                                                        document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[j].indexOf("max-h_") == 0 ||
-                                                        document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[j].indexOf("max-height_") == 0
-                                                    )
-                                                        classStyle.size = classStyle.size.concat(["maxHeight"]);
+                                                    // Minimum
+                                                    case "min":
+                                                        document.querySelectorAll("[class]")[i].classSetMetadata = "min";
+                                                        break;
 
-                                                    // Max-Width Preset
-                                                    if (
-                                                        document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[j].indexOf("max-w_") == 0 ||
-                                                        document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[j].indexOf("max-width_") == 0
-                                                    )
-                                                        classStyle.size = classStyle.size.concat(["minWidth"]);
-
-                                                    // Min-Height Preset
-                                                    if (
-                                                        document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[j].indexOf("min-h_") == 0 ||
-                                                        document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[j].indexOf("min-height_") == 0
-                                                    )
-                                                        classStyle.size = classStyle.size.concat(["minHeight"]);
-
-                                                    // Min-Width Preset
-                                                    if (
-                                                        document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[j].indexOf("min-w_") == 0 ||
-                                                        document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[j].indexOf("min-width") == 0
-                                                    )
-                                                        classStyle.size = classStyle.size.concat(["minWidth"]);
-
-                                                    // Width Preset
-                                                    if (
-                                                        document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[j].indexOf("w_") == 0 ||
-                                                        document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[j].indexOf("width_") == 0
-                                                    )
-                                                        classStyle.size = classStyle.size.concat(["width"]);
+                                                    // [Default]
+                                                    default:
+                                                        document.querySelectorAll("[class]")[i].classSetMetadata = "";
+                                                        break;
                                                 };
 
-                                                // Style
-                                                    // Size
-                                                        /* Loop
-                                                                Index all members of Class Style Size.
-                                                        */
-                                                        for (var j = 0; j < classStyle.size.length; j++)
-                                                            /* Loop
-                                                                    Index all class nodes of the element.
+                                                /* Logic
+                                                        Switch case to
+                                                            Basis, Height and Width.
+                                                */
+                                                switch (document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].replace(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_")), "").slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].replace(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_")), "").indexOf("-") + "-".length)) {
+                                                    case ("b" || "basis"):
+                                                        document.querySelectorAll("[class]")[i].classSetData = "basis";
+                                                        break;
+
+                                                    case ("h" || "height"):
+                                                        document.querySelectorAll("[class]")[i].classSetData = "height";
+                                                        break;
+
+                                                    case ("w" || "width"):
+                                                        document.querySelectorAll("[class]")[i].classSetData = "width";
+                                                        break;
+
+                                                    // [Default]
+                                                    default:
+                                                        document.querySelectorAll("[class]")[i].classSetData = "";
+                                                        break;
+                                                };
+
+                                                /* Logic
+                                                        If
+                                                            the class set metadata is defined.
+                                                */
+                                                if (document.querySelectorAll("[class]")[i].classSetMetadata)
+                                                    // Modification > Element > Class Set
+                                                    document.querySelectorAll("[class]")[i].classSet = (
+                                                        document.querySelectorAll("[class]")[i].classSetMetadata +
+                                                        (
+                                                            document.querySelectorAll("[class]")[i].classSetData[0].toUpperCase() +
+                                                            document.querySelectorAll("[class]")[i].classSetData.slice(1)
+                                                        )
+                                                    );
+
+                                                else
+                                                    // Modification > Element > Class Set
+                                                    document.querySelectorAll("[class]")[i].classSet = document.querySelectorAll("[class]")[i].classSetData;
+
+                                                /* Logic
+                                                        If
+                                                            the Class Set is "eval".
+                                                */
+                                                if (
+                                                    document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_") + "_".length).indexOf("eval(") >= 0
+                                                )
+                                                    // Style > DOM Class Element > [Class Set]
+                                                    document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = eval(document.querySelectorAll("[class]")[i].getAttribute("class").replace(document.querySelectorAll("[class]")[i].classSet + "_eval", "::lapys::").replace(/\:\:lapys\:\:\(([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|)\{1,}\)/g, "").slice(document.querySelectorAll("[class]")[i].getAttribute("class").replace(document.querySelectorAll("[class]")[i].classSet + "_eval", "::lapys::").replace(/\:\:lapys\:\:\(([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|)\{1,}\)/g, "").indexOf("(") + "(".length, -1));
+
+                                                /* Logic
+                                                        Switch case to
+                                                            [case]
+                                                */
+                                                switch (document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_") + "_".length)) {
+                                                    // Device Height
+                                                    case "device-height":
+                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (screen.availHeight + "px");
+                                                        break;
+
+                                                    // Device Width
+                                                    case "device-width":
+                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (screen.availWidth + "px");
+                                                        break;
+
+                                                    // Height
+                                                    case "height":
+                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (parseNumber(document.querySelectorAll("[class]")[i].getCSS("height")) + "px");
+                                                        break;
+
+                                                    // Fill Parent
+                                                    case "fill-parent":
+                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (function() {
+                                                            /* Logic
+                                                                    If
+                                                                            the DOM Class Element's parent has a "flex-direction" of "column",
+                                                                                or
+                                                                            the DOM Class Element's parent has a "flex-direction" of "column-reverse",
+
+                                                                            or
+                                                                        the DOM Class Element "height" in its Class Set,
+
+                                                                    else if
+                                                                            the DOM Class Element's parent has a "flex-direction" of "auto",
+                                                                                or
+                                                                            the DOM Class Element's parent has a "flex-direction" of "initial",
+                                                                                or
+                                                                            the DOM Class Element's parent has a "flex-direction" of "inherit",
+                                                                                or
+                                                                            the DOM Class Element's parent has a "flex-direction" of "row",
+                                                                                or
+                                                                            the DOM Class Element's parent has a "flex-direction" of "row-reverse",
+
+                                                                            or
+                                                                        the DOM Class Element "width" in its Class Set.
                                                             */
-                                                            for (var k = 0; k < document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g).length; k++) {
-                                                                /* height
-                                                                        --- CONSIDER ---
-                                                                            The returned data should be the initial height of the element
-                                                                            when the document is loaded,
-                                                                            not its 'live' height.
-                                                                */
-                                                                if (document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[k].indexOf("height") >= 0)
-                                                                    document.querySelectorAll("*")[i].style[classStyle.size[j]] = (function() {
-                                                                        // Modification
-                                                                        document.querySelectorAll("*")[i]["LapysJS initialHeight"] = (document.querySelectorAll("*")[i]["LapysJS initialHeight"] || document.querySelectorAll("*")[i].clientHeight + "px");
+                                                            if (
+                                                                document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction").indexOf("column") >= 0 ||
+                                                                document.querySelectorAll("[class]")[i].classSet.toLowerCase().indexOf("height") >= 0
+                                                            )
+                                                                // Return
+                                                                return (
+                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("border-bottom-width")) +
+                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("border-top-width")) +
+                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("padding-bottom")) +
+                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("padding-top")) +
+                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("height"))
+                                                                ) + "px";
 
-                                                                        // Return
-                                                                        return document.querySelectorAll("*")[i]["LapysJS initialHeight"]
-                                                                    })();
+                                                            else if (
+                                                                document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction") == "auto" ||
+                                                                document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction") == "initial" ||
+                                                                document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction") == "inherit" ||
+                                                                document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction").indexOf("row") >= 0 ||
+                                                                document.querySelectorAll("[class]")[i].classSet.toLowerCase().indexOf("width") >= 0
+                                                            )
+                                                                // Return
+                                                                return (
+                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("border-left-width")) +
+                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("border-right-width")) +
+                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("padding-left")) +
+                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("padding-right")) +
+                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("width"))
+                                                                ) + "px"
+                                                        })();
+                                                        break;
 
-                                                                // device-height
-                                                                if (document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[k].indexOf("device-height") >= 0)
-                                                                    document.querySelectorAll("*")[i].style[classStyle.size[j]] = (window.innerHeight + "px");
+                                                    // Match Parent
+                                                    case "match-parent":
+                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (parseNumber((document.querySelectorAll("[class]")[i].parentElement || document.querySelectorAll("[class]")[i].parentNode).getCSS(document.querySelectorAll("[class]")[i].classSet)) + "px");
+                                                        break;
 
-                                                                /* width
-                                                                        --- CONSIDER ---
-                                                                            The returned data should be the initial width of the element
-                                                                            when the document is loaded,
-                                                                            not its 'live' width.
-                                                                */
-                                                                if (document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[k].indexOf("width") >= 0)
-                                                                    document.querySelectorAll("*")[i].style[classStyle.size[j]] = (function() {
-                                                                        // Modification
-                                                                        document.querySelectorAll("*")[i]["LapysJS initialWidth"] = (document.querySelectorAll("*")[i]["LapysJS initialWidth"] || document.querySelectorAll("*")[i].clientWidth + "px");
+                                                    // Width
+                                                    case "width":
+                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (parseNumber(document.querySelectorAll("[class]")[i].getCSS("width")) + "px");
+                                                        break;
 
-                                                                        // Return
-                                                                        return document.querySelectorAll("*")[i]["LapysJS initialWidth"]
-                                                                    })();
+                                                    // Window Height
+                                                    case "window-height":
+                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (window.innerHeight + "px");
+                                                        break;
 
-                                                                // device-width
-                                                                if (document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[k].indexOf("device-width") >= 0)
-                                                                    document.querySelectorAll("*")[i].style[classStyle.size[j]] = (window.innerWidth + "px");
+                                                    // Window Width
+                                                    case "window-width":
+                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (window.innerWidth + "px");
+                                                        break;
+                                                };
 
-                                                                // fill-parent
-                                                                if (document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[k].indexOf("fill-parent") >= 0) {
-                                                                    // Initialization
-                                                                        // Fill Length
-                                                                        var fillLength = 0;
+                                                document.querySelectorAll("[class]")[i].classSet = undefined;
+                                                document.querySelectorAll("[class]")[i].classSetMetadata = undefined;
+                                                document.querySelectorAll("[class]")[i].classSetData = undefined
+                                            }
+                                };
+                                classSets();
+                                setEvent("resize", classSets)
+                            };
 
-                                                                    /* Loop
-                                                                            Index all the element's parent's child elements.
-                                                                    */
-                                                                    for (var l = 0; l < (document.querySelectorAll("*")[i].parentElement || document.querySelectorAll("*")[i].parentNode).children.length; l++)
-                                                                        /* Logic
-                                                                                If
-                                                                                    the parent's child element is not the element.
-                                                                        */
-                                                                        if ((document.querySelectorAll("*")[i].parentElement || document.querySelectorAll("*")[i].parentNode).children[l] != document.querySelectorAll("*")[i])
-                                                                            // Update
-                                                                                // Fill Length
-                                                                                fillLength += parseNumber((document.querySelectorAll("*")[i].parentElement || document.querySelectorAll("*")[i].parentNode).children[l].getCSS(classStyle.size[j]));
+                    // Style
+                        /* Loop
+                                Index all items of the LapysJS script's "data-enable" attribute.
+                        */
+                        for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
+                            /* Logic
+                                    If
+                                        the LapysJS script has "_all" enabled or
+                                        the LapysJS script has "styleAttributes" enabled.
+                            */
+                            if (
+                                (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "_all" ||
+                                (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "styleAttributes"
+                            ) {
+                                /* Loop
+                                        Index all "css-style" attributed DOM Elements.
+                                */
+                                for (var i = 0; i < document.querySelectorAll("[css-style]").length; i++) {
+                                    /* Loop
+                                            Index all "css-style" CSS declarations.
+                                    */
+                                    for (var k = 0; k < document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g).length; k++)
+                                        // Style > Element > [CSS Style]
+                                        document.querySelectorAll("[css-style]")[i].style[document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g)[k].trim().slice(0, document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g)[k].trim().indexOf(":")).replace(/[a-z]\-[a-z]/g, function(data) { return (data.replace("-", "").slice(0, -1) + data[data.length - 1].toUpperCase()) })] = document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g)[k].trim().slice(document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g)[k].trim().indexOf(":") + ":".length).trim();
 
-                                                                    document.querySelectorAll("*")[i].style[classStyle.size[j]] = ((parseNumber((document.querySelectorAll("*")[i].parentElement || document.querySelectorAll("*")[i].parentNode).getCSS(classStyle.size[j])) - fillLength) + "px");
-                                                                };
+                                    // Modification > Element > CSS Style
+                                    document.querySelectorAll("[css-style]")[i].removeAttribute("css-style")
+                                };
 
-                                                                // match-parent
-                                                                if (document.querySelectorAll("*")[i].getAttribute("class").trim().split(/ /g)[k].indexOf("match-parent") >= 0)
-                                                                    document.querySelectorAll("*")[i].style[classStyle.size[j]] = (
-                                                                        (
-                                                                            document.querySelectorAll("*")[i].parentNode ||
-                                                                            document.querySelectorAll("*")[i].parentElement
-                                                                        ).style[classStyle.size[j]] ||
-                                                                        window.getComputedStyle(document.querySelectorAll("*")[i].parentNode).getPropertyValue(classStyle.size[j])
-                                                                    )
-                                                            }
-                                        }
-                                    }, 100)
-                                });
+                                /* Loop
+                                        Index all "js-style" attributed DOM Elements.
+                                */
+                                for (var i = 0; i < document.querySelectorAll("[js-style]").length; i++) {
+                                    // Modification > Element > JS Style
+                                    document.querySelectorAll("[js-style]")[i].setAttribute("js-style", document.querySelectorAll("[js-style]")[i].getAttribute("js-style").replace(/\(([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\"\'\<\,\>\.\?\/]| |\n|);([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\"\'\<\,\>\.\?\/]| |\n|){1,}\)/g, function(data) { return data.replace(/\;/g, "::semi-colon::") }));
 
-                            // Node Index
-                            document.querySelectorAll("*")[i].nodeIndex = i;
-                    }
+                                    /* Loop
+                                            Index all "js-style" CSS declarations.
+                                    */
+                                    for (var k = 0; k < document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g).length; k++)
+                                        // Style > Element > [CSS Style]
+                                        document.querySelectorAll("[js-style]")[i].style[document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g)[k].trim().slice(0, document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g)[k].trim().indexOf(":")).replace(/[a-z]\-[a-z]/g, function(data) { return (data.replace("-", "").slice(0, -1) + data[data.length - 1].toUpperCase()) })] = eval(document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g)[k].trim().slice(document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g)[k].trim().indexOf(":") + ":".length).trim());
+
+                                    // Modification > Element > JS Style
+                                    document.querySelectorAll("[js-style]")[i].removeAttribute("js-style")
+                                }
+                            }
                 };
                 modifyDOMElements();
-                    // On DOM Node Added
-                    onDOMNodeAdded(function() { modifyDOMElements() });
+                onDOMChange(function() { modifyDOMElements() });
 
         /* LapysJS Plug-Ins
                 --- WARN ---
@@ -4950,12 +6590,12 @@ if (
                                                                 /* Buttons Container */
                                                                 '\n\r<div class="buttons-container">' +
                                                                     /* Left Button */
-                                                                    '\r\t<button class="button left-button" onmouseup="((this.parentElement || this.parentNode).parentElement || (this.parentElement || this.parentNode).parentNode).prev()">' +
+                                                                    '\r\t<button class="button left-button" onmouseup="this.parentElement.parentElement[\'LapysJS prev\']()">' +
                                                                         (document.getElementsByClassName("carousel")[i].getAttribute("data-button-left-inner-html") || '<') +
                                                                     '\r\t</button>' +
 
                                                                     /* Right Button */
-                                                                    '\r\t<button class="button right-button" onmouseup="((this.parentElement || this.parentNode).parentElement || (this.parentElement || this.parentNode).parentNode).next()">' +
+                                                                    '\r\t<button class="button right-button" onmouseup="this.parentElement.parentElement[\'LapysJS next\']()">' +
                                                                         (document.getElementsByClassName("carousel")[i].getAttribute("data-button-right-inner-html") || '>') +
                                                                     '\r\t</button>' +
                                                                 '\r</div>'
@@ -6793,19 +8433,6 @@ if (
                                                     this["LapysJS toggle"].playMode = !this["LapysJS toggle"].playMode
                                         });
 
-                                        // Loaded Data
-                                        document.querySelectorAll("audio.media, video.media")[j].setEvent("loadeddata", function() {
-                                            // Modification
-                                                // Target Element
-                                                    // Source
-                                                        /* Logic
-                                                                If
-                                                                    the Target Element does not have a "src" attribute.
-                                                        */
-                                                        if (this.hasAttribute("src"))
-                                                            this.src = this.currentSrc
-                                        });
-
                                         // Loaded Data, Pause, Play
                                         document.querySelectorAll("audio.media, video.media")[j].setEvent("loadeddata, pause, play", function() {
                                             // Modification
@@ -7616,12 +9243,12 @@ if (
                                     if (event.code == "ArrowLeft")
                                         // Carousel [Selected]
                                             // Previous
-                                            document.querySelector(".carousel[data-selected]").prev();
+                                            document.querySelector(".carousel[data-selected]")["LapysJS prev"]();
 
                                     else if (event.code == "ArrowRight")
                                         // Carousel [Selected]
                                             // Next
-                                            document.querySelector(".carousel[data-selected]").next();
+                                            document.querySelector(".carousel[data-selected]")["LapysJS next"]();
 
                                 /* Loop
                                         Index all 'focused' Media.

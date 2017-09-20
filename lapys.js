@@ -1,67 +1,580 @@
 /* Strict Mode */
 "use strict";
 
-/* Window */
-    /* Event */
-        // Blur
-            /* Set Timeout
-                    --- NOTE ---
-                        "setEvent()" needs to be defined before this function runs.
-            */
-            setTimeout(function() {
-                setEvent("blur", function() {
-                    /* Loop
-                            Index all Select Boxes.
-                    */
-                    for (var j = 0; j < document.querySelectorAll("input.select-box[data-id]").length; j++)
-                        // Modification
-                            // Option Box
-                                // Hide
-                                document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]')[1].hidden = true
-                })
-            }, 0);
+/* Global Data */
+    /* Event
+            --- NOTE ---
+                Just in case Event is not defined by default,
+                this should serve as a fallback.
+    */
+    var event = (window.event || []);
+        // Path
+        event.path = [];
 
-    /* Location */
-        // Query Parameters
-        location.queryParameters || (location.queryParameters = (function() {
+/* Window */
+    /* Event > Window > Blur > Set Timeout
+            --- NOTE ---
+                "setEvent()" needs to be defined before this function runs.
+    */
+    setTimeout(function() {
+        window.setEvent("blur", function() {
+            /* Loop
+                    Index all Select Boxes.
+            */
+            for (var j = 0; j < document.querySelectorAll("input.select-box[data-id]").length; j++)
+                // Modification > Option Box > Hide
+                document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]')[1].hidden = true
+        })
+    }, 0);
+
+    // Console > Print
+    console.print || (console.print = console.log);
+
+    // Location > Query Parameters
+    location.queryParameters || (location.queryParameters = (function() {
+        /* Logic
+                If
+                    Location > Search is not 'empty'.
+        */
+        if ((location.search || "").trim()) {
+            // Initialization > URL
+            var url = [];
+
+            /* Loop
+                    Index all Query Parameters.
+            */
+            for (var i = 0; i < location.search.replace("?", "").replace(/\&/g, ",").split(/,/g).length; i++)
+                // Update > URL
+                url[i] = {
+                    // Name
+                    name: location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].slice(0, location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].indexOf("=")),
+
+                    // Value
+                    value: location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].slice(location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].indexOf("=") + "=".length)
+                };
+
+            // Return
+            return url
+        }
+    })());
+
+    // Math
+        // Range
+        (Math.random || []).range || (Math.random.range = function(start, end) {
             /* Logic
                     If
-                        Location > Search is not 'empty'.
+                        Start is a number
+                            and
+                        End is a number.
+
+                > Return
             */
-            if (location.search.trim()) {
-                // Initialization
-                    // URL
-                    var url = [];
+            if (
+                typeof start == "number" &&
+                typeof end == "number"
+            )
+                return ((Math.random() * end) + start)
+        });
 
-                /* Loop
-                        Index all Query Parameters.
-                */
-                for (var i = 0; i < location.search.replace("?", "").replace(/\&/g, ",").split(/,/g).length; i++)
-                    // Update
-                        // URL
-                        url[i] = {
-                            // Name
-                            name: location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].slice(
-                                0, location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].indexOf("=")
-                            ),
+        // Root
+        Math.root || (Math.root = function(data, power) {
+            /* Logic
+                    If
+                        Data is a number
+                            and
+                        Power is a number.
 
-                            // Value
-                            value: location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].slice(
-                                location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].indexOf("=") + "=".length
-                            )
-                        };
+                > Return
+            */
+            if (
+                typeof data == "number" &&
+                typeof power == "number"
+            )
+                return pow(data, (1 / power));
 
-                // Return
-                return url
+            else
+                return NaN
+        });
+
+    // Boolean
+    window.bool || (window.bool = function(data) {
+        // Return
+        return !!data
+    });
+
+    /* Cookie
+            --- CONSIDER ---
+                Should this just point to the Document's Cookie property.
+    */
+    window.$_COOKIE || (window.$_COOKIE = document.cookie);
+
+    // Cube Root
+    window.cbrt || (window.cbrt = Math.cbrt);
+
+    // Date
+    window.date || (window.date = new Date());
+        // Date
+        date.date = function(utc) {
+            /* Logic
+                    If
+                        UTC is false.
+
+                > Return
+            */
+            if (!utc)
+                return new Date().getDate();
+
+            else
+                return new Date().getUTCDate()
+        };
+
+        // Day
+        date.day = function() {
+            /* Logic
+                    Switch
+                        case to the Day of the Week's Index.
+
+                > Return
+            */
+            switch (new Date().getDay()) {
+                // 0
+                case 0:
+                    return "Sunday";
+                    break;
+
+                // 1
+                case 1:
+                    return "Monday";
+                    break;
+
+                // 2
+                case 2:
+                    return "Tuesday";
+                    break;
+
+                // 3
+                case 3:
+                    return "Wednesday";
+                    break;
+
+                // 4
+                case 4:
+                    return "Thursday";
+                    break;
+
+                // 5
+                case 5:
+                    return "Friday";
+                    break;
+
+                // 6
+                case 6:
+                    return "Saturday"
             }
-        })());
+        };
+
+        // Hours
+        date.hours = function(utc) {
+            /* Logic
+                    If
+                        UTC is false.
+
+                > Return
+            */
+            if (!utc)
+                return new Date().getHours();
+
+            else
+                return new Date().getUTCHours()
+        };
+
+        // Milli-Seconds
+        date.mSecs = function(utc) {
+            /* Logic
+                    If
+                        UTC is false.
+
+                > Return
+            */
+            if (!utc)
+                return new Date().getMilliseconds();
+
+            else
+                return new Date().getUTCMilliseconds()
+        };
+
+        // Minutes
+        date.mins = function(utc) {
+            /* Logic
+                    If
+                        UTC is false.
+
+                > Return
+            */
+            if (!utc)
+                return new Date().getMinutes();
+
+            else
+                return new Date().getUTCMinutes()
+        };
+
+        // Month
+        date.month = function(utc) {
+            /* Logic
+                    If
+                        UTC is false.
+
+                > Return
+            */
+            if (!utc)
+                return new Date().getMonth();
+
+            else
+                return new Date().getUTCMonth()
+        };
+
+        // Seconds
+        date.secs = function(utc) {
+            /* Logic
+                    If
+                        UTC is false.
+
+                > Return
+            */
+            if (!utc)
+                return new Date().getSeconds();
+
+            else
+                return new Date().getUTCSeconds()
+        };
+
+        // Time
+        date.time = function() {
+            // Return
+            return new Date().getTime()
+        };
+
+        // Year
+        date.year = function(utc) {
+            /* Logic
+                    If
+                        UTC is false.
+
+                > Return
+            */
+            if (!utc)
+                return new Date().getFullYear();
+
+            else
+                return new Date().getUTCFullYear()
+        };
+
+    // Decimal Point
+    window.dp || (window.dp = function(data, placeholder = 0) {
+        // Update > Placeholder
+        !(placeholder > 20) || (placeholder = 20);
+
+        /* Logic
+                If
+                    Data is a Number.
+
+            > Return
+        */
+        if (typeof data == "number")
+            return data .toFixed(placeholder);
+
+        else
+            return
+    });
+
+    // Execute
+    window.exec || (window.exec = eval);
+
+    // Fixed
+    window.fix || (window.fix = function(data, placeholder = 0) {
+        // Update > Placeholder
+        !(placeholder > 20) || (placeholder = 20);
+
+        /* Logic
+                If
+                    Data is a Number.
+
+            > Return
+        */
+        if (typeof data == "number")
+            return data .toFixed(placeholder);
+
+        else
+            return
+    });
+
+    // Float
+    window.float || (window.float = parseFloat);
+
+    // Floor
+    window.floor || (window.floor = function(data, invert) {
+        /* Logic
+                If
+                    Invert is false.
+
+            > Return
+        */
+        if (!invert)
+            return Math.floor(data);
+
+        else
+            return Math.ceil(data)
+    });
+
+    // Get
+    window.$_GET || (window.$_GET = (function() {
+        /* Logic
+                If
+                    Location > Search is not 'empty'.
+        */
+        if (location.search.trim()) {
+            // Initialization > URL
+            var url = [];
+
+            /* Loop
+                    Index all Query Parameters.
+            */
+            for (var i = 0; i < location.search.replace("?", "").replace(/\&/g, ",").split(/,/g).length; i++)
+                // Update > URL
+                url[location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].slice(0, location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].indexOf("="))] =  location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].slice(location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].indexOf("=") + "=".length);
+
+            // Return
+            return url
+        }
+    })());
+
+    // Globals
+        // Set Timeout
+        setTimeout(function() {
+            window.$GLOBALS || (window.$GLOBALS = {
+                // Cookie
+                _COOKIE: $_COOKIE,
+
+                // Get
+                _GET: $_GET,
+
+                // Request
+                _REQUEST: $_REQUEST,
+
+                // Server
+                _SERVER: $_SERVER,
+            })
+        }, 0);
+
+    // Integer
+    window.int || (window.int = parseInt);
+
+    // Length
+    window.len || (window.len = function(data) {
+        /* Logic
+                If
+                    Data is "Array"
+                        or
+                    Data is "HTMLCollection"
+                        or
+                    Data is "NodeList"
+                        or
+                    Data is "String".
+        */
+        if (
+            (data.constructor || "").name == "Array" ||
+            (data.constructor || "").name == "HTMLCollection" ||
+            (data.constructor || "").name == "NodeList" ||
+            (data.constructor || "").name == "String"
+        )
+            // Return
+            return data.length;
+
+        // Return
+        return
+    });
+
+    // Left Trim
+    window.ltrim || (window.ltrim = function(data) {
+        /* Logic
+                If
+                    Data is String.
+        */
+        if (typeof data == "string")
+            // Return
+            return data.replace(/ {1,}([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|\t)/, function(data) {
+                // Return
+                return data.replace(/ /g, "")
+            });
+
+        else
+            // Return
+            LapysJS.error("You can only trim Strings.")
+    });
+
+    // Max
+    window.max || (window.max = Math.max);
+
+    // Min
+    window.min || (window.min = Math.min);
 
     // Name
     window.name || (window.name = document.title);
 
+    // PI
+    window.PI || (window.PI = Math.PI || 3.141592653589793);
+
+    // Power
+    window.pow || (window.pow = (Math.pow || function(data, power) {
+        /* Logic
+                If
+                    both parameters are numbers.
+
+            > Return
+        */
+        if (
+            typeof data == "number" &&
+            typeof power == "number"
+        )
+            return data ** power
+    }));
+
+    // Precision
+    window.prec || (window.prec = function(data, placeholder = 1) {
+        // Update > Placeholder
+        !(placeholder < 1) || (placeholder = 1);
+        !(placeholder > 20) || (placeholder = 20);
+
+        /* Logic
+                If
+                    Data is a Number.
+
+            > Return
+        */
+        if (typeof data == "number")
+            return data .toPrecision(placeholder);
+
+        else
+            return
+    });
+
+    // Random
+    window.rand || (window.rand = function(data) {
+        /* Logic
+                If
+                    Data is defined.
+
+            > Return
+        */
+        if (data)
+            return parseInt(Math.random() * 10);
+
+        else
+            return Math.random()
+    });
+        // Range
+        rand.range || (rand.range = function(start, end) {
+            /* Logic
+                    If
+                        Start is a number
+                            and
+                        End is a number.
+
+                > Return
+            */
+            if (
+                typeof start == "number" &&
+                typeof end == "number"
+            )
+                return ((Math.random() * end) + start)
+        });
+
+    // Request
+    window.$_REQUEST || (window.$_REQUEST = (function() {
+        /* Logic
+                If
+                    Location > Search is not 'empty'.
+        */
+        if (location.search.trim()) {
+            // Initialization > URL
+            var url = [];
+
+            /* Loop
+                    Index all Query Parameters.
+            */
+            for (var i = 0; i < location.search.replace("?", "").replace(/\&/g, ",").split(/,/g).length; i++)
+                // Update > URL
+                url[location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].slice(0, location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].indexOf("="))] =  location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].slice(location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].indexOf("=") + "=".length);
+
+            // Return
+            return url
+        }
+    })());
+
+    // Round
+    window.round || (window.round = Math.round);
+
+    // Right Trim
+    window.rtrim || (window.rtrim = function(data) {
+        /* Logic
+                If
+                    Data is String.
+        */
+        if (typeof data == "string")
+            // Return
+            return data.replace(/ {1,}([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|\t)/, function(data) {
+                // Return
+                return data.replace(/ /g, "~:~:lapys:~:~!@#$%^&*())(*&^%$#@!~:~:lapys:~:~")
+            }).trim().replace(/\~\:\~\:lapys\:\~\:\~\!\@\#\$\%\^\&\*\(\)\)\(\*\&\^\%\$\#\@\!\~\:\~\:lapys\:\~\:\~/g, " ");
+
+        else
+            // Return
+            LapysJS.error("You can only trim Strings.")
+    });
+
+    // Square Root
+    window.sqrt || (window.sqrt = Math.sqrt);
+
+    // Server
+    window.$_SERVER || (window.$_SERVER = {
+        // HTTP User Agent
+        HTTP_USER_AGENT: navigator.userAgent,
+
+        // Query String
+        QUERY_STRING: location.search,
+
+        // Request URI
+        REQUEST_URI: (location.pathname.split("/").pop() || location.pathname.split("#").shift()),
+
+        // Server Name
+        SERVER_NAME: location.host,
+
+        // Server Protocol
+        SERVER_PROTOCOL: location.protocol
+    });
+
+    // String
+    window.str || (window.str = (window.String || window.toString()));
+
+    // Trim
+    window.trim || (window.trim = function(data) {
+        /* Logic
+                If
+                    Data is String.
+
+            > Return
+        */
+        if (typeof data == "string")
+            return data.trim();
+
+        else
+            LapysJS.error("You can only trim Strings.")
+    });
+
 /* Custom Data */
     /* Version Number */
-    const VER_NUMBER = "0.0.1";
+        // Initialization
+        var VER_NUMBER = "0.0.1";
 
     /* LapysJS */
         // Initialization
@@ -70,7 +583,7 @@
             this.author = "Lapys Dev Team";
 
             // Error
-            this.error = (data, metadata) => {
+            this.error = (data = "~", metadata) => {
                 /* Function */
                     // Log LapysJS Error
                     const logLapysJSError = (data) => {
@@ -95,7 +608,7 @@
                                 or
                             "~" does not have a "~" character.
                 */
-                if ((data || "~").indexOf("~") <= -1)
+                if (data.indexOf("~") <= -1)
                     // Log LapysJS Error
                     logLapysJSError(data);
 
@@ -132,8 +645,7 @@
                         // [Default]
                         default:
                             // Log LapysJS Error > Log Help Sheet
-                            logLapysJSErrorLogHelpSheet();
-                            break;
+                            logLapysJSErrorLogHelpSheet()
                     }
                 }
             };
@@ -157,7 +669,7 @@
             this.version = VER_NUMBER;
 
             // Warn
-            this.warn = (data, metadata) => {
+            this.warn = (data = "~", metadata) => {
                 /* Function */
                     // Log LapysJS Warning
                     const logLapysJSWarning = (data) => {
@@ -182,7 +694,7 @@
                                 or
                             "~" does not have a "~" character.
                 */
-                if ((data || "~").indexOf("~") <= -1)
+                if (data.indexOf("~") <= -1)
                     // Log LapysJS Warning
                     logLapysJSWarning(data);
 
@@ -219,8 +731,7 @@
                         // [Default]
                         default:
                             // Log LapysJS Warning > Log Help Sheet
-                            logLapysJSWarningLogHelpSheet();
-                            break;
+                            logLapysJSWarningLogHelpSheet()
                     }
                 }
             }
@@ -228,21 +739,108 @@
 
 /* Array Data */
     // Add Element
-    Array.prototype.addElement || (Array.prototype.addElement = function(element) {
-        // Return
-        return [element].concat(this)
+    Array.prototype.addElement || (Array.prototype.addElement = function(element, isArray) {
+        /* Logic
+                If
+                    Element is not an Array,
+
+                else if
+                    Is Array is true.
+        */
+        if ((element || []).constructor.name != "Array" || !element)
+            // Return
+            return [element].concat(this);
+
+        else if (isArray)
+            // Return
+            return [element].concat(this);
+
+        else {
+            // Initialization > Array
+            var array = [];
+
+            /* Loop
+                    Index all members of Element.
+            */
+            for (var i = 0; i < (element || []).length; i++)
+                // Update > Array
+                array[i] = element[i];
+
+            // Return
+            return array.concat(this)
+        }
     });
 
     // Add Element To Back
-    Array.prototype.addElementToBack || (Array.prototype.addElementToBack = function(element) {
-        // Return
-        return [element].concat(this)
+    Array.prototype.addElementToBack || (Array.prototype.addElementToBack = function(element, isArray) {
+        /* Logic
+                If
+                    Element is not an Array,
+
+                else if
+                    Is Array is true.
+        */
+        if ((element || []).constructor.name != "Array" || !element)
+            // Return
+            return [element].concat(this);
+
+        else if (isArray)
+            // Return
+            return [element].concat(this);
+
+        else {
+            // Initialization > Array
+            var array = [];
+
+            /* Loop
+                    Index all members of Element.
+            */
+            for (var i = 0; i < (element || []).length; i++)
+                // Update > Array
+                array[i] = element[i];
+
+            // Return
+            return array.concat(this)
+        }
     });
 
     // Add Element To Front
-    Array.prototype.addElementToFront || (Array.prototype.addElementToFront = function(element) {
+    Array.prototype.addElementToFront || (Array.prototype.addElementToFront = function(element, isArray) {
+        /* Logic
+                If
+                    Element is not an Array,
+
+                else if
+                    Is Array is true.
+        */
+        if ((element || []).constructor.name != "Array" || !element)
+            // Return
+            return this.concat([element]);
+
+        else if (isArray)
+            // Return
+            return this.concat([element]);
+
+        else {
+            // Initialization > Array
+            var array = [];
+
+            /* Loop
+                    Index all members of Element.
+            */
+            for (var i = 0; i < (element || []).length; i++)
+                // Update > Array
+                array[i] = element[i];
+
+            // Return
+            return this.concat(array)
+        }
+    });
+
+    // Empty
+    Array.prototype.empty || (Array.prototype.empty = function() {
         // Return
-        return this.concat([element])
+        return !(this[0] || false)
     });
 
     // First Element
@@ -262,17 +860,15 @@
 
     // Get Repeated Elements
      Array.prototype.getRepeatedElements || (Array.prototype.getRepeatedElements = function() {
-        // Initialization
-            // Repeated Elements
-            var repeatedElements = [];
+        // Initialization > Repeated Elements
+        var repeatedElements = [];
 
         /* Loop
                 Index all members of the Target.
         */
         for (var i = 0; i < this.length - 1; i++)
-            // Update
-                // Repeated Elements
-                !(this.slice().sort()[i + 1] == this.slice().sort()[i]) || repeatedElements.push(this.slice().sort()[i]);
+            // Update > Repeated Elements
+            !(this.slice().sort()[i + 1] == this.slice().sort()[i]) || repeatedElements.push(this.slice().sort()[i]);
 
         // Return
         return repeatedElements
@@ -280,17 +876,8 @@
 
      // Has Member
      Array.prototype.hasElement || (Array.prototype.hasElement = function(element) {
-        /* Logic
-                If
-                    the Array has the specified Element.
-        */
-        if (this.indexOf(element) >= 0)
-            // Return
-            return true;
-
-        else
-            // Return
-            return false
+        // Return
+        return !(!(this.indexOf(element) >= 0) || false)
     });
 
     /* Index Of
@@ -335,9 +922,35 @@
                 Removes the first instance specified element of an array.
     */
     Array.prototype.removeElement || (Array.prototype.removeElement = function(element) {
-        // Update
-            // Target
+        /* Logic
+                If
+                    Element is false.
+        */
+        if (!element) {
+            // LapysJS > Error
+            LapysJS.error("Non-truthy values can not be removed from an Array with this method.\n\tTry the 'removeFalsyElements()' Array method or specifying your target item in another Array.");
+
+            // Return
+            return
+        }
+
+        /* Logic
+                If
+                    Element is not an Array.
+        */
+        if ((element || []).constructor.name != "Array")
+            // Update >  Target
             !(this.indexOf(element) > -1) || this.splice(this.indexOf(element), 1);
+
+
+        else {
+            /* Loop
+                    Index all members of Element.
+            */
+            for (var i = 0; i < (element || []).length; i++)
+                // Update >  Target
+                !(this.indexOf(element[i]) > -1) || this.splice(this.indexOf(element[i]), 1);
+        };
 
         // Return
         return this
@@ -345,9 +958,34 @@
 
     // Remove Element From Back
     Array.prototype.removeElementFromBack || (Array.prototype.removeElementFromBack = function(element) {
-        // Update
-            // Target
+        /* Logic
+                If
+                    Element is false.
+        */
+        if (!element) {
+            // LapysJS > Error
+            LapysJS.error("Non-truthy values can not be removed from an Array with this method.\n\tTry the 'removeFalsyElements()' Array method or specifying your target item in another Array.");
+
+            // Return
+            return
+        }
+
+        /* Logic
+                If
+                    Element is not an Array.
+        */
+        if ((element || []).constructor.name != "Array")
+            // Update >  Target
             !(this.indexOf(element) > -1) || this.splice(this.indexOf(element), 1);
+
+        else {
+            /* Loop
+                    Index all members of Element.
+            */
+            for (var i = 0; i < (element || []).length; i++)
+                // Update >  Target
+                !(this.indexOf(element[i]) > -1) || this.splice(this.indexOf(element[i]), 1);
+        };
 
         // Return
         return this
@@ -358,9 +996,34 @@
                 Removes the last instance specified element of an array.
     */
      Array.prototype.removeElementFromFront || (Array.prototype.removeElementFromFront = function(element) {
-        // Update
-            // Target
+        /* Logic
+                If
+                    Element is false.
+        */
+        if (!element) {
+            // LapysJS > Error
+            LapysJS.error("Non-truthy values can not be removed from an Array with this\n method.\nTry the 'removeFalsyElements()' Array method or specifying your target item in another Array.");
+
+            // Return
+            return
+        }
+
+        /* Logic
+                If
+                    Element is not an Array.
+        */
+        if ((element || []).constructor.name != "Array")
+            // Update >  Target
             !(this.lastIndexOf(element) > -1) || this.splice(this.lastIndexOf(element), 1);
+
+        else {
+            /* Loop
+                    Index all members of Element.
+            */
+            for (var i = 0; i < (element || []).length; i++)
+                // Update >  Target
+                !(this.lastIndexOf(element[i]) > -1) || this.splice(this.lastIndexOf(element[i]), 1);
+        };
 
         // Return
         return this
@@ -383,9 +1046,8 @@
 
     // Remove Repeated Elements
      Array.prototype.removeRepeatedElements || (Array.prototype.removeRepeatedElements = function() {
-        // Initialization
-            // Target
-            var that = this;
+        // Initialization > Target
+        var that = this;
 
         // Return
         return this.filter(function(element, index) {
@@ -404,6 +1066,59 @@
     });
 
 /* Object Data */
+    // Define
+     Object.prototype.def || (Object.prototype.def = function(name, value) {
+        /* Logic
+                If
+                    Value is defined.
+        */
+        if (typeof value != "undefined")
+            /* Logic
+                    If
+                        the "." character is not in Name
+                            and
+                        the "[" and "]" character is not in Name
+                            and
+                        the Name is not "def".
+            */
+            if (
+                name.toString().indexOf(".") <= -1 &&
+                (
+                    name.toString().indexOf("[") <= -1 &&
+                    name.toString().indexOf("]") <= -1
+                ) &&
+                name.toString() != "def"
+            ) {
+                // Modification > (Target, Window) > [Name]
+                (this || window)[String(name)] = value;
+
+                // Return
+                return (this || window)[String(name)]
+            }
+
+            else
+                /* Logic
+                        If
+                            Name is "def".
+
+                    > LapysJS > Error
+                */
+                if (name.toString() == "def")
+                    LapysJS.error("This function can not override itself.");
+
+                else
+                    LapysJS.error("'" + name + "' is not a valid variable name.")
+     });
+
+    // Empty
+    Object.prototype.empty || (Object.prototype.empty = function() {
+        /* --- UPDATE REQUIRED ---
+                Detect if the Object has an element within.
+
+                Also works with the 'isset()' function.
+        */
+    });
+
     // Is Array
     Object.prototype.isArray || (Object.defineProperty(Object.prototype, "isArray", {
         // Configurable
@@ -416,6 +1131,54 @@
         get: function() {
             // Return
             return (this.constructor.name == "Array")
+        }
+    }));
+
+    // Is Double
+    Object.prototype.isDouble || (Object.defineProperty(Object.prototype, "isDouble", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            /* Logic
+                    If
+                        the Target is a Number.
+
+                > Return
+            */
+            if (this.constructor.name == "Number")
+                return ((this.toString().indexOf(".") >= 0) && this.toString().slice(this.toString().indexOf(".") + ".".length).length > 1);
+
+            else
+                return false
+        }
+    }));
+
+    // Is Float
+    Object.prototype.isFloat || (Object.defineProperty(Object.prototype, "isFloat", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            /* Logic
+                    If
+                        the Target is a Number.
+
+                > Return
+            */
+            if (this.constructor.name == "Number")
+                return ((this.toString().indexOf(".") >= 0) && this.toString().slice(this.toString().indexOf(".") + ".".length).length == 1);
+
+            else
+                return false
         }
     }));
 
@@ -434,6 +1197,75 @@
         }
     }));
 
+    // Is HTMLCollection
+    Object.prototype.isHTMLCollection || (Object.defineProperty(Object.prototype, "isHTMLCollection", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Return
+            return (this.constructor.name == "HTMLCollection")
+        }
+    }));
+
+    // Is Integer
+    Object.prototype.isInteger || (Object.defineProperty(Object.prototype, "isInteger", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            /* Logic
+                    If
+                        the Target is a Number.
+
+                > Return
+            */
+            if (this.constructor.name == "Number")
+                return (this.toString().indexOf(".") <= -1);
+
+            else
+                return false
+        }
+    }));
+
+    // Is NodeList
+    Object.prototype.isNodeList || (Object.defineProperty(Object.prototype, "isNodeList", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Return
+            return (this.constructor.name == "NodeList")
+        }
+    }));
+
+    // Is Number
+    Object.prototype.isNumber || (Object.defineProperty(Object.prototype, "isNumber", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Return
+            return (this.constructor.name == "Number")
+        }
+    }));
+
     // Is Object
     Object.prototype.isObject || (Object.defineProperty(Object.prototype, "isObject", {
         // Configurable
@@ -448,6 +1280,86 @@
             return (this.constructor.name == "Object")
         }
     }));
+
+    // Is Regular Expression
+    Object.prototype.isRegex || (Object.defineProperty(Object.prototype, "isRegex", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Return
+            return (this.constructor.name == "RegExp")
+        }
+    }));
+
+    // Is Regular Expression
+    Object.prototype.isRegExp || (Object.defineProperty(Object.prototype, "isRegExp", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Return
+            return (this.constructor.name == "RegExp")
+        }
+    }));
+
+    // Is String
+    Object.prototype.isString || (Object.defineProperty(Object.prototype, "isString", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Return
+            return (this.constructor.name == "String")
+        }
+    }));
+
+    // Undefine
+     Object.prototype.undef || (Object.prototype.undef = function(name) {
+        /* Logic
+                If
+                    the "." character is not in Name
+                        and
+                    the "[" and "]" character is not in Name
+                        and
+                    the Name is not "undef".
+        */
+        if (
+            name.toString().indexOf(".") <= -1 &&
+            (
+                name.toString().indexOf("[") <= -1 &&
+                name.toString().indexOf("]") <= -1
+            ) &&
+            name.toString() != "undef"
+        )
+            // Update > (Target, Window) > [Name]
+            !(this || window)[String(name)] || ((this || window)[String(name)] = void 0);
+
+        else
+            /* Logic
+                    If
+                        Name is "undef".
+
+                > LapysJS > Error
+            */
+            if (name.toString() == "undef")
+                LapysJS.error("This function can not override itself.");
+
+            else
+                LapysJS.error("'" + name + "' is not a valid variable name.")
+     });
 
     /* Lapys
             --- UPDATE REQUIRED ---
@@ -488,6 +1400,15 @@
             })
         });
 
+        /* Empty
+                --- CONSIDER ---
+                    This method apparently removes a pre-built "empty()" String method.
+        */
+        String.prototype.empty = function() {
+            // Return
+            return !(this[0] || false)
+        };
+
         // First Character
         String.prototype.firstChar || Object.defineProperty(String.prototype, "firstChar", {
             // Configurable
@@ -497,7 +1418,10 @@
             enumerable: true,
 
             // Get
-            get: function() { return this[0] }
+            get: function() {
+                // Return
+                return this[0]
+            }
         });
 
         // Get After Character
@@ -505,19 +1429,18 @@
             /* Logic
                     Switch Data data type case to
                         "number" and "string".
+
+                > Return
             */
             switch (typeof data) {
                 // Number
                 case "number":
-                    // Return
                     return this.slice(data);
                     break;
 
                 // String
                 case "string":
-                    // Return
-                    return this.slice(this.indexOf(data) + 1);
-                    break;
+                    return this.slice(this.indexOf(data) + 1)
             }
         });
 
@@ -526,33 +1449,25 @@
             /* Logic
                     Switch "data" data type case to
                         "number" and "string".
+
+                > Return
             */
             switch (typeof data) {
                 // Number
                 case "number":
-                    // Return
                     return this.slice(0, data);
                     break;
 
                 // String
                 case "string":
-                    // Return
-                    return this.slice(0, this.indexOf(data));
-                    break;
+                    return this.slice(0, this.indexOf(data))
             }
         });
 
         // Has Text
         String.prototype.hasText || (String.prototype.hasText = function(data) {
-            /* Logic
-                    If
-                        the Target has the Data.
-            */
-            if (this.indexOf(data) >= 0)
-                return true;
-
-            else
-                return false
+            // Return
+            return !(!(this.indexOf(data) >= 0) || false)
         });
 
         // HTML
@@ -597,7 +1512,10 @@
             enumerable: true,
 
             // Get
-            get: function() { return this[this.length - 1] }
+            get: function() {
+                // Return
+                return this[this.length - 1]
+            }
         });
 
         /* Lower
@@ -670,6 +1588,66 @@
         return newElement
     });
 
+     // Get
+     constructor.prototype.get || (constructor.prototype.get = (name) => {
+        /* Logic
+                If
+                    the "." character is not in Name
+                        and
+                    the "[" and "]" character is not in Name.
+        */
+        if (
+            name.toString().indexOf(".") <= -1 &&
+            (
+                name.toString().indexOf("[") <= -1 &&
+                name.toString().indexOf("]") <= -1
+            )
+        )
+            // Return
+            return window[String(name)];
+
+        else {
+            // Initialization > Data
+            var data = "";
+
+            // Update > Name
+            name = name.replace(/\[([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\{\}\|\\\.\:\;\"\'\<\,\>\?\/]){1,}\]/g, function(data) {
+                // Return
+                return "." + data.slice(2, -2)
+            });
+
+            /* Loop
+                    Index all 'properties' of Name.
+
+                > Update > Name
+            */
+            for (var i = 0; i < name.split(/\./g).length; i++)
+                name = name.replace(/\.([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\?\/]){1,}/g, function(data) {
+                    // Return
+                    return (data.replace(".", "['") + "']")
+                });
+
+            /* Loop
+                    Index all 'properties' of Name.
+            */
+            for (var i = 0; i < name.split(/\[/g).length; i++)
+                /* Logic
+                        If
+                            Loop Counter is 0.
+
+                    > Update > Data
+                */
+                if (i == 0)
+                    data = window[String(name.slice(0, name.indexOf("[") + "[".length - 1))];
+
+                else
+                    data = data[String(name.split(/\[/g)[i].slice(1, -2))];
+
+            // Return
+            return data
+        }
+     });
+
     // Get Query String By Name
     constructor.prototype.getQueryParameterByName || (constructor.prototype.getQueryParameterByName = (name, url) => {
         // Return
@@ -692,30 +1670,26 @@
                     "func" is a function.
         */
         if (typeof func == "function") {
-            // Initialization
-                // DOM Content
-                var currentDOMContent = document.documentElement.outerHTML,
-                    // Former DOM Content
-                    formerDOMContent = currentDOMContent;
+            // Initialization > DOM Content
+            var currentDOMContent = document.documentElement.outerHTML,
+                // Former DOM Content
+                formerDOMContent = currentDOMContent;
 
             // Set Interval
             setInterval(function() {
-                // Update
-                    // DOM Content
-                    currentDOMContent = document.documentElement.outerHTML;
+                // Update > DOM Content
+                currentDOMContent = document.documentElement.outerHTML;
 
                 /* Logic
                         If
                             "DOM Content" is not "Former DOM Content".
                 */
                 if (currentDOMContent != formerDOMContent) {
-                    // Function
-                        // Function
-                        func();
+                    // Function > Function
+                    func();
 
-                    // Update
-                        // Former DOM Content
-                        formerDOMContent = currentDOMContent
+                    // Update > Former DOM Content
+                    formerDOMContent = currentDOMContent
                 }
             }, 100)
         }
@@ -728,17 +1702,15 @@
                     "func" is a function.
         */
         if (typeof func == "function") {
-            // Initialization
-                // DOM Nodes Length
-                var DOMNodesLength = document.querySelectorAll("*").length,
-                    // Former DOM Nodes Length
-                    formerDOMNodesLength = DOMNodesLength;
+            // Initialization > DOM Nodes Length
+            var DOMNodesLength = document.querySelectorAll("*").length,
+                // Former DOM Nodes Length
+                formerDOMNodesLength = DOMNodesLength;
 
             // Set Interval
             setInterval(function() {
-                // Update
-                    // DOM Nodes Length
-                    DOMNodesLength = document.querySelectorAll("*").length;
+                // Update > DOM Nodes Length
+                DOMNodesLength = document.querySelectorAll("*").length;
 
                 /* Logic
                         If
@@ -748,9 +1720,8 @@
                     // Function
                     func();
 
-                    // Update
-                        // Former DOM Nodes Length
-                        formerDOMNodesLength = DOMNodesLength
+                    // Update > Former DOM Nodes Length
+                    formerDOMNodesLength = DOMNodesLength
                 }
             }, 100)
         }
@@ -763,17 +1734,15 @@
                     "func" is a function.
         */
         if (typeof func == "function") {
-            // Initialization
-                // DOM Nodes Length
-                var DOMNodesLength = document.querySelectorAll("*").length,
-                    // Former DOM Nodes Length
-                    formerDOMNodesLength = DOMNodesLength;
+            // Initialization > DOM Nodes Length
+            var DOMNodesLength = document.querySelectorAll("*").length,
+                // Former DOM Nodes Length
+                formerDOMNodesLength = DOMNodesLength;
 
             // Set Interval
             setInterval(function() {
-                // Update
-                    // DOM Nodes Length
-                    DOMNodesLength = document.querySelectorAll("*").length;
+                // Update > DOM Nodes Length
+                DOMNodesLength = document.querySelectorAll("*").length;
 
                 /* Logic
                         If
@@ -783,9 +1752,8 @@
                     // Function
                     func();
 
-                    // Update
-                        // Former DOM Nodes Length
-                        formerDOMNodesLength = DOMNodesLength
+                    // Update > Former DOM Nodes Length
+                    formerDOMNodesLength = DOMNodesLength
                 }
             }, 100)
         }
@@ -798,17 +1766,15 @@
                     "func" is a function.
         */
         if (typeof func == "function") {
-            // Initialization
-                // DOM Nodes Length
-                var DOMNodesLength = document.querySelectorAll("*").length,
-                    // Former DOM Nodes Length
-                    formerDOMNodesLength = DOMNodesLength;
+            // Initialization > DOM Nodes Length
+            var DOMNodesLength = document.querySelectorAll("*").length,
+                // Former DOM Nodes Length
+                formerDOMNodesLength = DOMNodesLength;
 
             // Set Interval
             setInterval(function() {
-                // Update
-                    // DOM Nodes Length
-                    DOMNodesLength = document.querySelectorAll("*").length;
+                // Update > DOM Nodes Length
+                DOMNodesLength = document.querySelectorAll("*").length;
 
                 /* Logic
                         If
@@ -818,9 +1784,8 @@
                     // Function
                     func();
 
-                    // Update
-                        // Former DOM Nodes Length
-                        formerDOMNodesLength = DOMNodesLength
+                    // Update > Former DOM Nodes Length
+                    formerDOMNodesLength = DOMNodesLength
                 }
             }, 100)
         }
@@ -862,38 +1827,38 @@
     */
     constructor.prototype.parseNumber || (constructor.prototype.parseNumber = (data) => {
         // Return
-        return (parseFloat(
-            data.toString().replace(
-                data.toString().replace(/[0-9]|\./g, ""), ""
-            )
-        ) || 0)
+        return (parseFloat(data.toString().replace(data.toString().replace(/[0-9]|\./g, ""), "")) || 0)
     });
 
     // Redirect
     constructor.prototype.redirect || (constructor.prototype.redirect = (directory) => {
-        // Location
-            // Assign
-            location.assign(directory)
+        // Location > Assign
+        location.assign(directory)
     });
 
     // Register Element
     constructor.prototype.registerElement || (constructor.prototype.registerElement = (element) => {
-        // Return
-        return window.customElements.define(element, class customElement extends HTMLElement {})
+        /* Logic
+                If
+                    Custom Elements is defined.
+
+            > Return
+        */
+        if (window.customElements)
+            return customElements.define(element, class customElement extends HTMLElement {})
     });
 
     // Reload
     constructor.prototype.reload || (constructor.prototype.reload = function() {
-        // Location
-            // Reload
-            location.reload()
+        // Location > Reload
+        location.reload()
     });
 
     // Warn
     constructor.prototype.warn || (constructor.prototype.warn = console.warn);
 
     // Write
-    constructor.prototype.write || (constructor.prototype.write = function(data) { document.write(data) });
+    constructor.prototype.write || (constructor.prototype.write = (data) => { document.write(data) });
 
 /* Global Object Test
         Logic
@@ -958,52 +1923,40 @@ if (
         constructor.prototype.css || (constructor.prototype.css = new (function CSS() {
             // Link
             this.link = function(dataID, array) {
-                // Initialization
-                    // <link>
-                    var link = document.createElement("link");
+                // Initialization > <link>
+                var link = document.createElement("link");
 
-                // Insertion
-                    // <link>
-                    document.head.append(link);
+                // Insertion > <link>
+                document.head.append(link);
 
-                // Modification
-                    // <link>
-                        // Data ID
-                        link.dataset.id = dataID;
+                // Modification > <link>
+                    // Data ID
+                    link.dataset.id = dataID;
 
-                        // [Attribute]
-                            // Update
-                                // Array
-                                ((array.indexOf(".css") >= 0) || LapysJS.warn("The 'css.link()' method is meant for importing stylesheets."));
-                                array = array.replace(/\'|\"/g, "").split(/,/g);
-
-                                /* Loop
-                                        Index all members of array.
-                                */
-                                for (var i = 0; i < array.length; i++)
-                                    link.setAttribute(
-                                        array[i].slice(0, array[i].indexOf("=")).replace(/ /g, ""),
-                                        array[i].slice(array[i].indexOf("=") + "=".length)
-                                    )
+                    // [Attribute] > Update > Array
+                    ((array.indexOf(".css") >= 0) || LapysJS.warn("The 'css.link()' method is meant for importing stylesheets."));
+                    array = array.replace(/\'|\"/g, "").split(/,/g);
+                        /* Loop
+                                Index all members of array.
+                        */
+                        for (var i = 0; i < array.length; i++)
+                            link.setAttribute(array[i].slice(0, array[i].indexOf("=")).replace(/ /g, ""), array[i].slice(array[i].indexOf("=") + "=".length))
             };
 
             // Style
             this.style = function(dataID, innerHTML) {
-                // Initialization
-                    // <style>
-                    var style = document.createElement("style");
+                // Initialization > <style>
+                var style = document.createElement("style");
 
-                // Insertion
-                    // <style>
-                    document.head.append(style);
+                // Insertion > <style>
+                document.head.append(style);
 
-                // Modification
-                    // <style>
-                        // Data ID
-                        style.dataset.id = dataID;
+                // Modification > <style>
+                    // Data ID
+                    style.dataset.id = dataID;
 
-                        // Inner HTML
-                        style.innerHTML = ("\r\t" + innerHTML + "\n\r\t")
+                    // Inner HTML
+                    style.innerHTML = ("\r\t" + innerHTML + "\n\r\t")
             }
         }));
 
@@ -1044,35 +1997,67 @@ if (
 
                                 else if
                                     the element is a <script>.
+
+                            > Deletion
                         */
                         if (document.querySelector('link[data-id="' + dataID + '"]'))
-                            // Deletion
                             document.querySelector('link[data-id="' + dataID + '"]').remove();
 
                         else if (document.querySelector('style[data-id="' + dataID + '"]'))
-                            // Deletion
                             document.querySelector('style[data-id="' + dataID + '"]').remove();
 
                         else if (document.querySelector('script[data-id="' + dataID + '"]'))
-                            // Deletion
                             document.querySelector('script[data-id="' + dataID + '"]').remove()
-                    })();
-                    break;
+                    })()
             }
         });
 
         // File
         constructor.prototype.file || (constructor.prototype.file = new (function File() {
             // Full Name
-            this.fullName = (location.pathname.split("/").pop() || location.pathname.split("#").shift());
+            this.fullName = (function() {
+                /* Logic
+                        If
+                            the following data contains "/".
+
+                    > Return
+                */
+                if ((location.pathname.split("/").pop() || location.pathname.split("#").shift()).indexOf("/") >= 0)
+                    return;
+
+                else
+                    return (location.pathname.split("/").pop() || location.pathname.split("#").shift())
+            })();
 
             // Name
-            this.name = (location.pathname.split("/").pop() || location.pathname.split("#").shift()).slice(
-                0, (location.pathname.split("/").pop() || location.pathname.split("#").shift()).indexOf(".")
-            );
+            this.name = (function() {
+                /* Logic
+                        If
+                            the following data contains "/".
+
+                    > Return
+                */
+                if ((location.pathname.split("/").pop() || location.pathname.split("#").shift()).indexOf("/") >= 0)
+                    return;
+
+                else
+                    return (location.pathname.split("/").pop() || location.pathname.split("#").shift()).slice(0, (location.pathname.split("/").pop() || location.pathname.split("#").shift()).indexOf("."))
+            })();
 
             // Type
-            this.type = (location.pathname.split("/").pop() || location.pathname.split("#").shift()).split(".").pop()
+            this.type = (function() {
+                /* Logic
+                        If
+                            the following data contains "/".
+
+                    > Return
+                */
+                if ((location.pathname.split("/").pop() || location.pathname.split("#").shift()).indexOf("/") >= 0)
+                    return;
+
+                else
+                    return (location.pathname.split("/").pop() || location.pathname.split("#").shift()).split(".").pop()
+            })()
         }));
 
         // HTML Document Type
@@ -1116,71 +2101,65 @@ if (
         constructor.prototype.js || (constructor.prototype.js = new (function JS() {
             // Script
             this.script = function(dataID, innerHTML) {
-                // Initialization
-                    // <script>
-                    var script = document.createElement("script");
+                // Initialization > <script>
+                var script = document.createElement("script");
 
-                // Insertion
-                    // <script>
-                    document.head.append(script);
+                // Insertion > <script>
+                document.head.append(script);
 
-                // Modification
-                    // <script>
-                        // Data ID
-                        script.dataset.id = dataID;
+                // Modification > <script>
+                    // Data ID
+                    script.dataset.id = dataID;
 
-                        // Inner HTML
-                        script.innerHTML = ("\r\t" + innerHTML + "\n\r\t")
+                    // Inner HTML
+                    script.innerHTML = ("\r\t" + innerHTML + "\n\r\t")
             };
 
             // Source
             this.src = function(dataID, array) {
-                // Initialization
-                    // <script>
-                    var script = document.createElement("script");
+                // Initialization > <script>
+                var script = document.createElement("script");
 
-                // Insertion
-                    // <script>
-                    document.head.append(script);
+                // Insertion > <script>
+                document.head.append(script);
 
-                // Modification
-                    // <script>
-                        // Data ID
-                        script.dataset.id = dataID;
+                // Modification > <script>
+                    // Data ID
+                    script.dataset.id = dataID;
 
-                        // [Attribute]
-                            // Update
-                                // Array
-                                ((array.indexOf(".js") >= 0) || LapysJS.warn("The 'css.link()' method is meant for importing JavaScript files."));
-                                array = array.replace(/\'|\"/g, "").split(/,/g);
+                    // [Attribute]
+                        // Update
+                            // Array
+                            ((array.indexOf(".js") >= 0) || LapysJS.warn("The 'css.link()' method is meant for importing JavaScript files."));
+                            array = array.replace(/\'|\"/g, "").split(/,/g);
 
-                                /* Loop
-                                        Index all members of array.
-                                */
-                                for (var i = 0; i < array.length; i++)
-                                    // Modification
-                                        // <script>
-                                            // [Attribute]
-                                            script.setAttribute(
-                                                array[i].slice(0, array[i].indexOf("=")).replace(/ /g, ""),
-                                                array[i].slice(array[i].indexOf("=") + "=".length)
-                                            )
+                            /* Loop
+                                    Index all members of array.
+                            */
+                            for (var i = 0; i < array.length; i++)
+                                // Modification
+                                    // <script>
+                                        // [Attribute]
+                                        script.setAttribute(
+                                            array[i].slice(0, array[i].indexOf("=")).replace(/ /g, ""),
+                                            array[i].slice(array[i].indexOf("=") + "=".length)
+                                        )
             }
         }));
 
         // Operating System
         constructor.prototype.operatingSystem || (constructor.prototype.operatingSystem = new (function operatingSystem() {
             // Is Macintosh?
-            this.macintosh = ((navigator.appVersion.indexOf("Mac") >= 0) || false);
+            this.macintosh = (navigator.appVersion.indexOf("Mac") >= 0);
 
             // Is Linux?
-            this.linux = ((navigator.appVersion.indexOf("Linux") >= 0) || false);
+            this.linux = (navigator.appVersion.indexOf("Linux") >= 0);
 
             // Is Unix?
-            this.unix = ((navigator.appVersion.indexOf("X11") >= 0) || false);
+            this.unix = (navigator.appVersion.indexOf("X11") >= 0);
 
             // Is Windows?
-            this.windows = ((navigator.appVersion.indexOf("Win") >= 0) || false)
+            this.windows = (navigator.appVersion.indexOf("Win") >= 0)
         }));
 
     /* Document */
@@ -1196,32 +2175,28 @@ if (
                     return this.querySelectorAll("[" + name + "]");
 
                 else {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
                                     the element has an attribute.
+
+                            > Update > Array
                         */
                         if (document.querySelectorAll("*")[i].attributes.length > 0)
-                            // Update
-                                // Array
-                                array[count] = document.querySelectorAll("*")[i];
+                            array[count] = document.querySelectorAll("*")[i];
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -1250,18 +2225,16 @@ if (
                     name == "*" &&
                     (value || "").toString()
                 ) {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -1272,19 +2245,12 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute value is Value.
-                                */
-                                if (document.querySelectorAll("*")[i].attributes[j].value == value)
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                // Update > Array
+                                !(document.querySelectorAll("*")[i].attributes[j].value == value) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -1295,18 +2261,16 @@ if (
                 }
 
                 else {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -1317,19 +2281,12 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute has a value.
-                                */
-                                if (document.querySelectorAll("*")[i].attributes[j].value)
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                // Update > Array
+                                !(document.querySelectorAll("*")[i].attributes[j].value) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -1384,18 +2341,16 @@ if (
                     (value2 || "").toString() &&
                     !value1
                 ) {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -1406,19 +2361,12 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute value is not Value 2.
-                                */
-                                if (document.querySelectorAll("*")[i].attributes[j].value != value2)
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                // Update > Array
+                                !(document.querySelectorAll("*")[i].attributes[j].value != value2) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -1433,18 +2381,16 @@ if (
                     (value1 || "").toString() &&
                     (value2 || "").toString()
                 ) {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -1455,24 +2401,15 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute value is Value 1
-                                                and
-                                            the attribute value is not Value 2.
-                                */
-                                if (
+                                // Update > Array
+                                !(
                                     document.querySelectorAll("*")[i].attributes[j].value == value1 &&
                                     document.querySelectorAll("*")[i].attributes[j].value != value2
-                                )
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                ) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -1483,8 +2420,7 @@ if (
                 }
 
                 else {
-                    // Initialization
-                        // Array, Count
+                    // Initialization > (Array, Count)
                         var array = [],
                             count = 0;
 
@@ -1492,8 +2428,7 @@ if (
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
+                        // Update > Count
                             count++;
 
                         /* Logic
@@ -1505,19 +2440,12 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute has a value.
-                                */
-                                if (document.querySelectorAll("*")[i].attributes[j].value)
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                // Update > Array
+                                !(document.querySelectorAll("*")[i].attributes[j].value) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -1572,18 +2500,16 @@ if (
                     (value2 || "").toString() &&
                     !value1
                 ) {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -1594,19 +2520,12 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute value does not have Value 2 in it.
-                                */
-                                if (document.querySelectorAll("*")[i].attributes[j].value.indexOf(value2) <= -1)
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                // Update > Array
+                                !(document.querySelectorAll("*")[i].attributes[j].value.indexOf(value2) <= -1) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -1621,18 +2540,16 @@ if (
                     (value1 || "").toString() &&
                     (value2 || "").toString()
                 ) {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -1643,24 +2560,15 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute value is Value 1
-                                                and
-                                            the attribute Value does not have Value 2 in it.
-                                */
-                                if (
+                                // Update > Array
+                                !(
                                     document.querySelectorAll("*")[i].attributes[j].value == value1 &&
                                     document.querySelectorAll("*")[i].attributes[j].value.indexOf(value2) <= -1
-                                )
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                ) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -1671,18 +2579,16 @@ if (
                 }
 
                 else {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -1693,19 +2599,12 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute has a value.
-                                */
-                                if (document.querySelectorAll("*")[i].attributes[j].value)
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                // Update > Array
+                                !(document.querySelectorAll("*")[i].attributes[j].value) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -1735,18 +2634,16 @@ if (
                     name == "*" &&
                     (value || "").toString()
                 ) {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -1757,19 +2654,12 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute value is not Value.
-                                */
-                                if (document.querySelectorAll("*")[i].attributes[j].value != value)
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                // Update > Array
+                                !(document.querySelectorAll("*")[i].attributes[j].value != value) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -1780,32 +2670,28 @@ if (
                 }
 
                 else {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
                                     the element has an attribute.
+
+                            > Update > Array
                         */
                         if (document.querySelectorAll("*")[i].attributes.length > 0)
-                            // Update
-                                // Array
-                                array[count] = document.querySelectorAll("*")[i];
+                            array[count] = document.querySelectorAll("*")[i];
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -1835,18 +2721,16 @@ if (
                     name == "*" &&
                     (value || "").toString()
                 ) {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -1857,19 +2741,12 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute value has Value in it.
-                                */
-                                if (document.querySelectorAll("*")[i].attributes[j].value.indexOf(value))
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                // Update > Array
+                                !(document.querySelectorAll("*")[i].attributes[j].value.indexOf(value)) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -1880,32 +2757,28 @@ if (
                 }
 
                 else {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
                                     the element has an attribute.
+
+                            > Update > Array
                         */
                         if (document.querySelectorAll("*")[i].attributes.length > 0)
-                            // Update
-                                // Array
-                                array[count] = document.querySelectorAll("*")[i];
+                            array[count] = document.querySelectorAll("*")[i];
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -1952,18 +2825,16 @@ if (
                     (value1 || "").toString() &&
                     !value2
                 ) {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -1974,19 +2845,12 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute value is Value 1.
-                                */
-                                if (document.querySelectorAll("*")[i].attributes[j].value == value1)
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                // Update > Array
+                                !(document.querySelectorAll("*")[i].attributes[j].value == value1) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -2001,18 +2865,16 @@ if (
                     (value2 || "").toString() &&
                     !value1
                 ) {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -2023,19 +2885,12 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute value is not Value 2.
-                                */
-                                if (document.querySelectorAll("*")[i].attributes[j].value != value2)
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                // Update > Array
+                                !(document.querySelectorAll("*")[i].attributes[j].value != value2) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -2050,18 +2905,16 @@ if (
                     (value1 || "").toString() &&
                     (value2 || "").toString()
                 ) {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -2072,24 +2925,15 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute value is Value 1
-                                                and
-                                            the attribute value is not Value 2.
-                                */
-                                if (
+                                // Update > Array
+                                !(
                                     document.querySelectorAll("*")[i].attributes[j].value == value1 &&
                                     document.querySelectorAll("*")[i].attributes[j].value != value2
-                                )
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                ) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -2100,32 +2944,28 @@ if (
                 }
 
                 else {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
                                     the element has an attribute.
+
+                            > Update > Array
                         */
                         if (document.querySelectorAll("*")[i].attributes.length > 0)
-                            // Update
-                                // Array
-                                array[count] = document.querySelectorAll("*")[i];
+                            array[count] = document.querySelectorAll("*")[i];
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -2172,8 +3012,7 @@ if (
                     (value1 || "").toString() &&
                     !value2
                 ) {
-                    // Initialization
-                        // Array, Count
+                    // Initialization > (Array, Count)
                         var array = [],
                             count = 0;
 
@@ -2181,9 +3020,8 @@ if (
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -2194,19 +3032,12 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute value is Value 1.
-                                */
-                                if (document.querySelectorAll("*")[i].attributes[j].value == value1)
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                // Update > Array
+                                !(document.querySelectorAll("*")[i].attributes[j].value == value1) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -2221,18 +3052,16 @@ if (
                     (value2 || "").toString() &&
                     !value1
                 ) {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -2243,19 +3072,12 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute value does not have Value 2.
-                                */
-                                if (document.querySelectorAll("*")[i].attributes[j].value.indexOf(value2) <= -1)
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                // Update > Array
+                                !(document.querySelectorAll("*")[i].attributes[j].value.indexOf(value2) <= -1) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -2270,18 +3092,16 @@ if (
                     (value1 || "").toString() &&
                     (value2 || "").toString()
                 ) {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -2292,24 +3112,15 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute value is Value 1
-                                                and
-                                            the attribute value does not have Value 2.
-                                */
-                                if (
+                                // Update > Array
+                                !(
                                     document.querySelectorAll("*")[i].attributes[j].value == value1 &&
                                     document.querySelectorAll("*")[i].attributes[j].value.indexOf(value2) <= -1
-                                )
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                ) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -2320,32 +3131,28 @@ if (
                 }
 
                 else {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
                                     the element has an attribute.
                         */
                         if (document.querySelectorAll("*")[i].attributes.length > 0)
-                            // Update
-                                // Array
-                                array[count] = document.querySelectorAll("*")[i];
+                            // Update > Array
+                            array[count] = document.querySelectorAll("*")[i];
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -2375,18 +3182,16 @@ if (
                     name == "*" &&
                     (value || "").toString()
                 ) {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
@@ -2397,19 +3202,12 @@ if (
                                     Index all the element's attributes.
                             */
                             for (var j = 0; j < document.querySelectorAll("*")[i].attributes.length; j++)
-                                /* Logic
-                                        If
-                                            the attribute value does not have Value.
-                                */
-                                if (document.querySelectorAll("*")[i].attributes[j].value.indexOf(value) <= -1)
-                                    // Update
-                                        // Array
-                                        array[count] = document.querySelectorAll("*")[i];
+                                // Update > Array
+                                !(document.querySelectorAll("*")[i].attributes[j].value.indexOf(value) <= -1) || (array[count] = document.querySelectorAll("*")[i]);
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            // Update > Array
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -2420,32 +3218,28 @@ if (
                 }
 
                 else {
-                    // Initialization
-                        // Array, Count
-                        var array = [],
-                            count = 0;
+                    // Initialization > (Array, Count)
+                    var array = [],
+                        count = 0;
 
                     /* Loop
                             Index all DOM Elements.
                     */
                     for (var i = 0; i < document.querySelectorAll("*").length; i++) {
-                        // Update
-                            // Count
-                            count++;
+                        // Update > Count
+                        count++;
 
                         /* Logic
                                 If
                                     the element has an attribute.
+
+                            > Update > Array
                         */
                         if (document.querySelectorAll("*")[i].attributes.length > 0)
-                            // Update
-                                // Array
-                                array[count] = document.querySelectorAll("*")[i];
+                            array[count] = document.querySelectorAll("*")[i];
 
                         else
-                            // Update
-                                // Array
-                                array[count] = "falsy"
+                            array[count] = "falsy"
                     };
 
                     // Return
@@ -2471,7 +3265,7 @@ if (
             // Initialization
                 // <key-command>
                     // Registration
-                    (document.createElement("key-command").constructor !== HTMLElement) || window.customElements.define("key-command", class KeyCommand extends HTMLElement {});
+                    (!window.customElements || (document.createElement("key-command").constructor !== HTMLElement) || customElements.define("key-command", class KeyCommand extends HTMLElement {}));
 
                     // On DOM Ready
                     onDOMReady(function() {
@@ -2479,22 +3273,20 @@ if (
                                 Index all <key-command> elements.
                         */
                         for (var i = 0; i < document.getElementsByTagName("key-command").length; i++)
-                            // Event
-                                // Document Element
-                                    // Key Down
-                                    !(document.getElementsByTagName("key-command")[i].hasAttribute("data-event-key")) || document.documentElement.setEvent("keydown", function() {
-                                        /* Loop
-                                                Index all <key-command> elements.
-                                        */
-                                        for (var i = 0; i < document.getElementsByTagName("key-command").length; i++)
-                                            // Parse
-                                            !(event.code == document.getElementsByTagName("key-command")[i].getAttribute("data-event-key")) || eval(document.getElementsByTagName("key-command")[i].getAttribute("data-event-function"))
-                                    })
+                            // Event > Document Element > Key Down
+                            !(document.getElementsByTagName("key-command")[i].hasAttribute("data-event-key")) || document.documentElement.setEvent("keydown", function() {
+                                /* Loop
+                                        Index all <key-command> elements.
+                                */
+                                for (var i = 0; i < document.getElementsByTagName("key-command").length; i++)
+                                    // Execution
+                                    !(((event || []).code || "") == document.getElementsByTagName("key-command")[i].getAttribute("data-event-key")) || eval(document.getElementsByTagName("key-command")[i].getAttribute("data-event-function"))
+                            })
                     });
 
                 // <lorem-ipsum>
                     // Registration
-                    (document.createElement("lorem-ipsum").constructor !== HTMLElement) || window.customElements.define("lorem-ipsum", class LoremIpsum extends HTMLElement {});
+                    (!window.customElements ||  (document.createElement("lorem-ipsum").constructor !== HTMLElement) || customElements.define("lorem-ipsum", class LoremIpsum extends HTMLElement {}));
 
                     /* Set Timeout
                             --- NOTE ---
@@ -2505,103 +3297,93 @@ if (
                                 Index all <lorem-ipsum> elements.
                         */
                         for (var i = 0; i < document.getElementsByTagName("lorem-ipsum").length; i++) {
-                            // Modification
-                                // <lorem-ipsum>
-                                    /* Logic
-                                            If
-                                                the element has the "1" attribute,
+                            // Modification > <lorem-ipsum>
+                                /* Logic
+                                        If
+                                            the element has the "1" attribute,
 
-                                            else if
-                                                the element has the "2" attribute,
+                                        else if
+                                            the element has the "2" attribute,
 
-                                            else if
-                                                the element has the "3" attribute,
+                                        else if
+                                            the element has the "3" attribute,
 
-                                            else if
-                                                the element has the "4" attribute,
+                                        else if
+                                            the element has the "4" attribute,
 
-                                            else if
-                                                the element has the "5" attribute.
-                                    */
-                                    if (document.getElementsByTagName("lorem-ipsum")[i].hasAttribute("1")) {
-                                        // 2, 3, 4, 5
-                                        document.getElementsByTagName("lorem-ipsum")[i].delAttr("2, 3, 4, 5");
+                                        else if
+                                            the element has the "5" attribute.
+                                */
+                                if (document.getElementsByTagName("lorem-ipsum")[i].hasAttribute("1")) {
+                                    // 2, 3, 4, 5
+                                    document.getElementsByTagName("lorem-ipsum")[i].delAttr("2, 3, 4, 5");
 
-                                        // Outer HTML
-                                        document.getElementsByTagName("lorem-ipsum")[i].outerHTML = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
-                                    }
+                                    // Outer HTML
+                                    document.getElementsByTagName("lorem-ipsum")[i].outerHTML = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+                                }
 
-                                    else if (document.getElementsByTagName("lorem-ipsum")[i].hasAttribute("2")) {
-                                        // 1, 3, 4, 5
-                                        document.getElementsByTagName("lorem-ipsum")[i].delAttr("1, 3, 4, 5");
+                                else if (document.getElementsByTagName("lorem-ipsum")[i].hasAttribute("2")) {
+                                    // 1, 3, 4, 5
+                                    document.getElementsByTagName("lorem-ipsum")[i].delAttr("1, 3, 4, 5");
 
-                                        // Outer HTML
-                                        document.getElementsByTagName("lorem-ipsum")[i].outerHTML = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa."
-                                    }
+                                    // Outer HTML
+                                    document.getElementsByTagName("lorem-ipsum")[i].outerHTML = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa."
+                                }
 
-                                    else if (document.getElementsByTagName("lorem-ipsum")[i].hasAttribute("3")) {
-                                        // 1, 2, 4, 5
-                                        document.getElementsByTagName("lorem-ipsum")[i].delAttr("1, 2, 4, 5");
+                                else if (document.getElementsByTagName("lorem-ipsum")[i].hasAttribute("3")) {
+                                    // 1, 2, 4, 5
+                                    document.getElementsByTagName("lorem-ipsum")[i].delAttr("1, 2, 4, 5");
 
-                                        // Outer HTML
-                                        document.getElementsByTagName("lorem-ipsum")[i].outerHTML = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim."
-                                    }
+                                    // Outer HTML
+                                    document.getElementsByTagName("lorem-ipsum")[i].outerHTML = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim."
+                                }
 
-                                    else if (document.getElementsByTagName("lorem-ipsum")[i].hasAttribute("4")) {
-                                        // 1, 2, 3, 5
-                                        document.getElementsByTagName("lorem-ipsum")[i].delAttr("1, 2, 3, 5");
+                                else if (document.getElementsByTagName("lorem-ipsum")[i].hasAttribute("4")) {
+                                    // 1, 2, 3, 5
+                                    document.getElementsByTagName("lorem-ipsum")[i].delAttr("1, 2, 3, 5");
 
-                                        // Outer HTML
-                                        document.getElementsByTagName("lorem-ipsum")[i].outerHTML = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim."
-                                    }
+                                    // Outer HTML
+                                    document.getElementsByTagName("lorem-ipsum")[i].outerHTML = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim."
+                                }
 
-                                    else if (document.getElementsByTagName("lorem-ipsum")[i].hasAttribute("5")) {
-                                        // 1, 2, 3, 4
-                                        document.getElementsByTagName("lorem-ipsum")[i].delAttr("1, 2, 3, 4");
+                                else if (document.getElementsByTagName("lorem-ipsum")[i].hasAttribute("5")) {
+                                    // 1, 2, 3, 4
+                                    document.getElementsByTagName("lorem-ipsum")[i].delAttr("1, 2, 3, 4");
 
-                                        // Outer HTML
-                                        document.getElementsByTagName("lorem-ipsum")[i].outerHTML = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc."
-                                    };
+                                    // Outer HTML
+                                    document.getElementsByTagName("lorem-ipsum")[i].outerHTML = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc."
+                                };
 
-                            // Update
-                                // Loop Counter
-                                i--
+                            // Update > Loop Counter
+                            i--
                         }
                     }, 0);
 
                 // <fav-icon>
                     // Registration
-                    (document.createElement("fav-icon").constructor !== HTMLElement) || window.customElements.define("fav-icon", class FavIcon extends HTMLElement {});
+                    (!window.customElements || (document.createElement("fav-icon").constructor !== HTMLElement) || customElements.define("fav-icon", class FavIcon extends HTMLElement {}));
 
-                    /* Logic
-                            If
-                                the first <fav-icon> with a Source exists.
-                    */
-                    if (
+                    // Modification > <head> > Inner HTML
+                    !(
                         document.querySelector("fav-icon") &&
                         (document.querySelector("fav-icon") || document.createElement("fav-icon")).hasAttribute("src") ||
                         (document.querySelector("fav-icon") || document.createElement("fav-icon")).src
-                    )
-                        // Modification
-                            // <head>
-                                // Inner HTML
-                                document.head.innerHTML += (
-                                    '\n\r\t<!-- Document Favicon -->' +
-                                    '\r\t<link href="' + (document.querySelector("fav-icon").getAttribute("src") || document.querySelector("fav-icon").src) + '" rel="icon" type="image/png">' +
-                                    '\r\t<link href="' + (document.querySelector("fav-icon").getAttribute("src") || document.querySelector("fav-icon").src) + '" rel="shortcut icon">\r'
-                                );
+                    ) || (document.head.innerHTML += (
+                        '\n\r\t<!-- Document Favicon -->' +
+                        '\r\t<link href="' + (document.querySelector("fav-icon").getAttribute("src") || document.querySelector("fav-icon").src) + '" rel="icon" type="image/png">' +
+                        '\r\t<link href="' + (document.querySelector("fav-icon").getAttribute("src") || document.querySelector("fav-icon").src) + '" rel="shortcut icon">\r'
+                    ));
 
                     /* Loop
                             Index all <fav-icon> elements.
                     */
                     for (var i = 0; i < document.getElementsByTagName("fav-icon").length; i++) {
-                        // <fav-icon>
-                            // Deletion
-                            document.getElementsByTagName("fav-icon")[i].remove();
+                        // Modification > <fav-icon> > Source
+                        !document.getElementsByTagName("fav-icon")[i].getAttribute("src") || (document.getElementsByTagName("fav-icon")[i].src = (document.getElementsByTagName("fav-icon")[i].src || document.getElementsByTagName("fav-icon")[i].getAttribute("src")));
+                        !document.getElementsByTagName("fav-icon")[i].src || document.getElementsByTagName("fav-icon")[i].setAttribute("src", (document.getElementsByTagName("fav-icon")[i].getAttribute("src") || document.getElementsByTagName("fav-icon")[i].src));
 
-                            // Update
-                                // Loop Counter
-                                i--
+                        // Deletion > <fav-icon>
+                        document.getElementsByTagName("fav-icon")[i--].remove()
                     };
 
             // Modification
@@ -2629,9 +3411,8 @@ if (
                                     document.querySelectorAll("*")[j].hasAttribute("data-event-function") &&
                                     document.querySelectorAll("*")[j].hasAttribute("data-event-type")
                                 ) {
-                                    // Initialization
-                                        // Target Element
-                                        var that = document.querySelectorAll("*")[j];
+                                    // Initialization > Target Element
+                                    var that = document.querySelectorAll("*")[j];
 
                                     // Set Timeout
                                     setTimeout(function() {
@@ -2639,17 +3420,15 @@ if (
                                                 Index all the Target Element's 'Event By Type''s members.
                                         */
                                         for (var j = 0; j < that.getAttribute("data-event-type").replace(/ /g, "").split(/,/g).removeRepeatedElements().length; j++)
-                                            // Event
-                                                // Target Element
-                                                    // [Data Event Type]
-                                                    that.setEvent(
-                                                        that.getAttribute("data-event-type").replace(/ /g, "").split(/,/g).removeRepeatedElements()[j],
+                                            // Event > Target Element > [Data Event Type]
+                                            that.setEvent(
+                                                that.getAttribute("data-event-type").replace(/ /g, "").split(/,/g).removeRepeatedElements()[j],
 
-                                                        function eventByTypeFunction() {
-                                                            // Parse
-                                                            eval(that.getAttribute('data-event-function'))
-                                                        }
-                                                    )
+                                                function eventByTypeFunction() {
+                                                    // Execution
+                                                    eval(that.getAttribute('data-event-function'))
+                                                }
+                                            )
                                     }, 0)
                                 }
                         }
@@ -2659,47 +3438,44 @@ if (
             // Function
                 // Modify DOM Elements
                 function modifyDOMElements() {
-                    // <body>
-                        // Event
-                            // Mouse Up
-                                /* Loop
-                                        Index all items of the LapysJS script's "data-enable" attribute.
-                                */
-                                for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
-                                    /* Logic
-                                            If
-                                                the LapysJS script has "_all" enabled or
-                                                the LapysJS script has "dataFocus" enabled.
+                    /* Loop
+                            Index all items of the LapysJS script's "data-enable" attribute.
+                    */
+                    for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
+                        /* Logic
+                                If
+                                    the LapysJS script has "_all" enabled or
+                                    the LapysJS script has "dataFocus" enabled.
+                        */
+                        if (
+                            (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "dataFocus" ||
+                            (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "dataFocus"
+                        ) {
+                            /* Set Timeout
+                                    --- NOTE ---
+                                        "setEvent()" method should be defined.
+                            */
+                            setTimeout(function() {
+                                document.body.setEvent("mouseup", function() {
+                                    /* Loop
+                                            Index all elements.
                                     */
-                                    if (
-                                        (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "dataFocus" ||
-                                        (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "dataFocus"
-                                    ) {
-                                        /* Set Timeout
-                                                --- NOTE ---
-                                                    "setEvent()" method should be defined.
-                                        */
-                                        setTimeout(function() {
-                                            document.body.setEvent("mouseup", function() {
-                                                /* Loop
-                                                        Index all elements.
-                                                */
-                                                for (var i = 0; i < document.querySelectorAll("[data-focus]").length; i++)
-                                                    // Modification
-                                                        // Element
-                                                            // Data Focus
-                                                            document.querySelectorAll("[data-focus]")[i].removeAttribute("data-focus");
+                                    for (var i = 0; i < document.querySelectorAll("[data-focus]").length; i++)
+                                        // Modification
+                                            // Element
+                                                // Data Focus
+                                                document.querySelectorAll("[data-focus]")[i].removeAttribute("data-focus");
 
-                                                // Modification
-                                                    // Event Target
-                                                        // Data Focus
-                                                        event.path[0].setAttribute("data-focus", "")
-                                            })
-                                        }, 100);
+                                    // Modification
+                                        // Event Target
+                                            // Data Focus
+                                            ((event || []).path || [])[0].setAttribute("data-focus", "")
+                                })
+                            }, 100);
 
-                                        // Break
-                                        break
-                                    };
+                            // Break
+                            break
+                        };
 
                     // <br>
                         /* Loop
@@ -2711,16 +3487,14 @@ if (
                                         the element has an attribute of "2"
                                             or
                                         the element has an attribute of "3".
+
+                                > Modification > Outer HTML
                             */
                             if (document.getElementsByTagName("br")[i].hasAttribute("2"))
-                                // Modification
-                                    // Outer HTML
-                                    document.getElementsByTagName("br")[i].outerHTML = "<br> <br>";
+                                document.getElementsByTagName("br")[i].outerHTML = "<br> <br>";
 
                             else if (document.getElementsByTagName("br")[i].hasAttribute("3"))
-                                // Modification
-                                    // Outer HTML
-                                    document.getElementsByTagName("br")[i].outerHTML = "<br> <br> <br>";
+                                document.getElementsByTagName("br")[i].outerHTML = "<br> <br> <br>";
 
                     // <form>
                         /* Loop
@@ -2748,12 +3522,8 @@ if (
                                         document.getElementsByTagName("form")[i].querySelectorAll("*")[j].tagName == "LABEL"
                                     )
                                 )
-                                    // Modification
-                                        // Form
-                                        document.getElementsByTagName("form")[i].querySelectorAll("*")[j].setAttribute(
-                                            "form",
-                                            document.getElementsByTagName("form")[i].getAttribute("name")
-                                        );
+                                    // Modification > Form
+                                    document.getElementsByTagName("form")[i].querySelectorAll("*")[j].setAttribute("form", document.getElementsByTagName("form")[i].getAttribute("name"));
 
                     // <label>
                         /* Loop
@@ -2782,30 +3552,27 @@ if (
                                             the element's previous element sibling is an <input> with an ID.
                                 */
                                 if ((document.getElementsByTagName("label")[i].querySelector("input") || document.createElement("input")).hasAttribute("id"))
-                                    // Modification
-                                        // For
-                                        document.getElementsByTagName("label")[i].setAttribute("for", document.getElementsByTagName("label")[i].querySelector("input").id);
+                                    // Modification > For
+                                    document.getElementsByTagName("label")[i].setAttribute("for", document.getElementsByTagName("label")[i].querySelector("input").id);
 
                                 else if (
                                     (document.getElementsByTagName("label")[i].nextElementSibling || document.createElement("input")).tagName == "INPUT" &&
                                     (document.getElementsByTagName("label")[i].nextElementSibling || document.createElement("input")).hasAttribute("id")
                                 )
-                                    // Modification
-                                        // For
-                                        document.getElementsByTagName("label")[i].setAttribute("for", document.getElementsByTagName("label")[i].nextElementSibling.id);
+                                    // Modification > For
+                                    document.getElementsByTagName("label")[i].setAttribute("for", document.getElementsByTagName("label")[i].nextElementSibling.id);
 
                                 else if (
                                     (document.getElementsByTagName("label")[i].previousElementSibling || document.createElement("input")).tagName == "INPUT" &&
                                     (document.getElementsByTagName("label")[i].previousElementSibling || document.createElement("input")).hasAttribute("id")
                                 )
-                                    // Modification
-                                        // For
-                                        document.getElementsByTagName("label")[i].setAttribute("for", document.getElementsByTagName("label")[i].previousElementSibling.id);
+                                    // Modification > For
+                                    document.getElementsByTagName("label")[i].setAttribute("for", document.getElementsByTagName("label")[i].previousElementSibling.id);
 
                     // <html>
                         // Modification
                             // Language
-                            document.documentElement.lang = (document.documentElement.lang || window.navigator.languages.toString().replace(/, /, ",").replace(/,/g, ", "));
+                            document.documentElement.lang = (document.documentElement.lang || (navigator.languages || "").toString().replace(/, /, ",").replace(/,/g, ", "));
 
                     // <input>
                         /* Loop
@@ -2818,13 +3585,16 @@ if (
                             */
                             if (
                                 !document.getElementsByTagName("input")[i].min &&
-                                document.getElementsByTagName("input")[i].type == "number"
+                                (
+                                    document.getElementsByTagName("input")[i].type == "meter" ||
+                                    document.getElementsByTagName("input")[i].type == "number" ||
+                                    document.getElementsByTagName("input")[i].type == "range"
+                                )
                             )
                                 // Modification
                                     // Minimum
                                     document.getElementsByTagName("input")[i].min = 0;
 
-                                // Modification
                                     // Value
                                         /* Logic
                                                 Switch <input> Value case to
@@ -2853,8 +3623,7 @@ if (
 
                                             // _lorem5
                                             case "_lorem5":
-                                                document.getElementsByTagName("input")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.";
-                                                break;
+                                                document.getElementsByTagName("input")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc."
                                         }
                         };
 
@@ -2947,9 +3716,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dt") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("date")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -2969,9 +3737,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dt_utc_octal") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("date_utc_octal")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3000,9 +3767,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dt_octal") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("date_octal")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3031,9 +3797,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dt_utc") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("date_utc")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3051,9 +3816,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dy") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("day")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3073,9 +3837,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dy_utc_octal") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("day_utc_octal")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3104,9 +3867,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dy_octal") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("day_octal")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3135,9 +3897,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dy_utc") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("day_utc")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3155,9 +3916,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("f-dt") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("full-date")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3175,9 +3935,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("f-yr") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("full-year")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3195,9 +3954,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("f-yr_utc") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("full-year_utc")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3215,9 +3973,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hr") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hour")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3237,9 +3994,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hr_utc_octal") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hour_utc_octal")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3268,9 +4024,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hr_octal") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hour_octal")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3299,9 +4054,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hr_utc") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hour_utc")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3319,9 +4073,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mil") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("milliseconds")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3339,9 +4092,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mil_utc") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("milliseconds_utc")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3359,9 +4111,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("min") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("minute")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3381,9 +4132,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("min_utc_octal") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("minute_utc_octal")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3412,9 +4162,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("min_octal") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("minute_octal")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3443,9 +4192,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("min_utc") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("minute_utc")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3463,9 +4211,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mth") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("month")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3485,9 +4232,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mth_utc_octal") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("month_utc_octal")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3516,9 +4262,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mth_octal") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("month_octal")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3547,9 +4292,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mth_utc") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("month_utc")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3567,9 +4311,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("sec") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("second")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3589,9 +4332,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("sec_utc_octal") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("second_utc_octal")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3620,9 +4362,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("sec_octal") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("second_octal")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3651,9 +4392,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("sec_utc") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("second_utc")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3668,9 +4408,8 @@ if (
 
                                         // Time
                                         else if (document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("time")) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3685,9 +4424,8 @@ if (
 
                                         // Time Zone Offset
                                         else if (document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("timezone-offset")) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3705,9 +4443,8 @@ if (
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("yr") ||
                                             document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("year")
                                         ) {
-                                            // Initialization
-                                                // Target Element
-                                                var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+                                            // Initialization > Target Element
+                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
 
                                             // Set Interval
                                             setInterval(function() {
@@ -3727,10 +4464,9 @@ if (
                                     --- WARN ---
                                         Should be defined before the "addClass()" and "delClass()" methods.
                             */
-                            Element.prototype.hasClass = function(name) {
-                                // Initialization
-                                    // Has Class
-                                    var hasClass = false;
+                            Element.prototype.hasClass || (Element.prototype.hasClass = function(name) {
+                                // Initialization > Has Class
+                                var hasClass = false;
 
                                 /* Logic
                                         If
@@ -3756,49 +4492,48 @@ if (
 
                                 // Return
                                 return hasClass
-                            };
+                            });
 
                             // Add Class
-                            Element.prototype.addClass = function(name) {
-                                // Target Element
-                                    // Definition
-                                    var that = this;
+                            Element.prototype.addClass || (Element.prototype.addClass = function(name = "") {
+                                // Target Element > Definition
+                                var that = this;
 
-                                    // Modification
-                                        // Class
-                                        (
-                                            this.hasClass(name) ||
-                                            (function() {
-                                                /* Logic
-                                                        If
-                                                            the Target Element has a class value.
-                                                */
-                                                if (that.getAttribute("class"))
-                                                    /* Logic
-                                                            If
-                                                                there are multiple class values.
-                                                    */
-                                                    if (that.getAttribute("class").indexOf(" ") >= 0)
-                                                        // Return
-                                                        return (that.getAttribute("class").indexOf(name) >= 0);
+                                // Modification > Target Element > Class
+                                (
+                                    this.hasClass(name) ||
+                                    (function() {
+                                        /* Logic
+                                                If
+                                                    the Target Element has a class value.
+                                        */
+                                        if (that.getAttribute("class"))
+                                            /* Logic
+                                                    If
+                                                        there are multiple class values.
+                                            */
+                                            if (that.getAttribute("class").indexOf(" ") >= 0)
+                                                // Return
+                                                return (that.getAttribute("class").indexOf(name) >= 0);
 
-                                                    else
-                                                        // Return
-                                                        return that.hasClass(name);
+                                            else
+                                                // Return
+                                                return that.hasClass(name);
 
-                                                else
-                                                    // Return
-                                                    return that.hasClass(name)
-                                            })()
-                                        ) ||
-                                        this.setAttribute(
-                                            "class",
-                                            ((this.getAttribute("class") || "") + " " + name).trim()
-                                        )
-                            };
+                                        else
+                                            // Return
+                                            return that.hasClass(name)
+                                    })()
+                                ) ||
+                                this.setAttribute(
+                                    "class",
+                                    ((this.getAttribute("class") || "") + " " + name).trim()
+                                );
+                                !(name == "" && !(void name == false)) || (this.getAttribute("class") || this.removeAttribute("class"))
+                            });
 
                             // Close
-                            Element.prototype.close = function() {
+                            Element.prototype.close || (Element.prototype.close = function() {
                                 // Modification
                                     // Target Element
                                         // Data Open
@@ -3806,10 +4541,10 @@ if (
 
                                         // Data Close
                                         this.setAttribute("data-close", "")
-                            };
+                            });
 
                             // Delete Attribute
-                            Element.prototype.delAttr = function(name) {
+                            Element.prototype.delAttr || (Element.prototype.delAttr = function(name) {
                                 /* Logic
                                         If
                                             Name is not "_all".
@@ -3828,20 +4563,15 @@ if (
                                     /* Loop
                                             Index all the Target Element's attributes.
                                     */
-                                    for (var i = 0; i < this.attributes.length; i++) {
+                                    for (var i = 0; i < this.attributes.length; i++)
                                         // Modification
                                             // Target Element
                                                 // [Name]
-                                                this.removeAttribute(this.attributes[i].name);
-
-                                        // Update
-                                            // Loop Counter
-                                            i--
-                                    }
-                            };
+                                                this.removeAttribute(this.attributes[i--].name)
+                            });
 
                             // Delete Class
-                            Element.prototype.delClass = function(data) {
+                            Element.prototype.delClass || (Element.prototype.delClass = function(data) {
                                 // Target Element
                                     /* Logic
                                             If
@@ -3903,10 +4633,10 @@ if (
                                     };
 
                                     this.getAttribute("class") || this.removeAttribute("class")
-                            };
+                            });
 
                             // Delete (Inline) Style
-                            Element.prototype.delStyle = function(style) {
+                            Element.prototype.delStyle || (Element.prototype.delStyle = function(style) {
                                 /* Logic
                                         If
                                             Style is not "_all"
@@ -3954,21 +4684,21 @@ if (
                                                                     else if
                                                                         [property : value].
                                                             */
-                                                            if (that.getAttribute("style").indexOf(style + ": " + (that.style[style] || window.getComputedStyle(that).getPropertyValue(style))) >= 0)
+                                                            if (that.getAttribute("style").indexOf(style + ": " + (that.style[style] || getComputedStyle(that).getPropertyValue(style))) >= 0)
                                                                 // Return
-                                                                return (that.getAttribute("style").indexOf(style) + (style + ": " + (that.style[style] || window.getComputedStyle(that).getPropertyValue(style))).toString().length);
+                                                                return (that.getAttribute("style").indexOf(style) + (style + ": " + (that.style[style] || getComputedStyle(that).getPropertyValue(style))).toString().length);
 
-                                                            else if (that.getAttribute("style").indexOf(style + ":" + (that.style[style] || window.getComputedStyle(that).getPropertyValue(style))) >= 0)
+                                                            else if (that.getAttribute("style").indexOf(style + ":" + (that.style[style] || getComputedStyle(that).getPropertyValue(style))) >= 0)
                                                                 // Return
-                                                                return (that.getAttribute("style").indexOf(style) + (style + ":" + (that.style[style] || window.getComputedStyle(that).getPropertyValue(style))).toString().length);
+                                                                return (that.getAttribute("style").indexOf(style) + (style + ":" + (that.style[style] || getComputedStyle(that).getPropertyValue(style))).toString().length);
 
-                                                            else if (that.getAttribute("style").indexOf(style + " :" + (that.style[style] || window.getComputedStyle(that).getPropertyValue(style))) >= 0)
+                                                            else if (that.getAttribute("style").indexOf(style + " :" + (that.style[style] || getComputedStyle(that).getPropertyValue(style))) >= 0)
                                                                 // Return
-                                                                return (that.getAttribute("style").indexOf(style) + (style + " :" + (that.style[style] || window.getComputedStyle(element).getPropertyValue(style))).toString().length);
+                                                                return (that.getAttribute("style").indexOf(style) + (style + " :" + (that.style[style] || getComputedStyle(that).getPropertyValue(style))).toString().length);
 
-                                                            else if (that.getAttribute("style").indexOf(style + " : " + (that.style[style] || window.getComputedStyle(element).getPropertyValue(style))) >= 0)
+                                                            else if (that.getAttribute("style").indexOf(style + " : " + (that.style[style] || getComputedStyle(that).getPropertyValue(style))) >= 0)
                                                                 // Return
-                                                                return (that.getAttribute("style").indexOf(style) + (style + " : " + (that.style[style] || window.getComputedStyle(element).getPropertyValue(style))).toString().length);
+                                                                return (that.getAttribute("style").indexOf(style) + (style + " : " + (that.style[style] || getComputedStyle(that).getPropertyValue(style))).toString().length);
 
                                                             else
                                                                 // Return
@@ -3990,19 +4720,19 @@ if (
                                                                     else if
                                                                         [value ; ].
                                                             */
-                                                            if (that.getAttribute("style").indexOf((that.style[style] || window.getComputedStyle(that).getPropertyValue(style)) + "; ") >= 0)
+                                                            if (that.getAttribute("style").indexOf((that.style[style] || getComputedStyle(that).getPropertyValue(style)) + "; ") >= 0)
                                                                 // Return
                                                                 return (that.getAttribute("style").indexOf(style) + "; ".length);
 
-                                                            else if (that.getAttribute("style").indexOf((that.style[style] || window.getComputedStyle(that).getPropertyValue(style)) + " ;") >= 0)
+                                                            else if (that.getAttribute("style").indexOf((that.style[style] || getComputedStyle(that).getPropertyValue(style)) + " ;") >= 0)
                                                                 // Return
                                                                 return (that.getAttribute("style").indexOf(style) + " ;".length);
 
-                                                            else if (that.getAttribute("style").indexOf((that.style[style] || window.getComputedStyle(that).getPropertyValue(style)) + ";") >= 0)
+                                                            else if (that.getAttribute("style").indexOf((that.style[style] || getComputedStyle(that).getPropertyValue(style)) + ";") >= 0)
                                                                 // Return
                                                                 return (that.getAttribute("style").indexOf(style) + ";".length);
 
-                                                            else if (that.getAttribute("style").indexOf((that.style[style] || window.getComputedStyle(that).getPropertyValue(style)) + " ; ") >= 0)
+                                                            else if (that.getAttribute("style").indexOf((that.style[style] || getComputedStyle(that).getPropertyValue(style)) + " ; ") >= 0)
                                                                 // Return
                                                                 return (that.getAttribute("style").indexOf(style) + " ; ".length);
 
@@ -4031,10 +4761,10 @@ if (
 
                                 else
                                     this.removeAttribute("style")
-                            };
+                            });
 
                             // Get Attribute
-                            Element.prototype.getAttr = function(data) {
+                            Element.prototype.getAttr || (Element.prototype.getAttr = function(data) {
                                 /* Logic
                                         If
                                             Data data type is a "number",
@@ -4102,98 +4832,96 @@ if (
                                         // Return
                                         return attributes
                                     }
-                            };
+                            });
 
                             // Get CSS
-                            Element.prototype.getCSS = function(property) {
-                                // Update
-                                    // Property
-                                    property = property.replace(/[A-Z]/g, function(data) {
-                                        // Return
-                                        return ("-" + data.toLowerCase())
-                                    });
-
+                            Element.prototype.getCSS || (Element.prototype.getCSS = function(property) {
                                 // Return
-                                return (this.style[property] || window.getComputedStyle(this).getPropertyValue(property))
-                            };
+                                return (this.style[property.replace(/[A-Z]/g, function(data) { return ("-" + data.toLowerCase()) })] || getComputedStyle(this).getPropertyValue(property.replace(/[A-Z]/g, function(data) { return ("-" + data.toLowerCase()) })))
+                            });
 
                             // Get Elements By Attribute Name
-                            Element.prototype.getElementsByAttributeName = document.getElementsByAttributeName;
+                            Element.prototype.getElementsByAttributeName || (Element.prototype.getElementsByAttributeName = document.getElementsByAttributeName);
 
                             // Get Elements By Attribute Name and Value
-                            Element.prototype.getElementsByAttributeNameAndValue = document.getElementsByAttributeNameAndValue;
+                            Element.prototype.getElementsByAttributeNameAndValue || (Element.prototype.getElementsByAttributeNameAndValue = document.getElementsByAttributeNameAndValue);
 
                             // Get Elements By Attribute Name and Value except Value
-                            Element.prototype.getElementsByAttributeNameAndValueExceptValue = document.getElementsByAttributeNameAndValueExceptValue;
+                            Element.prototype.getElementsByAttributeNameAndValueExceptValue || (Element.prototype.getElementsByAttributeNameAndValueExceptValue = document.getElementsByAttributeNameAndValueExceptValue);
 
                             // Get Elements By Attribute Name and Value without Value
-                            Element.prototype.getElementsByAttributeNameAndValueWithoutValue = document.getElementsByAttributeNameAndValueWithoutValue;
+                            Element.prototype.getElementsByAttributeNameAndValueWithoutValue || (Element.prototype.getElementsByAttributeNameAndValueWithoutValue = document.getElementsByAttributeNameAndValueWithoutValue);
 
                             // Get Elements By Attribute Name except Value
-                            Element.prototype.getElementsByAttributeNameExceptValue = document.getElementsByAttributeNameExceptValue;
+                            Element.prototype.getElementsByAttributeNameExceptValue || (Element.prototype.getElementsByAttributeNameExceptValue = document.getElementsByAttributeNameExceptValue);
 
                             // Get Elements By Attribute Name with Value
-                            Element.prototype.getElementsByAttributeNameWithValue = document.getElementsByAttributeNameWithValue;
+                            Element.prototype.getElementsByAttributeNameWithValue || (Element.prototype.getElementsByAttributeNameWithValue = document.getElementsByAttributeNameWithValue);
 
                             // Get Elements By Attribute Name with Value except Value
-                            Element.prototype.getElementsByAttributeNameWithValueExceptValue = document.getElementsByAttributeNameWithValueExceptValue;
+                            Element.prototype.getElementsByAttributeNameWithValueExceptValue || (Element.prototype.getElementsByAttributeNameWithValueExceptValue = document.getElementsByAttributeNameWithValueExceptValue);
 
                             // Get Elements By Attribute Name with Value without Value
-                            Element.prototype.getElementsByAttributeNameWithValueWithoutValue = document.getElementsByAttributeNameWithValueWithoutValue;
+                            Element.prototype.getElementsByAttributeNameWithValueWithoutValue || (Element.prototype.getElementsByAttributeNameWithValueWithoutValue = document.getElementsByAttributeNameWithValueWithoutValue);
 
                             // Get Elements By Attribute Name without Value
-                            Element.prototype.getElementsByAttributeNameWithoutValue = document.getElementsByAttributeNameWithoutValue;
+                            Element.prototype.getElementsByAttributeNameWithoutValue || (Element.prototype.getElementsByAttributeNameWithoutValue = document.getElementsByAttributeNameWithoutValue);
 
                             // Get Elements Related By Data ID
-                            Element.prototype.getElementsRelatedByDataID = function() {
+                            Element.prototype.getElementsRelatedByDataID || (Element.prototype.getElementsRelatedByDataID = function() {
                                 // Return
                                 return document.querySelectorAll('[data-id="' + this.getAttribute('data-id') + '"]')
-                            };
+                            });
 
                             // Has Attribute
-                            Element.prototype.hasAttr = function(name) {
+                            Element.prototype.hasAttr || (Element.prototype.hasAttr = function(name) {
                                 // Return
                                 return this.hasAttribute(name)
-                            };
+                            });
 
-                            Element.prototype.hasChild = function(child) {
+                            Element.prototype.hasChild || (Element.prototype.hasChild = function(child) {
                                 // Return
                                 return (this != child && this.contains((child || document.createElement("div"))))
-                            };
+                            });
 
                             // Has Child (Element) By Query Selector
-                            Element.prototype.hasChildByQuerySelector = function(selector) {
+                            Element.prototype.hasChildByQuerySelector || (Element.prototype.hasChildByQuerySelector = function(selector) {
                                 // Return
                                 return !!this.querySelector(selector)
-                            };
+                            });
 
                             // Node Index
-                                /* Loop
-                                        Index all items of the LapysJS script's "data-enable" attribute.
+                                /* Logic
+                                        If
+                                            'Element.prototype.nodeIndex' is undefined.
                                 */
-                                for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
-                                    /* Logic
-                                            If
-                                                the LapysJS script has "_all" enabled or
-                                                the LapysJS script has "nodeIndex" enabled.
+                                if (!Element.prototype.nodeIndex)
+                                    /* Loop
+                                            Index all items of the LapysJS script's "data-enable" attribute.
                                     */
-                                    if (
-                                        (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "_all" ||
-                                        (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "nodeIndex"
-                                    ) {
-                                        /* Loop
-                                                Index all DOM Elements.
+                                    for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
+                                        /* Logic
+                                                If
+                                                    the LapysJS script has "_all" enabled or
+                                                    the LapysJS script has "nodeIndex" enabled.
                                         */
-                                        for (var i = 0; i < document.querySelectorAll("*").length; i++)
-                                            // Modification > DOM Element > Node Index
-                                            document.querySelectorAll("*")[i].nodeIndex = i;
+                                        if (
+                                            (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "_all" ||
+                                            (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "nodeIndex"
+                                        ) {
+                                            /* Loop
+                                                    Index all DOM Elements.
+                                            */
+                                            for (var i = 0; i < document.querySelectorAll("*").length; i++)
+                                                // Modification > DOM Element > Node Index
+                                                document.querySelectorAll("*")[i].nodeIndex = i;
 
-                                        // Break
-                                        break
-                                    };
+                                            // Break
+                                            break
+                                        };
 
                             // Open
-                            Element.prototype.open = function() {
+                            Element.prototype.open || (Element.prototype.open = function() {
                                 // Modification
                                     // Target Element
                                         // Data Close
@@ -4201,12 +4929,12 @@ if (
 
                                         // Data Open
                                         this.setAttribute("data-open", "")
-                            };
+                            });
 
                             // Relate Element By Data ID
-                            Element.prototype.relateElementByDataID = function(element) {
+                            Element.prototype.relateElementByDataID || (Element.prototype.relateElementByDataID = function(element) {
                                 element.setAttribute("data-id", this.getAttribute("data-id"))
-                            };
+                            });
 
                             // Scroll To
                             Element.prototype.scrollToElement || (Element.prototype.scrollToElement = function() {
@@ -4216,7 +4944,7 @@ if (
                             });
 
                             // Set Attribute
-                            Element.prototype.setAttr = function(name, value) {
+                            Element.prototype.setAttr || (Element.prototype.setAttr = function(name, value) {
                                 /* Loop
                                         Index all Names.
                                 */
@@ -4230,13 +4958,13 @@ if (
                                     // Target Element
                                         // [Name]
                                         !(name == "class" || name == "style") || this.setAttribute(name, this.getAttribute(name).trim())
-                            };
+                            });
 
                             /* Attribute
                                     --- WARN ---
                                         This method can only be defined after the "getAttr()" and "setAttr()" method.
                             */
-                            Element.prototype.attr = function(name, value) {
+                            Element.prototype.attr || (Element.prototype.attr = function(name, value) {
                                 /* Logic
                                         If
                                             Value is specified.
@@ -4250,34 +4978,42 @@ if (
                                 else
                                     // Return
                                     return this.getAttr(name)
-                            };
+                            });
+
+                            // Set CSS
+                            Element.prototype.setCSS || (Element.prototype.setCSS = function(property, value) {
+                                // Style > Target > Property
+                                this.style[property.replace(/[A-Z]/g, function(data) { return ("-" + data.toLowerCase()) })] = String(value)
+                            });
 
                             // Add Event
-                            EventTarget.prototype.addEvent = function(type, listener) {
-                                // Target Element
-                                    // Modification
-                                        // New Event
-                                        this.customEvents = (this.customEvents || {});
-                                            // Modification
-                                                // [Type]
-                                                this.customEvents[type] = document.createEvent("Event");
-                                                    // Initialize Event
-                                                    this.customEvents[type].initEvent(type, true, true);
+                            EventTarget.prototype.addEvent || (EventTarget.prototype.addEvent = function(type, listener) {
+                                /* Logic
+                                        If
+                                            "EventTarget.prototype.customEvents" is undefined.
+                                */
+                                if (!(this || window).customEvents) {
+                                    // Modification > Target Element > New Event
+                                        (this || window).customEvents = ((this || window).customEvents || {});
+                                            // Modification > [Type]
+                                            (this || window).customEvents[type] = document.createEvent("Event");
+                                                // Initialize Event
+                                                (this || window).customEvents[type].initEvent(type, true, true);
 
-                                    // Event
-                                        // [New Event]
-                                        this.addEventListener(type, listener, false)
-                            };
+                                    // Event > Target Element > [New Event]
+                                    (this || window).addEventListener(type, listener, false)
+                                }
+                            });
 
                             // Delete Event
-                            EventTarget.prototype.delEvent = function(type, listener) {
+                            EventTarget.prototype.delEvent || (EventTarget.prototype.delEvent = function(type, listener) {
                                 /* Loop
                                         Index all Types
                                 */
                                 for (var i = 0; i < type.replace(/ /g, "").split(/,/g).length; i++)
                                     // Event
                                         // [if]
-                                        (window.removeEventListener) ?
+                                        (document.removeEventListener) ?
                                             // [true]
                                                 // [Type]
                                                 (this || window).removeEventListener(type.replace(/ /g, "").split(/,/g)[i], listener) :
@@ -4285,13 +5021,13 @@ if (
                                             // [false]
                                                 // On [Type]
                                                 (this || window).detachEvent(("on" + type.replace(/ /g, "").split(/,/g)[i]), listener)
-                            };
+                            });
 
                             // Event Listeners
-                            EventTarget.prototype.eventListeners = function() {
+                            EventTarget.prototype.eventListeners || (EventTarget.prototype.eventListeners = function() {
                                 /* Logic
                                         If
-                                            getEventListeners() is defined.
+                                            "getEventListeners()" is defined.
                                 */
                                 if (getEventListeners)
                                     // Return
@@ -4299,41 +5035,42 @@ if (
 
                                 else
                                     LapysJS.error("Sorry, your browser does not support the 'getEventListeners()' function.")
-                            };
+                            });
 
                             // [Query Selector (All)]
                             EventTarget.prototype.$$ || (EventTarget.prototype.$$ = function(selector, index) {
-                                // Update
-                                    // Target
-                                    var that = (this || document);
-                                    (this == window) ? that = document : false;
+                                // Update > Target
+                                var that = (this || document);
+                                (this == window) ? that = document : false;
+
+                                // Update > Selector
+                                selector = selector.replace(/\$\$([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|){1,}\;/g, function(data) {
+                                    // Return
+                                    return ('[data-id="' + data.slice(2, -1) + '"]')
+                                });
 
                                 /* Logic
                                         If
                                             "selector" is a "string".
                                 */
-                                if (typeof selector == "string")
+                                if (typeof selector == "string") {
                                     /* Logic
                                             If
-                                                Selector is not ("[]", "[=]", "[=]:not([])", "[=]:not([=])"),
-
-                                            else if
-                                                Selector is "[=]",
-
-                                            else if
-                                                Selector is "[=]:not([])",
-
-                                            else if
-                                                Selector is "[=]:not([=])",
-
-                                            else if
-                                                Selector is "[]".
+                                                [if:else if:else statement].
                                     */
                                     if (
                                         selector != "[]" &&
                                         selector != "[=]" &&
+                                        selector != "[*=]" &&
                                         selector != "[=]:not([])" &&
-                                        selector != "[=]:not([=])"
+                                        selector != "[=]:not([=])" &&
+                                        selector != "[=]:not([*=])" &&
+                                        selector != "[*=]:not([])" &&
+                                        selector != "[*=]:not([=])" &&
+                                        selector != "[*=]:not([*=])" &&
+                                        selector != ":not([])" &&
+                                        selector != ":not([=])" &&
+                                        selector != ":not([*=])"
                                     ) {
                                         /* Logic
                                                 If
@@ -4360,8 +5097,7 @@ if (
 
                                                 case "_length":
                                                     // Return
-                                                    return (that.querySelectorAll(selector).length - 1);
-                                                    break;
+                                                    return (that.querySelectorAll(selector).length - 1)
                                             };
 
                                             /* Logic
@@ -4387,32 +5123,100 @@ if (
                                         else
                                             // Return
                                             return that.querySelector(selector)
+                                    };
+
+                                    /* Logic
+                                            If
+                                                [switch statement].
+                                    */
+                                    switch (selector) {
+                                        // []
+                                        case "[]":
+                                            // Return
+                                            return document.getElementsByAttributeName("*");
+                                            break;
+
+                                        // [=]
+                                        case "[=]":
+                                            // Return
+                                            return document.getElementsByAttributeNameAndValue("*");
+                                            break;
+
+                                        // [*=]
+                                        case "[*=]":
+                                            // Return
+                                            return document.getElementsByAttributeNameWithValue("*");
+                                            break;
+
+                                        // [=]:not([])
+                                        case "[=]:not([])":
+                                            // Return
+                                            return [];
+                                            break;
+
+                                        // [*=]:not([])
+                                        case "[*=]:not([])":
+                                            // Return
+                                            return [];
+                                            break;
+
+                                        // [*=]:not([*=])
+                                        case "[*=]:not([*=])":
+                                            // Return
+                                            return [];
+                                            break;
+
+                                        // [=]:not([=])
+                                        case "[=]:not([=])":
+                                            // Return
+                                            return document.getElementsByAttributeNameAndValueExceptValue("*");
+                                            break;
+
+                                        // [*=]:not([=])
+                                        case "[*=]:not([=])":
+                                            // Return
+                                            return document.getElementsByAttributeNameWithValueExceptValue("*");
+                                            break;
+
+                                        // [=]:not([*=])
+                                        case "[=]:not([*=])":
+                                            // Return
+                                            return document.getElementsByAttributeNameAndValueWithoutValue("*");
+                                            break;
+
+                                        // [*=]:not([*=])
+                                        case "[*=]:not([*=])":
+                                            // Return
+                                            return document.getElementsByAttributeNameWithValueWithoutValue("*");
+                                            break;
+
+                                        // :not([])
+                                        case ":not([])":
+                                            // Return
+                                            return [];
+                                            break;
+
+                                        // :not([=])
+                                        case ":not([=])":
+                                            // Return
+                                            return document.getElementsByAttributeNameExceptValue("*");
+                                            break;
+
+                                        // :not([*=])
+                                        case ":not([*=])":
+                                            // Return
+                                            return document.getElementsByAttributeNameWithoutValue("*")
                                     }
-
-                                    else if (selector == "[=]")
-                                        // Return
-                                        return document.getElementsByAttributeNameAndValue("*");
-
-                                    else if (selector == "[=]:not([])")
-                                        // Return
-                                        return [];
-
-                                    else if (selector == "[=]:not([=])")
-                                        // Return
-                                        return document.getElementsByAttributeNameAndValueExceptValue("*");
-
-                                    else if (selector == "[]")
-                                        // Return
-                                        return document.getElementsByAttributeName("*")
+                                }
                             });
 
                             // Run Event
-                            EventTarget.prototype.runEvent = function(type) {
+                            EventTarget.prototype.runEvent || (EventTarget.prototype.runEvent = function(type) {
                                 // Execution
                                     // Target Element
                                         // [New Event]
-                                        this.dispatchEvent(this.customEvents[type])
-                            };
+                                        (this || window).dispatchEvent((this || window).customEvents[type])
+                            });
 
                             // Set Event
                             EventTarget.prototype.setEvent || (EventTarget.prototype.setEvent = function(type, listener, useCapture, wantsUntrusted) {
@@ -4456,7 +5260,7 @@ if (
                                     });
 
                                     // Event > [if]
-                                    (window.addEventListener) ?
+                                    (document.addEventListener) ?
                                         // [true] > [Type]
                                         (this || window).addEventListener(type.replace(/ /g, "").split(/,/g)[i], listener, useCapture, wantsUntrusted) :
 
@@ -4485,681 +5289,612 @@ if (
                             });
 
                             // Add Class
-                            HTMLCollection.prototype.addClass = function(name) {
+                            HTMLCollection.prototype.addClass || (HTMLCollection.prototype.addClass = function(name) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Modification
-                                        // Target Element
-                                            // Class
-                                            this[i].addClass(name)
-                            };
+                                    // Modification > Target Element > Class
+                                    this[i].addClass(name)
+                            });
 
                             // Add Event
-                            HTMLCollection.prototype.addEvent = function(type, listener) {
+                            HTMLCollection.prototype.addEvent || (HTMLCollection.prototype.addEvent = function(type, listener) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Event
-                                        // Target Element
-                                            // [Type]
-                                            this[i].addEvent(type, listener)
-                            };
+                                    // Event > Target Element > [Type]
+                                    this[i].addEvent(type, listener)
+                            });
 
                             // Add Event Listener
-                            HTMLCollection.prototype.addEventListener = function(type, listener, useCapture, wantsUntrusted) {
+                            HTMLCollection.prototype.addEventListener || (HTMLCollection.prototype.addEventListener = function(type, listener, useCapture, wantsUntrusted) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Event
-                                        // Target Element
-                                            // [Type]
-                                            this[i].addEventListener(type, listener, useCapture, wantsUntrusted)
-                            };
+                                    // Event > Target Element > [Type]
+                                    this[i].addEventListener(type, listener, useCapture, wantsUntrusted)
+                            });
 
                             // Append After
-                            HTMLCollection.prototype.appendAfter = function(sibling) {
+                            HTMLCollection.prototype.appendAfter || (HTMLCollection.prototype.appendAfter = function(sibling) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Insertion
-                                        // Target Element
-                                        this[i].appendAfter(sibling)
-                            };
+                                    // Insertion > Target Element
+                                    this[i].appendAfter(sibling)
+                            });
 
                             // Append Before
-                            HTMLCollection.prototype.appendBefore = function(sibling) {
+                            HTMLCollection.prototype.appendBefore || (HTMLCollection.prototype.appendBefore = function(sibling) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Insertion
-                                        // Target Element
+                                    // Insertion > Target Element
                                     this[i].appendBefore(sibling)
-                            };
+                            });
 
                             // Close
-                            HTMLCollection.prototype.close = function() {
+                            HTMLCollection.prototype.close || (HTMLCollection.prototype.close = function() {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Target Element
-                                        // Close
-                                        this[i].close()
-                            };
+                                    // Target Element > Close
+                                    this[i].close()
+                            });
 
                             // CSS Selector
-                            HTMLCollection.prototype.CSSSelector = function(value) {
+                            HTMLCollection.prototype.CSSSelector || (HTMLCollection.prototype.CSSSelector = function(value) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Modification
-                                        // Target Element
-                                            // CSS Selector
-                                            this[i].CSSSelector = value
-                            };
+                                    // Modification > Target Element > CSS Selector
+                                    this[i].CSSSelector = value
+                            });
 
                             // Delete
-                            HTMLCollection.prototype.delete = function() {
+                            HTMLCollection.prototype.delete || (HTMLCollection.prototype.delete = function() {
                                 /* Logic
                                         If
                                             the number of DOM Elements is greater than
                                             the number of members of the HTML Collection.
                                 */
                                 if (document.querySelectorAll("*").length > this.length) {
-                                    // Initialization
-                                        // Node List
-                                        var nodeList = this;
+                                    // Initialization > Node List
+                                    var nodeList = this;
 
                                     /* Loop
                                             Index all members of the HTML Collection.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Deletion
-                                            // Target Element
-                                            (nodeList[i] || document.createElement("div")).remove()
+                                        // Deletion > Target Element
+                                        (nodeList[i] || document.createElement("div")).remove()
                                 }
 
                                 else
                                     // LapysJS > Error
                                     LapysJS.error("LapysJS cannot delete all DOM Elements.")
-                            };
+                            });
 
                             // Delete Attribute
-                            HTMLCollection.prototype.delAttr = function(name) {
+                            HTMLCollection.prototype.delAttr || (HTMLCollection.prototype.delAttr = function(name) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Modification
-                                        // Target Element
-                                            // [Name]
-                                            this[i].delAttr(name)
-                            };
+                                    // Modification > Target Element > [Name]
+                                    this[i].delAttr(name)
+                            });
 
                             // Delete Class
-                            HTMLCollection.prototype.delClass = function(data) {
+                            HTMLCollection.prototype.delClass || (HTMLCollection.prototype.delClass = function(data) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Modification
-                                        // Target Element
-                                            // Class
-                                            this[i].delClass(data)
-                            };
+                                    // Modification > Target Element > Class
+                                    this[i].delClass(data)
+                            });
 
                             // Delete Event
-                            HTMLCollection.prototype.delEvent = function(type, listener) {
+                            HTMLCollection.prototype.delEvent || (HTMLCollection.prototype.delEvent = function(type, listener) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Event
-                                        // Target Element
-                                            // [Type]
-                                            this[i].delEvent(type, listener)
-                            };
+                                    // Event > Target Element > [Type]
+                                    this[i].delEvent(type, listener)
+                            });
 
                             // Delete Style
-                            HTMLCollection.prototype.delStyle = function(style) {
+                            HTMLCollection.prototype.delStyle || (HTMLCollection.prototype.delStyle = function(style) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Modification
-                                        // Target Element
-                                            // Style
-                                            this[i].delStyle(style)
+                                    // Modification > Target Element > Style
+                                    this[i].delStyle(style)
+                            });
+
+                            /* Empty
+                                    --- CONSIDER ---
+                                        This method apparently removes a pre-built "empty()" String method.
+                            */
+                            HTMLCollection.prototype.empty = function() {
+                                // Return
+                                return !(this[0] || false)
                             };
 
                             // Get Attr[ibute]
-                            HTMLCollection.prototype.getAttr = function(name) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.getAttr || (HTMLCollection.prototype.getAttr = function(name) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].getAttr(name);
+                                    // Update > Array
+                                    array[i] = this[i].getAttr(name);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Get Attribute
-                            HTMLCollection.prototype.getAttribute = function(name) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.getAttribute || (HTMLCollection.prototype.getAttribute = function(name) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].getAttribute(name);
+                                    // Update > Array
+                                    array[i] = this[i].getAttribute(name);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Get CSS
-                            HTMLCollection.prototype.getCSS = function(property) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.getCSS || (HTMLCollection.prototype.getCSS = function(property) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
+                                    // Update > Array
                                         array[i] = this[i].getCSS(property);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Get Elements By Attribute Name
-                            HTMLCollection.prototype.getElementsByAttributeName = function(name) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.getElementsByAttributeName || (HTMLCollection.prototype.getElementsByAttributeName = function(name) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].getElementsByAttributeName(name);
+                                    // Update > Array
+                                    array[i] = this[i].getElementsByAttributeName(name);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Get Elements By Attribute Name and Value
-                            HTMLCollection.prototype.getElementsByAttributeNameAndValue = function(name, value) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.getElementsByAttributeNameAndValue || (HTMLCollection.prototype.getElementsByAttributeNameAndValue = function(name, value) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].getElementsByAttributeNameAndValue(name, value);
+                                    // Update > Array
+                                    array[i] = this[i].getElementsByAttributeNameAndValue(name, value);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Get Elements By Attribute Name and Value except Value
-                            HTMLCollection.prototype.getElementsByAttributeNameAndValueExceptValue = function(name, value1, value2) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.getElementsByAttributeNameAndValueExceptValue || (HTMLCollection.prototype.getElementsByAttributeNameAndValueExceptValue = function(name, value1, value2) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].getElementsByAttributeNameAndValueExceptValue(name, value1, value2);
+                                    // Update > Array
+                                    array[i] = this[i].getElementsByAttributeNameAndValueExceptValue(name, value1, value2);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Get Elements By Attribute Name and Value without Value
-                            HTMLCollection.prototype.getElementsByAttributeNameAndValueWithoutValue = function(name, value1, value2) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.getElementsByAttributeNameAndValueWithoutValue || (HTMLCollection.prototype.getElementsByAttributeNameAndValueWithoutValue = function(name, value1, value2) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].getElementsByAttributeNameAndValueWithoutValue(name, value1, value2);
+                                    // Update > Array
+                                    array[i] = this[i].getElementsByAttributeNameAndValueWithoutValue(name, value1, value2);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Get Elements By Attribute Name except Value
-                            HTMLCollection.prototype.getElementsByAttributeNameExceptValue = function(name, value) {
-                                // Update
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.getElementsByAttributeNameExceptValue || (HTMLCollection.prototype.getElementsByAttributeNameExceptValue = function(name, value) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].getElementsByAttributeNameExceptValue(name, value);
+                                    // Update > Array
+                                    array[i] = this[i].getElementsByAttributeNameExceptValue(name, value);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Get Elements By Attribute Name with Value
-                            HTMLCollection.prototype.getElementsByAttributeNameWithValue = function(name, value) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.getElementsByAttributeNameWithValue || (HTMLCollection.prototype.getElementsByAttributeNameWithValue = function(name, value) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].getElementsByAttributeNameWithValue(name, value);
+                                    // Update > Array
+                                    array[i] = this[i].getElementsByAttributeNameWithValue(name, value);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Get Elements By Attribute Name with Value except Value
-                            HTMLCollection.prototype.getElementsByAttributeNameWithValueExceptValue = function(name, value1, value2) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.getElementsByAttributeNameWithValueExceptValue || (HTMLCollection.prototype.getElementsByAttributeNameWithValueExceptValue = function(name, value1, value2) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].getElementsByAttributeNameWithValueExceptValue(name, value1, value2);
+                                    // Update > Array
+                                    array[i] = this[i].getElementsByAttributeNameWithValueExceptValue(name, value1, value2);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Get Elements By Attribute Name with Value without Value
-                            HTMLCollection.prototype.getElementsByAttributeNameWithValueWithoutValue = function(name, value1, value2) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.getElementsByAttributeNameWithValueWithoutValue || (HTMLCollection.prototype.getElementsByAttributeNameWithValueWithoutValue = function(name, value1, value2) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].getElementsByAttributeNameWithValueWithoutValue(name, value1, value2);
+                                    // Update > Array
+                                    array[i] = this[i].getElementsByAttributeNameWithValueWithoutValue(name, value1, value2);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Get Elements By Attribute Name without Value
-                            HTMLCollection.prototype.getElementsByAttributeNameWithoutValue = function(name, value) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.getElementsByAttributeNameWithoutValue || (HTMLCollection.prototype.getElementsByAttributeNameWithoutValue = function(name, value) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].getElementsByAttributeNameWithoutValue(name, value);
+                                    // Update > Array
+                                    array[i] = this[i].getElementsByAttributeNameWithoutValue(name, value);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Get Elements Related By Data ID
-                            HTMLCollection.prototype.getElementsRelatedByDataID = function() {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.getElementsRelatedByDataID || (HTMLCollection.prototype.getElementsRelatedByDataID = function() {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].getElementsRelatedByDataID();
+                                    // Update > Array
+                                    array[i] = this[i].getElementsRelatedByDataID();
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Has Attr[ibute]
-                            HTMLCollection.prototype.hasAttr = function(name) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.hasAttr || (HTMLCollection.prototype.hasAttr = function(name) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].hasAttr(name);
+                                    // Update > Array
+                                    array[i] = this[i].hasAttr(name);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Has Attribute
-                            HTMLCollection.prototype.hasAttribute = function(name) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.hasAttribute || (HTMLCollection.prototype.hasAttribute = function(name) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].hasAttribute(name);
+                                    // Update > Array
+                                    array[i] = this[i].hasAttribute(name);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Has Class
-                            HTMLCollection.prototype.hasClass = function(name) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.hasClass || (HTMLCollection.prototype.hasClass = function(name) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTMLCollection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].hasClass(name);
+                                    // Update > Array
+                                    array[i] = this[i].hasClass(name);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Has Child (Element)
-                            HTMLCollection.prototype.hasChild = function(child) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.hasChild || (HTMLCollection.prototype.hasChild = function(child) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].hasChild(child);
+                                    // Update > Array
+                                    array[i] = this[i].hasChild(child);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Has Child By Query Selector
-                            HTMLCollection.prototype.hasChildByQuerySelector = function(child) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.hasChildByQuerySelector || (HTMLCollection.prototype.hasChildByQuerySelector = function(child) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].hasChildByQuerySelector(child);
+                                    // Update > Array
+                                    array[i] = this[i].hasChildByQuerySelector(child);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Hide
-                            HTMLCollection.prototype.hide = function(child) {
+                            HTMLCollection.prototype.hide || (HTMLCollection.prototype.hide = function(child) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Modification
-                                        // Target Element
-                                            // Hidden
-                                            this[i].hidden = true
-                            };
+                                    // Modification > Target Element > Hidden
+                                    this[i].hidden = true
+                            });
 
                             // Open
-                            HTMLCollection.prototype.open = function(child) {
+                            HTMLCollection.prototype.open || (HTMLCollection.prototype.open = function(child) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Modification
-                                        // Target Element
-                                            // Open
-                                            this[i].open()
-                            };
+                                    // Modification > Target Element > Open
+                                    this[i].open()
+                            });
 
                             // [Query Selector (All)]
-                            HTMLCollection.prototype.$$ = function(selector, index) {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.$$ || (HTMLCollection.prototype.$$ = function(selector, index) {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i].$$(selector, index);
+                                    // Update > Array
+                                    array[i] = this[i].$$(selector, index);
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Relate Element By Data ID
-                            HTMLCollection.prototype.relateElementByDataID = function(element) {
+                            HTMLCollection.prototype.relateElementByDataID || (HTMLCollection.prototype.relateElementByDataID = function(element) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Target Element
-                                        // Relate Element By Data ID
-                                        this[i].relateElementByDataID(element)
-                            };
+                                    // Target Element > Relate Element By Data ID
+                                    this[i].relateElementByDataID(element)
+                            });
 
                             // Remove Attribute
-                            HTMLCollection.prototype.removeAttribute = function(name) {
+                            HTMLCollection.prototype.removeAttribute || (HTMLCollection.prototype.removeAttribute = function(name) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Modification
-                                        // Target Element
-                                            // [Name]
-                                            this[i].removeAttribute(name)
-                            };
+                                    // Modification > Target Element > [Name]
+                                    this[i].removeAttribute(name)
+                            });
 
                             // Remove Event Listener
-                            HTMLCollection.prototype.removeEventListener = function(type, listener) {
+                            HTMLCollection.prototype.removeEventListener || (HTMLCollection.prototype.removeEventListener = function(type, listener) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Event
-                                        // Target Element
-                                            // [Type]
-                                            this[i].removeEventListener(type, listener)
-                            };
+                                    // Event > Target Element > [Type]
+                                    this[i].removeEventListener(type, listener)
+                            });
 
                             // Run Event
-                            HTMLCollection.prototype.runEvent = function(type) {
+                            HTMLCollection.prototype.runEvent || (HTMLCollection.prototype.runEvent = function(type) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Event
-                                        // Target Element
-                                            // [Type]
-                                            this[i].runEvent(type)
-                            };
+                                    // Event > Target Element > [Type]
+                                    this[i].runEvent(type)
+                            });
 
                             // Set Attr[ibute]
-                            HTMLCollection.prototype.setAttr = function(name, value) {
+                            HTMLCollection.prototype.setAttr || (HTMLCollection.prototype.setAttr = function(name, value) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Modification
-                                        // Target Element
-                                            // [Name]
-                                        this[i].setAttr(name, value)
-                            };
+                                    // Modification > Target Element > [Name]
+                                    this[i].setAttr(name, value)
+                            });
 
                             // Set Attribute
-                            HTMLCollection.prototype.setAttribute = function(name, value) {
+                            HTMLCollection.prototype.setAttribute || (HTMLCollection.prototype.setAttribute = function(name, value) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Modification
-                                        // Target Element
-                                            // [Name]
-                                            this[i].setAttribute(name, value)
-                            };
+                                    // Modification > Target Element > [Name]
+                                    this[i].setAttribute(name, value)
+                            });
 
                             // Attr[ibute]
-                            HTMLCollection.prototype.attr = function(name, value) {
+                            HTMLCollection.prototype.attr || (HTMLCollection.prototype.attr = function(name, value) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Modification
-                                        // Target Element
-                                            // [Name]
-                                            this[i].attr(name, value)
-                            };
+                                    // Modification > Target Element > [Name]
+                                    this[i].attr(name, value)
+                            });
+
+                            // Get CSS
+                            HTMLCollection.prototype.setCSS || (HTMLCollection.prototype.setCSS = function(property, value) {
+                                /* Loop
+                                        Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Style > Target Element > [Property]
+                                    this[i].setCSS(property, value)
+                            });
 
                             // Set Event
-                            HTMLCollection.prototype.setEvent = function(type, listener, useCapture, wantsUntrusted) {
+                            HTMLCollection.prototype.setEvent || (HTMLCollection.prototype.setEvent = function(type, listener, useCapture, wantsUntrusted) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Event
-                                        // Target Element
-                                            // [Type]
-                                            this[i].setEvent(type, listener, useCapture, wantsUntrusted)
-                            };
+                                    // Event > Target Element > [Type]
+                                    this[i].setEvent(type, listener, useCapture, wantsUntrusted)
+                            });
 
                             // Show
-                            HTMLCollection.prototype.show = function() {
+                            HTMLCollection.prototype.show || (HTMLCollection.prototype.show = function() {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Target Element
-                                        // Show
-                                        this[i].show()
-                            };
+                                    // Target Element > Show
+                                    this[i].show()
+                            });
 
                             // Style
-                            HTMLCollection.prototype.style = function(declaration, value) {
+                            HTMLCollection.prototype.style || (HTMLCollection.prototype.style = function(declaration, value) {
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Modification
-                                        // Target Element
-                                            // Style
-                                                // [Declaration]
-                                                this[i].style[declaration] = value
-                            };
+                                    // Modification > Target Element > Style > [Declaration]
+                                    this[i].style[declaration] = value
+                            });
 
                             // To Array
-                            HTMLCollection.prototype.toArray = function() {
-                                // Initialization
-                                    // Array
-                                    var array = [];
+                            HTMLCollection.prototype.toArray || (HTMLCollection.prototype.toArray = function() {
+                                // Initialization > Array
+                                var array = [];
 
                                 /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                 for (var i = 0; i < this.length; i++)
-                                    // Update
-                                        // Array
-                                        array[i] = this[i];
+                                    // Update > Array
+                                    array[i] = this[i];
 
                                 // Return
                                 return array
-                            };
+                            });
 
                             // Hide
-                            HTMLElement.prototype.hide = function() {
-                                // Modification
-                                    // Target Element
-                                        // Hidden
-                                        this.hidden = true
-                            };
+                            HTMLElement.prototype.hide || (HTMLElement.prototype.hide = function() {
+                                // Modification > Target Element > Hidden
+                                this.hidden = true
+                            });
 
                             // Show
-                            HTMLElement.prototype.show = function() {
-                                // Modification
-                                    // Target Element
-                                        // Hidden
-                                        this.hidden = false
-                            };
+                            HTMLElement.prototype.show || (HTMLElement.prototype.show = function() {
+                                // Modification > Target Element > Hidden
+                                this.hidden = false
+                            });
 
                             // Append After
-                            Node.prototype.appendAfter = function(sibling) {
+                            Node.prototype.appendAfter || (Node.prototype.appendAfter = function(sibling) {
                                 /* Logic
                                         If
                                             Sibling is defined.
@@ -5187,10 +5922,10 @@ if (
                                                 sibling.parentNode
                                             ).insertBefore(sibling, this)
                                     }
-                            };
+                            });
 
                             // Append Before
-                            Node.prototype.appendBefore = function(sibling) {
+                            Node.prototype.appendBefore || (Node.prototype.appendBefore = function(sibling) {
                                 /* Logic
                                         If
                                             Sibling is defined.
@@ -5209,149 +5944,155 @@ if (
                                                 sibling.parentElement ||
                                                 sibling.parentNode
                                             ).insertBefore(this, sibling)
-                            };
+                            });
 
                             // Delete
-                            Node.prototype.delete = function() {
+                            Node.prototype.delete || (Node.prototype.delete = function() {
                                 // Deletion
                                     // Target Element
                                     this.remove()
-                            };
+                            });
 
                             // Add Class
-                            NodeList.prototype.addClass = HTMLCollection.prototype.addClass;
+                            NodeList.prototype.addClass || (NodeList.prototype.addClass = HTMLCollection.prototype.addClass);
 
                             // Add Event
-                            NodeList.prototype.addEvent = HTMLCollection.prototype.addEvent;
+                            NodeList.prototype.addEvent || (NodeList.prototype.addEvent = HTMLCollection.prototype.addEvent);
 
                             // Add Event Listener
-                            NodeList.prototype.addEventListener = HTMLCollection.prototype.addEventListener;
+                            NodeList.prototype.addEventListener || (NodeList.prototype.addEventListener = HTMLCollection.prototype.addEventListener);
 
                             // Append After
-                            NodeList.prototype.appendAfter = HTMLCollection.prototype.appendAfter;
+                            NodeList.prototype.appendAfter || (NodeList.prototype.appendAfter = HTMLCollection.prototype.appendAfter);
 
                             // Append Before
-                            NodeList.prototype.appendBefore = HTMLCollection.prototype.appendBefore;
+                            NodeList.prototype.appendBefore || (NodeList.prototype.appendBefore = HTMLCollection.prototype.appendBefore);
 
                             // Close
-                            NodeList.prototype.close = HTMLCollection.prototype.close;
+                            NodeList.prototype.close || (NodeList.prototype.close = HTMLCollection.prototype.close);
 
                             // CSS Selector
-                            NodeList.prototype.CSSSelector = HTMLCollection.prototype.CSSSelector;
+                            NodeList.prototype.CSSSelector || (NodeList.prototype.CSSSelector = HTMLCollection.prototype.CSSSelector);
 
                             // Delete Attr[ibute]
-                            NodeList.prototype.delAttr = HTMLCollection.prototype.delAttr;
+                            NodeList.prototype.delAttr || (NodeList.prototype.delAttr = HTMLCollection.prototype.delAttr);
 
                             // Delete Class
-                            NodeList.prototype.delClass = HTMLCollection.prototype.delClass;
+                            NodeList.prototype.delClass || (NodeList.prototype.delClass = HTMLCollection.prototype.delClass);
 
                             // Delete
-                            NodeList.prototype.delete = HTMLCollection.prototype.delete;
+                            NodeList.prototype.delete || (NodeList.prototype.delete = HTMLCollection.prototype.delete);
 
                             // Delete Event
-                            NodeList.prototype.delEvent = HTMLCollection.prototype.delEvent;
+                            NodeList.prototype.delEvent || (NodeList.prototype.delEvent = HTMLCollection.prototype.delEvent);
 
                             // Delete Style
-                            NodeList.prototype.delStyle = HTMLCollection.prototype.delStyle;
+                            NodeList.prototype.delStyle || (NodeList.prototype.delStyle = HTMLCollection.prototype.delStyle);
+
+                            // Empty
+                            NodeList.prototype.empty = HTMLCollection.prototype.empty;
 
                             // Get Attr[ibute]
-                            NodeList.prototype.getAttr = HTMLCollection.prototype.getAttr;
+                            NodeList.prototype.getAttr || (NodeList.prototype.getAttr = HTMLCollection.prototype.getAttr);
 
                             // Get Attribute
-                            NodeList.prototype.getAttribute = HTMLCollection.prototype.getAttribute;
+                            NodeList.prototype.getAttribute || (NodeList.prototype.getAttribute = HTMLCollection.prototype.getAttribute);
 
                             // Get CSS
-                            NodeList.prototype.getCSS = HTMLCollection.prototype.getCSS;
+                            NodeList.prototype.getCSS || (NodeList.prototype.getCSS = HTMLCollection.prototype.getCSS);
 
                             // Get Elements By Attribute Name
-                            NodeList.prototype.getElementsByAttributeName = HTMLCollection.prototype.getElementsByAttributeName;
+                            NodeList.prototype.getElementsByAttributeName || (NodeList.prototype.getElementsByAttributeName = HTMLCollection.prototype.getElementsByAttributeName);
 
                             // Get Elements By Attribute Name and Value
-                            NodeList.prototype.getElementsByAttributeNameAndValue = HTMLCollection.prototype.getElementsByAttributeNameAndValue;
+                            NodeList.prototype.getElementsByAttributeNameAndValue || (NodeList.prototype.getElementsByAttributeNameAndValue = HTMLCollection.prototype.getElementsByAttributeNameAndValue);
 
                             // Get Elements By Attribute Name and Value except Value
-                            NodeList.prototype.getElementsByAttributeNameAndValueExceptValue = HTMLCollection.prototype.getElementsByAttributeNameAndValueExceptValue;
+                            NodeList.prototype.getElementsByAttributeNameAndValueExceptValue || (NodeList.prototype.getElementsByAttributeNameAndValueExceptValue = HTMLCollection.prototype.getElementsByAttributeNameAndValueExceptValue);
 
                             // Get Elements By Attribute Name and Value without Value
-                            NodeList.prototype.getElementsByAttributeNameAndValueWithoutValue = HTMLCollection.prototype.getElementsByAttributeNameAndValueWithoutValue;
+                            NodeList.prototype.getElementsByAttributeNameAndValueWithoutValue || (NodeList.prototype.getElementsByAttributeNameAndValueWithoutValue = HTMLCollection.prototype.getElementsByAttributeNameAndValueWithoutValue);
 
                             // Get Elements By Attribute Name except Value
-                            NodeList.prototype.getElementsByAttributeNameExceptValue = HTMLCollection.prototype.getElementsByAttributeNameExceptValue;
+                            NodeList.prototype.getElementsByAttributeNameExceptValue || (NodeList.prototype.getElementsByAttributeNameExceptValue = HTMLCollection.prototype.getElementsByAttributeNameExceptValue);
 
                             // Get Element By Attribute Name with Value
-                            NodeList.prototype.getElementsByAttributeNameWithValue = HTMLCollection.prototype.getElementsByAttributeNameWithValue;
+                            NodeList.prototype.getElementsByAttributeNameWithValue || (NodeList.prototype.getElementsByAttributeNameWithValue = HTMLCollection.prototype.getElementsByAttributeNameWithValue);
 
                             // Get Elements By Attribute Name with Value except Value
-                            NodeList.prototype.getElementsByAttributeNameWithValueExceptValue = HTMLCollection.prototype.getElementsByAttributeNameWithValueExceptValue;
+                            NodeList.prototype.getElementsByAttributeNameWithValueExceptValue || (NodeList.prototype.getElementsByAttributeNameWithValueExceptValue = HTMLCollection.prototype.getElementsByAttributeNameWithValueExceptValue);
 
                             // Get Elements By Attribute Name with Value without Value
-                            NodeList.prototype.getElementsByAttributeNameWithValueWithoutValue = HTMLCollection.prototype.getElementsByAttributeNameWithValueWithoutValue;
+                            NodeList.prototype.getElementsByAttributeNameWithValueWithoutValue || (NodeList.prototype.getElementsByAttributeNameWithValueWithoutValue = HTMLCollection.prototype.getElementsByAttributeNameWithValueWithoutValue);
 
                             // Get Elements By Attribute Name without Value
-                            NodeList.prototype.getElementsByAttributeNameWithoutValue = HTMLCollection.prototype.getElementsByAttributeNameWithoutValue;
+                            NodeList.prototype.getElementsByAttributeNameWithoutValue || (NodeList.prototype.getElementsByAttributeNameWithoutValue = HTMLCollection.prototype.getElementsByAttributeNameWithoutValue);
 
                             // Get Elements Related By Data ID
-                            NodeList.prototype.getElementsRelatedByDataID = HTMLCollection.prototype.getElementsRelatedByDataID;
+                            NodeList.prototype.getElementsRelatedByDataID || (NodeList.prototype.getElementsRelatedByDataID = HTMLCollection.prototype.getElementsRelatedByDataID);
 
                             // Has Attr[ibute]
-                            NodeList.prototype.hasAttr = HTMLCollection.prototype.hasAttr;
+                            NodeList.prototype.hasAttr || (NodeList.prototype.hasAttr = HTMLCollection.prototype.hasAttr);
 
                             // Has Attribute
-                            NodeList.prototype.hasAttribute = HTMLCollection.prototype.hasAttribute;
+                            NodeList.prototype.hasAttribute || (NodeList.prototype.hasAttribute = HTMLCollection.prototype.hasAttribute);
 
                             // Has Child
-                            NodeList.prototype.hasChild = HTMLCollection.prototype.hasChild;
+                            NodeList.prototype.hasChild || (NodeList.prototype.hasChild = HTMLCollection.prototype.hasChild);
 
                             // Has Child by Query Selector
-                            NodeList.prototype.hasChildByQuerySelector = HTMLCollection.prototype.hasChildByQuerySelector;
+                            NodeList.prototype.hasChildByQuerySelector || (NodeList.prototype.hasChildByQuerySelector = HTMLCollection.prototype.hasChildByQuerySelector);
 
                             // Has Class
-                            NodeList.prototype.hasClass = HTMLCollection.prototype.hasClass;
+                            NodeList.prototype.hasClass || (NodeList.prototype.hasClass = HTMLCollection.prototype.hasClass);
 
                             // Hide
-                            NodeList.prototype.hide = HTMLCollection.prototype.hide;
+                            NodeList.prototype.hide || (NodeList.prototype.hide = HTMLCollection.prototype.hide);
 
                             // Open
-                            NodeList.prototype.open = HTMLCollection.prototype.open;
+                            NodeList.prototype.open || (NodeList.prototype.open = HTMLCollection.prototype.open);
 
                             // [Query Selector (All)]
-                            NodeList.prototype.$$ = HTMLCollection.prototype.$$;
+                            NodeList.prototype.$$ || (NodeList.prototype.$$ = HTMLCollection.prototype.$$);
 
                             // Relate Element By Data ID
-                            NodeList.prototype.relateElementByDataID = HTMLCollection.prototype.relateElementByDataID;
+                            NodeList.prototype.relateElementByDataID || (NodeList.prototype.relateElementByDataID = HTMLCollection.prototype.relateElementByDataID);
 
                             // Remove Attribute
-                            NodeList.prototype.removeAttribute = HTMLCollection.prototype.removeAttribute;
+                            NodeList.prototype.removeAttribute || (NodeList.prototype.removeAttribute = HTMLCollection.prototype.removeAttribute);
 
                             // Remove Event Listener
-                            NodeList.prototype.removeEventListener = HTMLCollection.prototype.removeEventListener;
+                            NodeList.prototype.removeEventListener || (NodeList.prototype.removeEventListener = HTMLCollection.prototype.removeEventListener);
 
                             // Run Event
-                            NodeList.prototype.runEvent = HTMLCollection.prototype.runEvent;
+                            NodeList.prototype.runEvent || (NodeList.prototype.runEvent = HTMLCollection.prototype.runEvent);
 
                             // Set Attr[ibute]
-                            NodeList.prototype.setAttr = HTMLCollection.prototype.setAttr;
+                            NodeList.prototype.setAttr || (NodeList.prototype.setAttr = HTMLCollection.prototype.setAttr);
 
                             // Set Attribute
-                            NodeList.prototype.setAttribute = HTMLCollection.prototype.setAttribute;
+                            NodeList.prototype.setAttribute || (NodeList.prototype.setAttribute = HTMLCollection.prototype.setAttribute);
 
                             // Attr[ibute]
-                            NodeList.prototype.attr = HTMLCollection.prototype.attr;
+                            NodeList.prototype.attr || (NodeList.prototype.attr = HTMLCollection.prototype.attr);
+
+                            // Set CSS
+                            NodeList.prototype.setCSS || (NodeList.prototype.setCSS = HTMLCollection.prototype.setCSS);
 
                             // Set Event
-                            NodeList.prototype.setEvent = HTMLCollection.prototype.setEvent;
+                            NodeList.prototype.setEvent || (NodeList.prototype.setEvent = HTMLCollection.prototype.setEvent);
 
                             // Show
-                            NodeList.prototype.show = HTMLCollection.prototype.show;
+                            NodeList.prototype.show || (NodeList.prototype.show = HTMLCollection.prototype.show);
 
                             // Style
-                            NodeList.prototype.style = HTMLCollection.prototype.style;
+                            NodeList.prototype.style || (NodeList.prototype.style = HTMLCollection.prototype.style);
 
                             // To Array
-                            NodeList.prototype.toArray = HTMLCollection.prototype.toArray;
+                            NodeList.prototype.toArray || (NodeList.prototype.toArray = HTMLCollection.prototype.toArray);
 
                             // CSS Selector
-                            Object.defineProperty(Element.prototype, "CSSSelector", {
+                            document.createElement("div").CSSSelector || (Object.defineProperty(Element.prototype, "CSSSelector", {
                                 // Configurable
                                 configurable: true,
 
@@ -5445,15 +6186,27 @@ if (
                                                 the specified "CSSSelector" has "." in it.
                                     */
                                         // Class
-                                        if (CSSSelector.indexOf(".") >= 0)
+                                        if (
+                                            CSSSelector.indexOf(".") >= 0 &&
+                                            (
+                                                (
+                                                    CSSSelector.indexOf(".") < CSSSelector.indexOf("[") &&
+                                                    CSSSelector.indexOf(".") < CSSSelector.indexOf("]")
+                                                ) ||
+                                                (
+                                                    CSSSelector.indexOf(".") > CSSSelector.indexOf("[") &&
+                                                    CSSSelector.indexOf(".") > CSSSelector.indexOf("]")
+                                                )
+                                            )
+                                        )
                                             /* Loop
                                                     For all existing class nodes.
                                             */
-                                            for (var i = 0; i < CSSSelector.replace(/(\[([a-zA-Z0-9]|_|-|\=|){1,}\]|\#([a-zA-Z0-9]|_|-){1,})/g, "").trim().split(/\./).filter(function(data) { return !!data }).length; i++)
+                                            for (var i = 0; i < CSSSelector.replace(/(\[([a-zA-Z0-9]|_|\.|\\|\/|\*|\"|\'|-|\=|){1,}\]|\#([a-zA-Z0-9]|_|-){1,})/g, "").trim().split(/\./).filter(function(data) { return !!data }).length; i++)
                                                 // Modification
                                                     // Target Element
                                                         // Class
-                                                        this.addClass(CSSSelector.replace(/(\[([a-zA-Z0-9]|_|-|\=|){1,}\]|\#([a-zA-Z0-9]|_|-){1,})/g, "").trim().replace(/\[style\=([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|){1,}\]/g, "").split(/\./).filter(function(data) { return !!data })[i]);
+                                                        this.addClass(CSSSelector.replace(/(\[([a-zA-Z0-9]|_|\.|\\|\/|\*|\"|\'|-|\=|){1,}\]|\#([a-zA-Z0-9]|_|-){1,})/g, "").trim().replace(/\[style\=([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|){1,}\]/g, "").split(/\./).filter(function(data) { return !!data })[i]);
 
                                     /* Logic
                                             If
@@ -5464,7 +6217,7 @@ if (
                                             // Modification
                                                 // Target Element
                                                     // ID
-                                                    this.id = CSSSelector.replace(/(\[([a-zA-Z0-9]|_|-|\=|"|'|){1,}\]|\.([a-zA-Z0-9]|_|-){1,})|#/g, "").replace(/\[style\=([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|){1,}\]/g, "");
+                                                    this.id = CSSSelector.replace(/(((\[([a-zA-Z0-9]|_|-|\=|\\|\/|"|'|){1,}\]|\.([a-zA-Z0-9]|_|-){1,})|#)|(\[style\=([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|){1,}\]))/g, "");
 
                                     /* Logic
                                             If
@@ -5494,10 +6247,10 @@ if (
                                                             )
                                                         )
                                 }
-                            });
+                            }));
 
                             // Parent
-                            Object.defineProperty(Element.prototype, "parent", {
+                            document.createElement("div").parent || (Object.defineProperty(Element.prototype, "parent", {
                                 // Configurable
                                 configurable: true,
 
@@ -5508,10 +6261,10 @@ if (
                                     // Return
                                     return (this.parentElement || this.parentNode)
                                 }
-                            });
+                            }));
 
                             // Parent Path
-                            Object.defineProperty(Element.prototype, "parentPath", {
+                            document.createElement("div").parentPath || (Object.defineProperty(Element.prototype, "parentPath", {
                                 // Configurable
                                 configurable: true,
 
@@ -5553,10 +6306,10 @@ if (
                                 set: function() {
                                     /* Do nothing… */
                                 }
-                            });
+                            }));
 
                             // Role
-                            Object.defineProperty(Element.prototype, "role", {
+                            document.createElement("div").role || (Object.defineProperty(Element.prototype, "role", {
                                 // Configurable
                                 configurable: true,
 
@@ -5578,9 +6331,12 @@ if (
                                             // Role
                                             this.setAttribute("role", data)
                                 }
-                            });
+                            }));
 
-                            // Siblings
+                            /* Siblings
+                                    --- NOTE ---
+                                        The property here should be volatile.
+                            */
                             Object.defineProperty(Element.prototype, "siblings", {
                                 // Configurable
                                 configurable: true,
@@ -5590,20 +6346,19 @@ if (
 
                                 // Get
                                 get: function(number) {
-                                    // Initialization
-                                        // Target Element
-                                        var that = this;
+                                    // Initialization > Target
+                                    var that = this;
 
                                     // Return
-                                    return Array.prototype.slice.call((this.parentElement || this.parentNode).children).filter(function(element) {
+                                    return Array.from((this.parentElement || this.parentNode).children).filter(function(data) {
                                         // Return
-                                        return element != that
+                                        return data != that
                                     })
                                 }
                             });
 
                             // Height
-                            Object.defineProperty(HTMLCollection.prototype, "height", {
+                            document.getElementsByTagName("html").height || (Object.defineProperty(HTMLCollection.prototype, "height", {
                                 // Configurable
                                 configurable: true,
 
@@ -5612,17 +6367,15 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                         Index all members of the HTML Collection.
                                 */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].height;
+                                        // Update > Array
+                                        array[i] = this[i].height;
 
                                     // Return
                                     return array
@@ -5634,15 +6387,13 @@ if (
                                             Index all members of the HTML Collection.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Style
-                                            // Target Element
-                                                // Height
-                                                this[i].style.height = (number + "px");
+                                        // Style > Target Element > Height
+                                        this[i].style.height = (number + "px");
                                 }
-                            });
+                            }));
 
                             // Node Index
-                            Object.defineProperty(HTMLCollection.prototype, "nodeIndex", {
+                            document.getElementsByTagName("html").nodeIndex || (Object.defineProperty(HTMLCollection.prototype, "nodeIndex", {
                                 // Configurable
                                 configurable: true,
 
@@ -5651,17 +6402,15 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                         Index all members of the HTML Collection.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].nodeIndex;
+                                        // Update > Array
+                                        array[i] = this[i].nodeIndex;
 
                                     // Return
                                     return array
@@ -5671,10 +6420,10 @@ if (
                                 set: function(number) {
                                     /* Do nothing... */
                                 }
-                            });
+                            }));
 
                             // Offset
-                            Object.defineProperty(HTMLCollection.prototype, "offset", {
+                            document.getElementsByTagName("html").offset || (Object.defineProperty(HTMLCollection.prototype, "offset", {
                                 // Configurable
                                 configurable: true,
 
@@ -5683,25 +6432,23 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                             Index all members of the HTML Collection.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].offset;
+                                        // Update > Array
+                                        array[i] = this[i].offset;
 
                                     // Return
                                     return array
                                 }
-                            });
+                            }));
 
                             // Parent
-                            Object.defineProperty(HTMLCollection.prototype, "parent", {
+                            document.getElementsByTagName("html").parent || (Object.defineProperty(HTMLCollection.prototype, "parent", {
                                 // Configurable
                                 configurable: true,
 
@@ -5710,25 +6457,23 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                             Index all members of the HTML Collection.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].parent;
+                                        // Update > Array
+                                        array[i] = this[i].parent;
 
                                     // Return
                                     return array
                                 }
-                            });
+                            }));
 
                             // Parent Path
-                            Object.defineProperty(HTMLCollection.prototype, "parentPath", {
+                            document.getElementsByTagName("html").parentPath || (Object.defineProperty(HTMLCollection.prototype, "parentPath", {
                                 // Configurable
                                 configurable: true,
 
@@ -5737,25 +6482,23 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                             Index all members of the HTML Collection.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].parentPath;
+                                        // Update > Array
+                                        array[i] = this[i].parentPath;
 
                                     // Return
                                     return array
                                 }
-                            });
+                            }));
 
                             // Role
-                            Object.defineProperty(HTMLCollection.prototype, "role", {
+                            document.getElementsByTagName("html").role || (Object.defineProperty(HTMLCollection.prototype, "role", {
                                 // Configurable
                                 configurable: true,
 
@@ -5764,17 +6507,15 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                             Index all members of the HTML Collection.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].role;
+                                        // Update > Array
+                                        array[i] = this[i].role;
 
                                     // Return
                                     return array
@@ -5786,15 +6527,13 @@ if (
                                             Index all members of the HTML Collection.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Modification
-                                            // Target Element
-                                                // Role
-                                                this[i].role = data
+                                        // Modification > Target Element > Role
+                                        this[i].role = data
                                 }
-                            });
+                            }));
 
                             // Siblings
-                            Object.defineProperty(HTMLCollection.prototype, "siblings", {
+                            document.getElementsByTagName("html").siblings || (Object.defineProperty(HTMLCollection.prototype, "siblings", {
                                 // Configurable
                                 configurable: true,
 
@@ -5803,25 +6542,23 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                             Index all members of the HTML Collection.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].siblings;
+                                        // Update > Array
+                                        array[i] = this[i].siblings;
 
                                     // Return
                                     return array
                                 }
-                            });
+                            }));
 
                             // Width
-                            Object.defineProperty(HTMLCollection.prototype, "width", {
+                            document.getElementsByTagName("html").width || (Object.defineProperty(HTMLCollection.prototype, "width", {
                                 // Configurable
                                 configurable: true,
 
@@ -5837,8 +6574,7 @@ if (
                                             Index all members of the HTML Collection.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
+                                        // Update > Array
                                             array[i] = this[i].width;
 
                                     // Return
@@ -5851,15 +6587,13 @@ if (
                                             Index all members of the HTML Collection.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Style
-                                            // Target Element
-                                                // Width
-                                                this[i].style.width = (number + "px")
+                                        // Style > Target Element > Width
+                                        this[i].style.width = (number + "px")
                                 }
-                            });
+                            }));
 
                             // Height
-                            Object.defineProperty(HTMLElement.prototype, "height", {
+                            document.createElement("div").height || (Object.defineProperty(HTMLElement.prototype, "height", {
                                 // Configurable
                                 configurable: true,
 
@@ -5874,15 +6608,13 @@ if (
 
                                 // Set
                                 set: function(number) {
-                                    // Target Element
-                                        // Style
-                                            // Height
-                                            this.style.height = (number + "px")
+                                    // Target Element > Style > Height
+                                    this.style.height = (number + "px")
                                 }
-                            });
+                            }));
 
                             // Offset
-                            Object.defineProperty(HTMLElement.prototype, "offset", {
+                            document.createElement("div").offset || (Object.defineProperty(HTMLElement.prototype, "offset", {
                                 // Configurable
                                 configurable: true,
 
@@ -5894,10 +6626,10 @@ if (
                                     // Return
                                     return this.getBoundingClientRect()
                                 }
-                            });
+                            }));
 
                             // Width
-                            Object.defineProperty(HTMLElement.prototype, "width", {
+                            document.createElement("div").width || (Object.defineProperty(HTMLElement.prototype, "width", {
                                 // Configurable
                                 configurable: true,
 
@@ -5917,10 +6649,10 @@ if (
                                             // Width
                                             this.style.width = (number + "px")
                                 }
-                            });
+                            }));
 
                             // Height
-                            Object.defineProperty(NodeList.prototype, "height", {
+                            document.querySelectorAll("html").height || (Object.defineProperty(NodeList.prototype, "height", {
                                 // Configurable
                                 configurable: true,
 
@@ -5929,17 +6661,15 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                             Index all members of the Node List.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].height;
+                                        // Update > Array
+                                        array[i] = this[i].height;
 
                                     // Return
                                     return array
@@ -5956,10 +6686,10 @@ if (
                                                 // Height
                                                 this[i].style.height = (number + "px");
                                 }
-                            });
+                            }));
 
                             // Node Index
-                            Object.defineProperty(NodeList.prototype, "nodeIndex", {
+                            document.querySelectorAll("html").nodeIndex || (Object.defineProperty(NodeList.prototype, "nodeIndex", {
                                 // Configurable
                                 configurable: true,
 
@@ -5968,17 +6698,15 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                         Index all members of the HTML Collection.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].nodeIndex;
+                                        // Update > Array
+                                        array[i] = this[i].nodeIndex;
 
                                     // Return
                                     return array
@@ -5988,10 +6716,10 @@ if (
                                 set: function(number) {
                                     /* Do nothing... */
                                 }
-                            });
+                            }));
 
                             // Offset
-                            Object.defineProperty(NodeList.prototype, "offset", {
+                            document.querySelectorAll("html").offset || (Object.defineProperty(NodeList.prototype, "offset", {
                                 // Configurable
                                 configurable: true,
 
@@ -6000,25 +6728,23 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                             Index all members of the Node List.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].offset;
+                                        // Update > Array
+                                        array[i] = this[i].offset;
 
                                     // Return
                                     return array
                                 }
-                            });
+                            }));
 
                             // Parent
-                            Object.defineProperty(NodeList.prototype, "parent", {
+                            document.querySelectorAll("html").parent || (Object.defineProperty(NodeList.prototype, "parent", {
                                 // Configurable
                                 configurable: true,
 
@@ -6027,25 +6753,23 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                             Index all members of the Node List.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].parent;
+                                        // Update > Array
+                                        array[i] = this[i].parent;
 
                                     // Return
                                     return array
                                 }
-                            });
+                            }));
 
                             // Parent Path
-                            Object.defineProperty(NodeList.prototype, "parentPath", {
+                            document.querySelectorAll("html").parentPath || (Object.defineProperty(NodeList.prototype, "parentPath", {
                                 // Configurable
                                 configurable: true,
 
@@ -6054,25 +6778,23 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                             Index all members of the Node List.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].parentPath;
+                                        // Update > Array
+                                        array[i] = this[i].parentPath;
 
                                     // Return
                                     return array
                                 }
-                            });
+                            }));
 
                             // Role
-                            Object.defineProperty(NodeList.prototype, "role", {
+                            document.querySelectorAll("html").role || (Object.defineProperty(NodeList.prototype, "role", {
                                 // Configurable
                                 configurable: true,
 
@@ -6081,17 +6803,15 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                             Index all members of the Node List.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].role;
+                                        // Update > Array
+                                        array[i] = this[i].role;
 
                                     // Return
                                     return array
@@ -6108,10 +6828,10 @@ if (
                                                 // Role
                                                 this[i].role = data
                                 }
-                            });
+                            }));
 
                             // Siblings
-                            Object.defineProperty(NodeList.prototype, "siblings", {
+                            document.querySelectorAll("html").siblings || (Object.defineProperty(NodeList.prototype, "siblings", {
                                 // Configurable
                                 configurable: true,
 
@@ -6120,25 +6840,23 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                             Index all members of the Node List.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].siblings;
+                                        // Update > Array
+                                        array[i] = this[i].siblings;
 
                                     // Return
                                     return array
                                 }
-                            });
+                            }));
 
                             // Width
-                            Object.defineProperty(NodeList.prototype, "width", {
+                            document.querySelectorAll("html").width || (Object.defineProperty(NodeList.prototype, "width", {
                                 // Configurable
                                 configurable: true,
 
@@ -6147,17 +6865,15 @@ if (
 
                                 // Get
                                 get: function() {
-                                    // Initialization
-                                        // Array
-                                        var array = [];
+                                    // Initialization > Array
+                                    var array = [];
 
                                     /* Loop
                                             Index all members of the Node List.
                                     */
                                     for (var i = 0; i < this.length; i++)
-                                        // Update
-                                            // Array
-                                            array[i] = this[i].width;
+                                        // Update > Array
+                                        array[i] = this[i].width;
 
                                     // Return
                                     return array
@@ -6174,7 +6890,7 @@ if (
                                                 // Width
                                                 this[i].style.width = (number + "px")
                                 }
-                            });
+                            }));
 
                     // Class Sets
                         /* Loop
@@ -6228,8 +6944,7 @@ if (
 
                                                     // [Default]
                                                     default:
-                                                        document.querySelectorAll("[class]")[i].classSetMetadata = "";
-                                                        break;
+                                                        document.querySelectorAll("[class]")[i].classSetMetadata = ""
                                                 };
 
                                                 /* Logic
@@ -6251,8 +6966,7 @@ if (
 
                                                     // [Default]
                                                     default:
-                                                        document.querySelectorAll("[class]")[i].classSetData = "";
-                                                        break;
+                                                        document.querySelectorAll("[class]")[i].classSetData = ""
                                                 };
 
                                                 /* Logic
@@ -6372,22 +7086,21 @@ if (
 
                                                     // Window Height
                                                     case "window-height":
-                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (window.innerHeight + "px");
+                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (innerHeight + "px");
                                                         break;
 
                                                     // Window Width
                                                     case "window-width":
-                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (window.innerWidth + "px");
-                                                        break;
+                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (innerWidth + "px")
                                                 };
 
-                                                document.querySelectorAll("[class]")[i].classSet = undefined;
-                                                document.querySelectorAll("[class]")[i].classSetMetadata = undefined;
-                                                document.querySelectorAll("[class]")[i].classSetData = undefined
+                                                document.querySelectorAll("[class]")[i].classSet = void 0;
+                                                document.querySelectorAll("[class]")[i].classSetMetadata = void 0;
+                                                document.querySelectorAll("[class]")[i].classSetData = void 0
                                             }
                                 };
                                 classSets();
-                                setEvent("resize", classSets)
+                                window.setEvent("resize", classSets)
                             };
 
                     // Style
@@ -6833,16 +7546,16 @@ if (
                     // Clipboard
                         // Definition
                             // <clip-clone>
-                            (document.createElement("clip-clone").constructor !== HTMLElement) || window.customElements.define("clip-clone", class ClipboardClone extends HTMLElement {});
+                            (!window.customElements || (document.createElement("clip-clone").constructor !== HTMLElement) || customElements.define("clip-clone", class ClipboardClone extends HTMLElement {}));
 
                             // <clip-copy>
-                            (document.createElement("clip-copy").constructor !== HTMLElement) || window.customElements.define("clip-copy", class ClipboardCopy extends HTMLElement {});
+                            (!window.customElements || (document.createElement("clip-copy").constructor !== HTMLElement) || customElements.define("clip-copy", class ClipboardCopy extends HTMLElement {}));
 
                             // <clip-cut>
-                            (document.createElement("clip-cut").constructor !== HTMLElement) || window.customElements.define("clip-cut", class ClipboardCut extends HTMLElement {});
+                            (!window.customElements || (document.createElement("clip-cut").constructor !== HTMLElement) || customElements.define("clip-cut", class ClipboardCut extends HTMLElement {}));
 
                             // <clip-paste>
-                            (document.createElement("clip-paste").constructor !== HTMLElement) || window.customElements.define("clip-paste", class ClipboardPaste extends HTMLElement {});
+                            (!window.customElements || (document.createElement("clip-paste").constructor !== HTMLElement) || customElements.define("clip-paste", class ClipboardPaste extends HTMLElement {}));
 
                         /* Loop
                                 Index all <clip-clone> elements.
@@ -6877,11 +7590,7 @@ if (
 
                                 // Deletion
                                     // <clip-clone>
-                                    document.getElementsByTagName("clip-clone")[i].remove();
-
-                                // Update
-                                    // Loop Counter
-                                    i--
+                                    document.getElementsByTagName("clip-clone")[i--].remove()
                         };
 
                         /* Loop
@@ -6941,11 +7650,7 @@ if (
 
                                 // Deletion
                                     // <clip-paste>
-                                    document.getElementsByTagName("clip-paste")[i].remove();
-
-                                // Update
-                                    // Loop Counter
-                                    i--
+                                    document.getElementsByTagName("clip-paste")[i--].remove()
                         };
 
                         /* Loop
@@ -6960,11 +7665,7 @@ if (
                         for (var i = 0; i < document.getElementsByTagName("clip-cut").length; i++) {
                             // Deletion
                                 // <clip-cut>
-                                document.getElementsByTagName("clip-cut")[i].remove();
-
-                            // Update
-                                // Loop Counter
-                                i--
+                                document.getElementsByTagName("clip-cut")[i--].remove()
                         };
 
                     // Dropdown
@@ -7025,7 +7726,7 @@ if (
                                 if (document.getElementsByClassName("dropdown")[i].getAttribute("data-event-type") == "hover") {
                                     // Event
                                         // Mouse Leave
-                                        document.getElementsByClassName("dropdown")[i].setEvent("mouseleave", function() {
+                                        document.getElementsByClassName("dropdown")[i].setEvent("mouseleave, mouseout", function() {
                                             // Close
                                             this["LapysJS close"]()
                                         });
@@ -7037,19 +7738,26 @@ if (
                                         })
                                 }
 
-                                else
-                                    // Event
-                                        // [Data Event Type] | Mouse Up
-                                        document.getElementsByClassName("dropdown")[i].setEvent(
-                                            (document.getElementsByClassName("dropdown")[i].getAttribute("data-event-type") || "mouseup"),
+                                else {
+                                    // Event > [Data Event Type] | Mouse Up
+                                    document.getElementsByClassName("dropdown")[i].constructor.prototype["LapysJS hasDropdownEventSet"] || document.getElementsByClassName("dropdown")[i].setEvent(
+                                        (document.getElementsByClassName("dropdown")[i].getAttribute("data-event-type") || "mouseup"),
 
-                                            function() {
-                                                // Toggle
-                                                !this["LapysJS toggle"] ? this["LapysJS open"]() : this["LapysJS close"]();
+                                        function() {
+                                            // Toggle
+                                            !this["LapysJS toggle"] ? this["LapysJS open"]() : this["LapysJS close"]();
 
-                                                this["LapysJS toggle"] = !this["LapysJS toggle"]
-                                            }
-                                        )
+                                            this["LapysJS toggle"] = !this["LapysJS toggle"];
+
+                                            // Modification
+                                            this["LapysJS toggle"] || this.setAttribute("data-selected", "");
+                                            !this["LapysJS toggle"] || this.removeAttribute("data-selected")
+                                        }
+                                    );
+
+                                    // Update > Dropdown > Has Dropdown Event Set
+                                    document.getElementsByClassName("dropdown")[i].constructor.prototype["LapysJS hasDropdownEventSet"] = true
+                                }
                             }
                         };
 
@@ -8114,20 +8822,20 @@ if (
                                                         '\r\t\tclass="playback-range" ' +
                                                         '\r\t\tonchange="' +
                                                             '\r\t\tthis.media.playbackRate = (function() {' +
-                                                                '\r\t\t\tif (event.target.value >= 500)' +
-                                                                    '\r\t\t\t\treturn parseFloat((event.target.value - 500) / 50); ' +
+                                                                '\r\t\t\tif (((event || []).target || []).value >= 500)' +
+                                                                    '\r\t\t\t\treturn parseFloat((((event || []).target || []).value - 500) / 50); ' +
 
                                                                 '\r\t\t\telse' +
-                                                                    '\r\t\t\t\treturn -parseFloat((event.target.value) / 100)' +
+                                                                    '\r\t\t\t\treturn -parseFloat((((event || []).target || []).value) / 100)' +
                                                             '\r\t\t})()' +
                                                         '" ' +
                                                         '\r\t\toninput="' +
-                                                            '\r\t\tevent.target.media.playbackRate = (function() {' +
-                                                                '\r\t\t\tif (event.target.value >= 500)' +
-                                                                    '\r\t\t\t\treturn parseFloat((event.target.value - 500) / 50); ' +
+                                                            '\r\t\t((event || []).target || []).media.playbackRate = (function() {' +
+                                                                '\r\t\t\tif (((event || []).target || []).value >= 500)' +
+                                                                    '\r\t\t\t\treturn parseFloat((((event || []).target || []).value - 500) / 50); ' +
 
                                                                 '\r\t\t\telse' +
-                                                                    '\r\t\t\t\treturn -parseFloat((event.target.value) / 100)' +
+                                                                    '\r\t\t\t\treturn -parseFloat((((event || []).target || []).value) / 100)' +
                                                             '\r\t\t})()' +
                                                         '" ' +
                                                         '\r\t\tmax="1000" ' +
@@ -8596,7 +9304,7 @@ if (
 
                     // Screen Tip
                         // Definition
-                        (document.createElement("screen-tip").constructor !== HTMLElement) || window.customElements.define("screen-tip", class ScreenTip extends HTMLElement {});
+                        (!window.customElements || (document.createElement("screen-tip").constructor !== HTMLElement) || customElements.define("screen-tip", class ScreenTip extends HTMLElement {}));
 
                         // Initialization
                         screen.tip = document.createElement("screen-tip");
@@ -8621,7 +9329,7 @@ if (
                             // Events
                                 // Mouse Leave
                                 document.querySelectorAll('[data-title]:not([data-title*="_hidden"])')[i].setEvent(
-                                    "mouseleave",
+                                    "mouseleave, mouseout",
 
                                     function() {
                                             // Update
@@ -8669,9 +9377,9 @@ if (
                                     }
                                 );
 
-                                // Mouse Over
+                                // Mouse Enter, Mouse Over
                                 document.querySelectorAll('[data-title]:not([data-title*="_hidden"])')[i].setEvent(
-                                    "mouseover",
+                                    "mouseenter, mouseover",
 
                                     function(event) {
                                             // Update
@@ -8765,10 +9473,10 @@ if (
                                                         screen.tip.margin.top = (that.getBoundingClientRect().height * (5 / 100));
 
                                                         // Screentip Position > Left
-                                                        screen.tip.position.left = event.clientX;
+                                                        screen.tip.position.left = (event || []).clientX || 0;
 
                                                         // Screentip Position > Top
-                                                        screen.tip.position.top = event.clientY;
+                                                        screen.tip.position.top = (event || []).clientY || 0;
 
                                                         /* Logic
                                                                 [if:else if:else function]
@@ -9112,7 +9820,7 @@ if (
 
                     // Toast
                         // Definition
-                        (document.createElement("screen-toast").constructor !== HTMLElement) || window.customElements.define("screen-toast", class ScreenToast extends HTMLElement {});
+                        (!window.customElements || (document.createElement("screen-toast").constructor !== HTMLElement) || customElements.define("screen-toast", class ScreenToast extends HTMLElement {}));
 
                         // Initialization
                         screen.toast = document.createElement("screen-toast");
@@ -9180,27 +9888,9 @@ if (
                                 );
 
                     // [Event]
-                        // <body>
-                            // Click, Mouse Up
-                            document.body.setEvent("click, keypress", function() {
-                                // Update
-                                    // Toast
-                                    screen.toast = document.querySelector("screen-toast#toast");
-
-                                // Modification
-                                    // Toast
-                                        // Class
-                                        screen.toast.removeAttribute("class");
-
-                                        // Hidden
-                                        screen.toast.setAttribute("data-hidden", "");
-
-                                        // Style
-                                        screen.toast.removeAttribute("style");
-                            });
-
-                            // Click, Key Press and Scroll
-                            document.body.setEvent("click, keypress, scroll", function() {
+                        // Window
+                            // Click, Key Down and Scroll
+                            window.setEvent("click, keydown, scroll", function() {
                                 // Update
                                     // Screentip
                                     screen.tip = document.querySelector("screen-tip#screentip");
@@ -9223,6 +9913,25 @@ if (
                                     screen.tip.style.top = (((screen.tip.margin || document.createElement("div")).top + (screen.tip.position || document.createElement("div")).top) + "px")
                             });
 
+                        // <body>
+                            // Click, Mouse Up
+                            document.body.setEvent("click, keypress", function() {
+                                // Update
+                                    // Toast
+                                    screen.toast = document.querySelector("screen-toast#toast");
+
+                                // Modification
+                                    // Toast
+                                        // Class
+                                        screen.toast.removeAttribute("class");
+
+                                        // Hidden
+                                        screen.toast.setAttribute("data-hidden", "");
+
+                                        // Style
+                                        screen.toast.removeAttribute("style");
+                            });
+
                             // Key Down
                             document.body.setEvent("keydown", function() {
                                 /* Logic
@@ -9240,12 +9949,12 @@ if (
                                             else if
                                                 the Event Code is "ArrowRight".
                                     */
-                                    if (event.code == "ArrowLeft")
+                                    if (((event || []).code || "") == "ArrowLeft")
                                         // Carousel [Selected]
                                             // Previous
                                             document.querySelector(".carousel[data-selected]")["LapysJS prev"]();
 
-                                    else if (event.code == "ArrowRight")
+                                    else if (((event || []).code || "") == "ArrowRight")
                                         // Carousel [Selected]
                                             // Next
                                             document.querySelector(".carousel[data-selected]")["LapysJS next"]();
@@ -9319,14 +10028,14 @@ if (
                                                     or
                                                 the Event Code is "KeyF".
                                     */
-                                    if (event.code == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-play-event-key") || "Space"))
+                                    if (((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-play-event-key") || "Space"))
                                         // Function
                                             // Toggle Play Mode
                                             document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i]["LapysJS togglePlayMode"]();
 
                                     else if (
-                                        (event.ctrlKey || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
-                                        event.code == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seekmore-left-event-key") || "ArrowLeft")
+                                        (((event || []).ctrlKey || false) || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
+                                        ((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seekmore-left-event-key") || "ArrowLeft")
                                     )
                                         // Modification
                                             // Current Time
@@ -9335,8 +10044,8 @@ if (
                                             );
 
                                     else if (
-                                        (event.ctrlKey || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
-                                        event.code == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seekmore-right-event-key") || "ArrowRight")
+                                        (((event || []).ctrlKey || false) || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
+                                        ((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seekmore-right-event-key") || "ArrowRight")
                                     )
                                         // Modification
                                             // Current Time
@@ -9345,8 +10054,8 @@ if (
                                             );
 
                                     else if (
-                                        (event.shiftKey || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
-                                        event.code == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seek-left-event-key") || "ArrowLeft")
+                                        ((event || []).shiftKey || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
+                                        ((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seek-left-event-key") || "ArrowLeft")
                                     )
                                         // Modification
                                             // Current Time
@@ -9355,8 +10064,8 @@ if (
                                             );
 
                                     else if (
-                                        (event.shiftKey || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
-                                        event.code == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seek-right-event-key") || "ArrowRight")
+                                        ((event || []).shiftKey || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
+                                        ((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seek-right-event-key") || "ArrowRight")
                                     )
                                         // Modification
                                             // Current Time
@@ -9365,8 +10074,8 @@ if (
                                             );
 
                                     else if (
-                                        (event.ctrlKey || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-volume-meta-event-key")) &&
-                                        event.code == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-volume-reduce-event-key") || "ArrowDown")
+                                        (((event || []).ctrlKey || false) || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-volume-meta-event-key")) &&
+                                        ((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-volume-reduce-event-key") || "ArrowDown")
                                     )
                                         // Modification
                                             // Volume
@@ -9396,8 +10105,8 @@ if (
                                                         false;
 
                                     else if (
-                                        (event.ctrlKey || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-volume-meta-event-key")) &&
-                                        event.code == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-volume-increase-event-key") || "ArrowUp")
+                                        (((event || []).ctrlKey || false) || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-volume-meta-event-key")) &&
+                                        ((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-volume-increase-event-key") || "ArrowUp")
                                     )
                                         // Modification
                                             // Volume
@@ -9432,7 +10141,7 @@ if (
                                                         })() + '"]')) :
                                                         false;
 
-                                    else if (event.code == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-fullscreen-event-key") || "KeyF"))
+                                    else if (((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-fullscreen-event-key") || "KeyF"))
                                         // Function
                                             // Fullscreen
                                             document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i]["LapysJS fullscreen"]()
@@ -9449,7 +10158,7 @@ if (
                                             else if
                                                 its respective Option Box exists.
                                     */
-                                    if (event.code == "Escape")
+                                    if (((event || []).code || "") == "Escape")
                                         // Modification
                                             // Option Box
                                                 // Hidden
@@ -9475,7 +10184,7 @@ if (
                                                         else if
                                                             the Event Code is "Enter".
                                                 */
-                                                if (event.code == "ArrowDown") {
+                                                if (((event || []).code || "") == "ArrowDown") {
                                                     // Modification
                                                         // Data Selected
                                                         document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]:not([hidden])')[1].children[k].removeAttribute("data-selected");
@@ -9491,7 +10200,7 @@ if (
                                                     k = document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]:not([hidden])')[1].children.length
                                                 }
 
-                                                else if (event.code == "ArrowUp") {
+                                                else if (((event || []).code || "") == "ArrowUp") {
                                                     // Modification
                                                         // Data Selected
                                                         document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]:not([hidden])')[1].children[k].removeAttribute("data-selected");
@@ -9509,7 +10218,7 @@ if (
                                                     k = document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]:not([hidden])')[1].children.length
                                                 }
 
-                                                else if (event.code == "Enter") {
+                                                else if (((event || []).code || "") == "Enter") {
                                                     // Modification
                                                         // [Select Box]
                                                             // Value
@@ -9542,7 +10251,7 @@ if (
                                                             else if
                                                                 the Event Code is "ArrowUp".
                                                     */
-                                                    if (event.code == "ArrowDown") {
+                                                    if (((event || []).code || "") == "ArrowDown") {
                                                         // Modification
                                                             // Data Selected
                                                             document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]:not([hidden])')[1].children[0].setAttribute("data-selected", "");
@@ -9551,7 +10260,7 @@ if (
                                                         k = document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]:not([hidden])')[1].children.length
                                                     }
 
-                                                    else if (event.code == "ArrowUp") {
+                                                    else if (((event || []).code || "") == "ArrowUp") {
                                                         // Modification
                                                             // Data Selected
                                                             document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]:not([hidden])')[1].children[
@@ -9583,24 +10292,24 @@ if (
                                 /* Loop
                                         Index all Targets.
                                 */
-                                for (var i = 0; i < event.path.length; i++)
+                                for (var i = 0; i < ((event || []).path || []).length; i++)
                                     /* Logic
                                             If
                                                 the Target is an element.
                                     */
-                                    if (typeof event.path[i].tagName == "string")
+                                    if (typeof ((event || []).path || [])[i].tagName == "string")
                                         /* Logic
                                                 If
                                                     the Target Element is a Carousel.
                                         */
-                                        if (event.path[i].hasClass("carousel")) {
+                                        if (((event || []).path || [])[i].hasClass("carousel")) {
                                             // Modification
                                                 // Carousel
                                                     // Data Selected
-                                                    event.path[i].setAttribute("data-selected", "");
+                                                    ((event || []).path || [])[i].setAttribute("data-selected", "");
 
                                             // End
-                                            i = event.path.length
+                                            i = ((event || []).path || []).length
                                         };
 
                                 /* Loop
@@ -9614,12 +10323,12 @@ if (
                                 /* Loop
                                         Index all Targets.
                                 */
-                                for (var i = 0; i < event.path.length; i++)
+                                for (var i = 0; i < ((event || []).path || []).length; i++)
                                     /* Logic
                                             If
                                                 the Target is an element.
                                     */
-                                    if (typeof event.path[i].tagName == "string")
+                                    if (typeof ((event || []).path || [])[i].tagName == "string")
                                         /* Logic
                                                 If
                                                     the Target Element is a Dropdown
@@ -9627,28 +10336,28 @@ if (
                                                 else if
                                                     the Target Element is a Dropdown Content.
                                         */
-                                        if (event.path[i].hasClass("dropdown")) {
+                                        if (((event || []).path || [])[i].hasClass("dropdown")) {
                                                 // Dropdown
                                                     // Open
-                                                    event.path[i]["LapysJS open"]();
+                                                    ((event || []).path || [])[i]["LapysJS open"]();
 
                                             // End
-                                            i = event.path.length
+                                            i = ((event || []).path || []).length
                                         }
 
-                                        else if (event.path[i]["LapysJS dropdown"]) {
+                                        else if (((event || []).path || [])[i]["LapysJS dropdown"]) {
                                             // Dropdown
                                                 // Open
-                                                document.querySelector('.dropdown[data-id="' + event.path[i].getAttribute("data-id") + '"]')["LapysJS open"]();
+                                                document.querySelector('.dropdown[data-id="' + ((event || []).path || [])[i].getAttribute("data-id") + '"]')["LapysJS open"]();
 
                                             // End
-                                            i = event.path.length
+                                            i = ((event || []).path || []).length
                                         };
 
                                 /* Loop
                                         Index all targets.
                                 */
-                                for (var j = 0; j < event.path.length; j++)
+                                for (var j = 0; j < ((event || []).path || []).length; j++)
                                     /* Loop
                                             Index all Select Boxes.
                                     */
@@ -9657,7 +10366,7 @@ if (
                                                 If
                                                     the target is an element.
                                         */
-                                        if (typeof event.path[j].tagName == "string")
+                                        if (typeof ((event || []).path || [])[j].tagName == "string")
                                             /* Logic
                                                     If
                                                         the Target Element
@@ -9666,14 +10375,14 @@ if (
                                                         is an Option Box.
                                             */
                                             if (
-                                                event.path[j].hasClass("select-box") ||
-                                                event.path[j] == document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[k].getAttribute('data-id') + '"]')[1]
+                                                ((event || []).path || [])[j].hasClass("select-box") ||
+                                                ((event || []).path || [])[j] == document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[k].getAttribute('data-id') + '"]')[1]
                                             ) {
                                                 // End
                                                 k = document.querySelectorAll("input.select-box").length;
 
                                                 // End
-                                                j = event.path.length
+                                                j = ((event || []).path || []).length
                                             }
 
                                             else
@@ -9695,4 +10404,4 @@ if (
 
 else if (!window)
     // Error
-    console.error("LapysJS v" + LapysJS.version + " does not function without the global 'window' object.")
+    LapysJS.error("LapysJS does not function without the global 'window' object.")

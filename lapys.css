@@ -1,3 +1,9 @@
+/**
+    @author: Lapys Dev Team
+    @currentUpdate: Implementation of Web-Safe colors; and improvements to some class selectors.
+    @description: LapysJS is a JavaScript library that uses its own CSS framework to beautify its JavaScript components and normalize DOM Elements.
+    @version: 0.0.1
+*/
 /* LapysJS CSS At-Rules */
     /* Character-Set Encoding
             @charset
@@ -62,12 +68,10 @@
         @media only screen
             and (max-width: 320px)
             and (min-width: 0px) {
-            /* Columns */
-                /* Not */
-                    /* No-Stack */
-                    [class*="col-"]:not(.no-stack) {
-                        flex-basis: 100%
-                    }
+            /* Columns > Not > No-Stack */
+            [class*="col-"]:not(.no-stack) {
+                flex-basis: 100%
+            }
 
             /* Mobile Delete, Mobile S Delete */
             .m-del,
@@ -94,12 +98,10 @@
         @media only screen
             and (max-width: 375px)
             and (min-width: 321px) {
-            /* Columns */
-                /* Not */
-                    /* No-Stack */
-                    [class*="col-"]:not(.no-stack) {
-                        flex-basis: 100%
-                    }
+            /* Columns > Not > No-Stack */
+            [class*="col-"]:not(.no-stack) {
+                flex-basis: 100%
+            }
 
             /* Mobile Delete, Mobile M Delete */
             .m-del,
@@ -126,12 +128,10 @@
         @media only screen
             and (max-width: 425px)
             and (min-width: 376px) {
-            /* Columns */
-                /* Not */
-                    /* No-Stack */
-                    [class*="col-"]:not(.no-stack) {
-                        flex-basis: 100%
-                    }
+            /* Columns > Not > No-Stack */
+            [class*="col-"]:not(.no-stack) {
+                flex-basis: 100%
+            }
 
             /* Mobile Delete, Mobile L Delete */
             .m-del,
@@ -244,17 +244,15 @@
 
     /* @moz-document url-prefix */
     @-moz-document url-prefix(chrome://) {
-        /* <input> */
-            /* States */
-                /* -moz- Locale Direction */
-                input:-moz-locale-dir(rtl) {
-                    direction: ltr !important;
-                    text-align: right !important
-                }
+        /* <input> > States > -moz- Locale Direction */
+        input:-moz-locale-dir(rtl) {
+            direction: ltr !important;
+            text-align: right !important
+        }
 
-                input[dir="ltr"]:-moz-locale-dir(rtl) {
-                    text-align: left !important
-                }
+        input[dir="ltr"]:-moz-locale-dir(rtl) {
+            text-align: left !important
+        }
     }
 
     /* @-ms-viewport */
@@ -272,9 +270,7 @@
         The [default] attribute is used to reject
         the given styles for the given selector.
 */
-    /* All
-            *
-    */
+    /* All */
     [b],
     .b,
     .strong,
@@ -413,7 +409,7 @@
                 :not(button):not(
                     input):not(
                     .btn):read-write:focus {
-                    outline: 1px solid #0023FF
+                    outline: 1px solid #0033FF
                 }
 
         /* Pseudo */
@@ -589,38 +585,37 @@
                     -moz-top-layer: top !important
                 }
 
-    /* <a> */
-        /* Not > Default */
-        a:not([default]) {
-            color: #0023FF;
-            cursor: pointer;
-            fill: #0023FF;
-            line-height: inherit;
-            outline: 0;
-            text-align: inherit;
-            stroke: #0023FF;
-            text-decoration: none;
-            -webkit-text-decoration-skip: objects
-        }
-            /* States */
-                /* (Active, Focus, Unvisited, Visited) > Not Default */
-                a:active:not([default]),
-                a:focus:not([default]),
-                a:unvisited:not([default]),
-                a:visited:not([default]) {
-                    color: #0078FF
-                }
-
-            /* Not > <body> > Not > Default */
-            :not(body):not(
-                [default]) a {
-                /* --- NOTE ---
-                        <a> elements should inherit the color of their parents
-                        since the majority of hyperlinks are buttons.
-                */
-                color: inherit;
-                text-decoration: underline
+    /* <a> > Not > Default */
+    a:not([default]) {
+        color: #0033FF;
+        cursor: pointer;
+        fill: #0033FF;
+        line-height: inherit;
+        outline: 0;
+        text-align: inherit;
+        stroke: #0033FF;
+        text-decoration: none;
+        -webkit-text-decoration-skip: objects
+    }
+        /* States */
+            /* (Active, Focus, Unvisited, Visited) > Not Default */
+            a:active:not([default]),
+            a:focus:not([default]),
+            a:unvisited:not([default]),
+            a:visited:not([default]) {
+                color: #0099FF
             }
+
+        /* Not > <body> > Not > Default */
+        :not(body):not(
+            [default]) a {
+            /* --- NOTE ---
+                    <a> elements should inherit the color of their parents
+                    since the majority of hyperlinks are buttons.
+            */
+            color: inherit;
+            text-decoration: underline
+        }
 
     /* <abbr> */
     abbr[abbr] {
@@ -631,25 +626,20 @@
     abbr[title] {
         border-bottom: 1px dotted
     }
-        /* Not */
-            /* Default */
-            abbr:not([default]) {
-                text-decoration: none
-            }
+        /* Not > Default */
+        abbr:not([default]) {
+            text-decoration: none
+        }
 
-    /* <acronym> */
-        /* Not */
-            /* Default */
-            acronym:not([default]) {
-                display: block
-            }
+    /* <acronym> > Not > Default */
+    acronym:not([default]) {
+        display: block
+    }
 
-    /* <address> */
-        /* Not */
-            /* Default */
-            address:not([default]) {
-                display: inline
-            }
+    /* <address> > Not > Default */
+    address:not([default]) {
+        display: inline
+    }
 
     /* <address>, <i>, <output>, <var> */
     address,
@@ -734,15 +724,13 @@
         unicode-bidi: isolate
     }
 
-    /* <applet> */
-        /* Not */
-            /* Default */
-            applet:not([default]) {
-                background-color: #000000;
-                border-radius: 2.5px;
-                color: #FFFFFF;
-                padding: 5px
-            }
+    /* <applet> > Not > Default */
+    applet:not([default]) {
+        background-color: #000000;
+        border-radius: 2.5px;
+        color: #FFFFFF;
+        padding: 5px
+    }
 
     /* <applet>, <audio>, <embed>, <object>, <video> */
     applet,
@@ -824,7 +812,7 @@
         /* <xul> */
         audio > xul|videocontrols,
         video > xul|videocontrols {
-            background-color: #0023FF !important
+            background-color: #0033FF !important
         }
 
     /* <b> */
@@ -1182,7 +1170,7 @@
             keygen:not([default]):focus,
             select:not([default]):focus,
             textarea:not([default]):focus {
-                outline: 1px solid #0023FF
+                outline: 1px solid #0033FF
             }
 
     /* <button>, <select> */
@@ -1208,11 +1196,12 @@
             text-shadow: none
         }
 
-    /* <code>, <kbd>, <tt>
+    /* All, <code>, <kbd>, <tt>
             --- CONSIDER ---
                 A suitable font except "monospace"
                 should be used.
     */
+    [code],
     code,
     tt {
         font-family: "Inconsolata", monospace, monospace;
@@ -1225,17 +1214,16 @@
     }
 
     /* <details> */
-        /* Not > Default */
-            /* <summary> > Not > Default > Pseudo > -webkit- Details Marker */
-            details:not([default]) summary:not([default])::-webkit-details-marker {
-                /* --- NOTE ---
-                    Style the -webkit- <details> marker.
-                */
-                display: inline-block;
-                height: .6em;
-                width: .6em;
-                -webkit-margin-end: 0 !important
-            }
+        /* Not > Default > <summary> > Not > Default > Pseudo > -webkit- Details Marker */
+        details:not([default]) summary:not([default])::-webkit-details-marker {
+            /* --- NOTE ---
+                Style the -webkit- <details> marker.
+            */
+            display: inline-block;
+            height: .6em;
+            width: .6em;
+            -webkit-margin-end: 0 !important
+        }
 
         /* <summary> */
         details summary {
@@ -1305,7 +1293,7 @@
         dl li[data-badge]::after,
         ol li[data-badge]::after,
         ul li[data-badge]::after {
-            background-color: #0078FF;
+            background-color: #0099FF;
             border-radius: 50px;
             color: #FFFFFF;
             content: attr(data-badge);
@@ -1430,17 +1418,16 @@
     }
 
     /* <hr> */
-        /* Not */
-            /* Default */
-            hr:not([default]) {
-                background-color: #000000;
-                border-bottom: 1px solid;
-                box-sizing: content-box;
-                display: block;
-                height: 0;
-                max-width: 100%;
-                width: 100%
-            }
+        /* Not > Default */
+        hr:not([default]) {
+            background-color: #000000;
+            border-bottom: 1px solid;
+            box-sizing: content-box;
+            display: block;
+            height: 0;
+            max-width: 100%;
+            width: 100%
+        }
 
     /* <html> */
     html {
@@ -1631,10 +1618,6 @@
         font-weight: lighter;
         padding: 2.5px 7.5px
     }
-
-    input[type="hidden"] {
-        display: none !important
-    }
         /* Not > Default */
         input:not([default]) {
             /* --- NOTE ---
@@ -1731,7 +1714,7 @@
             border-radius: 0;
             box-sizing: border-box;
             box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3),
-                        inset 0 0 0 1px rgba(0, 0, 0, .2);
+                                    inset 0 0 0 1px rgba(0, 0, 0, .2);
             padding: 6px;
             opacity: .75;
             outline: 1px solid rgba(0, 0, 0, .1);
@@ -2172,7 +2155,7 @@
                                 inset 0 0 0 1px rgba(0, 0, 0, .01);
             color: #565656;
             font-family: inherit;
-            padding: 5px 10px
+            padding: 5px
         }
 
     /* <marquee> */
@@ -2196,7 +2179,7 @@
     */
         /* Not > Default */
         mark:not([default]) {
-            background-color: #0078FF;
+            background-color: #0099FF;
             color: #FFFFFF;
             padding: 0;
             text-shadow: none
@@ -2216,7 +2199,7 @@
                             <mark>'s must not have a selection
                             background.
                     */
-                    background-color: #0078FF;
+                    background-color: #0099FF;
                     color: #FFFFFF;
                     text-shadow: none
                 }
@@ -2387,7 +2370,7 @@
         /* Not > Default */
         plaintext:not([default]),
         pre:not([default]) {
-            background-color: #CFCFCF;
+            background-color: #EFEFEF;
             border-radius: 3px;
             color: #454545;
             display: inline-block;
@@ -2493,7 +2476,7 @@
                             Quotes can be singled in
                             <q> elements.
                     */
-                    content: "’" !important
+                    content: "\0027" !important
                 }
 
                 [q]::after,
@@ -2501,7 +2484,7 @@
                     /* --- WARN ---
                             Special characters are not recommended.
                     */
-                    content: "”" !important
+                    content: "\0022" !important
                 }
 
                 /* Before */
@@ -2512,12 +2495,12 @@
 
                 [data-quotes="single"] q::before,
                 q[data-quotes="single"]:not([default])::before {
-                    content: "‘" !important
+                    content: "\0027" !important
                 }
 
                 [q]::before,
                 q:not([default])::before {
-                    content: "“" !important
+                    content: "\0022" !important
                 }
 
     /* <ruby> */
@@ -2914,7 +2897,7 @@
         /* --- NOTE ---
                 Static text takes a blue outset.
         */
-        background-color: #0078FF;
+        background-color: #0099FF;
         color: #FFFFFF;
         text-shadow: none
     }
@@ -3516,7 +3499,7 @@
             .bdr-c-aq,
             .bdr-c-aqua,
             .border-color-aqua {
-                border-color: #0078FF !important
+                border-color: #0099FF !important
             }
 
             /* Beige */
@@ -3738,7 +3721,7 @@
             .bdr-c-l,
             .bdr-c-lapis,
             .border-color-lapis {
-                border-color: #0023FF !important
+                border-color: #0033FF !important
             }
 
             /* Light Green */
@@ -4434,7 +4417,7 @@
             .bg-c-aq,
             .bg-c-aqua,
             .background-color-aqua {
-                background-color: #0078FF !important;
+                background-color: #0099FF !important;
                 color: #FFFFFF
             }
 
@@ -4686,7 +4669,7 @@
             .bg-c-l,
             .bg-c-lapis,
             .background-color-lapis {
-                background-color: #0023FF !important;
+                background-color: #0033FF !important;
                 color: #FFFFFF
             }
 
@@ -5778,7 +5761,7 @@
         .crt-c-aq,
         .crt-c-aqua,
         .caret-color-aqua {
-            caret-color: #0078FF !important
+            caret-color: #0099FF !important
         }
 
         /* Beige */
@@ -6001,7 +5984,7 @@
         .crt-c-l,
         .crt-c-lapis,
         .caret-color-lapis {
-            caret-color: #0023FF !important
+            caret-color: #0033FF !important
         }
 
         /* Light Green */
@@ -6146,7 +6129,7 @@
         .c-aq,
         .c-aqua,
         .color-aqua {
-            color: #0078FF !important
+            color: #0099FF !important
         }
 
         /* Beige */
@@ -6367,7 +6350,7 @@
         .c-l,
         .c-lapis,
         .color-lapis {
-            color: #0023FF !important
+            color: #0033FF !important
         }
 
         /* Light Green */
@@ -15413,7 +15396,7 @@
             .otln-c-aq,
             .otln-c-aqua,
             .outline-color-aqua {
-                outline-color: #0078FF !important
+                outline-color: #0099FF !important
             }
 
             /* Beige */
@@ -15634,7 +15617,7 @@
             .otln-c-l,
             .otln-c-lapis,
             .outline-color-lapis {
-                outline-color: #0023FF !important
+                outline-color: #0033FF !important
             }
 
             /* Light Green */
@@ -18570,7 +18553,7 @@
                 .txt-d-c-aq,
                 .txt-d-c-aqua,
                 .text-decoration-color-aqua {
-                    text-decoration-color: #0078FF !important
+                    text-decoration-color: #0099FF !important
                 }
 
                 /* Beige */
@@ -18794,7 +18777,7 @@
                 .txt-d-c-l,
                 .txt-d-c-lapis,
                 .text-decoration-color-lapis {
-                    text-decoration-color: #0023FF !important
+                    text-decoration-color: #0033FF !important
                 }
 
                 /* Light Green */
@@ -20176,7 +20159,7 @@
     }
 
     .carousel[data-selected] {
-        outline: 1px solid #0023FF
+        outline: 1px solid #0033FF
     }
         /* Slides Container */
         .carousel > div.slides-container {
@@ -20199,7 +20182,7 @@
                 border: 0;
                 border-radius: 50%;
                 box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3);
-                color: #0078FF;
+                color: #0099FF;
                 cursor: pointer;
                 font-size: 20px;
                 height: 40px;
@@ -20320,7 +20303,7 @@
             video.media + div.media-console > .loader-widget {
                 animation: rotateLoaderWidget 1s linear 0s infinite backwards running;
                 border: 10px solid rgba(255, 255, 255, .75);
-                border-top-color: #0078FF;
+                border-top-color: #0099FF;
                 border-radius: 50%;
                 height: 0px;
                 left: 0;
@@ -20370,7 +20353,7 @@
         button.media-play-button,
         button.media-play-button:focus {
             align-items: center;
-            background-color: #0023FF;
+            background-color: #0033FF;
             border: 0;
             border-radius: 50%;
             box-shadow: 0 0 5px 0 rgba(127, 127, 127, .5);
@@ -20462,7 +20445,7 @@
     /* Responsive Embed
             <audio>, <embed>, <iframe>, <object>, <video>
     */
-        /*  Not */
+        /* Not */
         audio.responsive:not(.no-responsive),
         audio.rspnv:not(.no-rspnv),
         embed.responsive:not(.no-responsive),
@@ -20499,7 +20482,7 @@
     /* Responsive Images
             <img>, <picture>
     */
-        /*  Not */
+        /* Not */
         img.responsive:not(.no-responsive),
         img.rspnv:not(.no-rspnv),
         picture.responsive:not(.no-responsive),
@@ -20519,7 +20502,7 @@
     /* Responsive Tables
             <table>
     */
-        /*  Not */
+        /* Not */
         table.responsive:not(.no-responsive),
         table.rspnv:not(.no-rspnv),
         .responsive table:not(.no-responsive),
@@ -21932,15 +21915,13 @@
 
     /* Column Group */
         /* Not */
-            /* Column */
-                /* Not */
-                    /* Grid */
-                    .col-grp:not([class*="col-"]):not(
-                        [class*="grid-"]),
-                    .column-group:not([class*="col-"]):not(
-                        [class*="grid-"]) {
-                        width: 100%
-                    }
+            /* Column > Not > Grid */
+            .col-grp:not([class*="col-"]):not(
+                [class*="grid-"]),
+            .column-group:not([class*="col-"]):not(
+                [class*="grid-"]) {
+                width: 100%
+            }
 
         /* Content */
         .col-grp > *,

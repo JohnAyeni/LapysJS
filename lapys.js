@@ -1,15 +1,115 @@
+/**
+    @author: Lapys Dev Team
+    @currentUpdate: Additional methods to Objects: foreach(); and newer functions: objectify() & repeat().
+    @description: LapysJS is a JavaScript library with its independent CSS framework designed to make JavaScript more forgiving and faster to script.
+    @version: 0.0.1
+*/
 /* Strict Mode */
 "use strict";
 
-/* Global Data */
-    /* Event
-            --- NOTE ---
-                Just in case Event is not defined by default,
-                this should serve as a fallback.
-    */
-    var event = (window.event || []);
+/* Global Data
+        --- CONSIDER ---
+            All Global Data here only act as fallback
+            in severe cases.
+
+            Although this really should be considered
+            as majority of the variables declared here are
+            built-in properties of the DOM.
+*/
+    // Event
+    var event = window.event || [];
+        // Code
+        event.code = "";
+
+        // Control Key
+        event.ctrlKey;
+
         // Path
         event.path = [];
+
+        // Meta Key
+        event.metaKey;
+
+        // Key
+        event.key = "";
+
+        // Shift Key
+        event.shiftKey;
+
+    // JSON
+    var JSON = window.JSON || [];
+        JSON.convertArraysToObject || (JSON.convertArraysToObject = (arrayA, arrayB) => {
+            /* Logic
+                    If
+                        Array A and Array B are both Arrays,
+
+                    else if
+                        Array B is not an Array,
+
+                    else if
+                        Array A is not an Array.
+            */
+            if (
+                (arrayA || "").constructor.name == "Array" &&
+                (arrayB || "").constructor.name == "Array"
+            ) {
+                // Modification > (Array A, Array B) > Length
+                arrayA.length = max(arrayA.length, arrayB.length);
+                arrayB.length = max(arrayA.length, arrayB.length);
+
+                // Initialization > Object
+                var object = {};
+
+                /* Loop
+                        Iterate for the length of Array A.
+
+                    > Update > Object > [Array A > Element]
+                */
+                for (var i = 0; i < arrayA.length; i++)
+                    object[arrayA[i].toString()] = arrayB[i];
+
+                // Return
+                return object
+            }
+
+            else if ((arrayA || "").constructor.name == "Array" && (arrayB || []).constructor.name != "Array")
+                // LapysJS > Error
+                LapysJS.error("The values (in a second array) need to be defined for the 'JSON.convertArraysToObject()' method.");
+
+            else if ((arrayA || []).constructor.name != "Array" && (arrayB || "").constructor.name == "Array")
+                // LapysJS > Error
+                LapysJS.error("The keys (in the first array) need to be defined for the 'JSON.convertArraysToObject()' method.");
+
+            else
+                // LapysJS > Error
+                LapysJS.error("Invalid objects parsed in the 'JSON.convertArraysToObject()' method, use arrays instead.")
+        });
+
+        // Parse
+        JSON.parse = JSON.parse || ((data) => { return data });
+
+        // Stringify
+        JSON.stringify = JSON.stringify || ((data) => { return data });
+
+    // Math
+    var Math = Math || [];
+        // Random
+        Math.random = Math.random || ((data) => { return 1 / (new Date().getMilliseconds() * .5) });
+
+    // Parse Float
+    var parseFloat = window.parseFloat || ((data) => { return JSON.parse(data) });
+
+    // Parse Integer
+    var parseInt = window.parseInt || ((data) => { return JSON.parse(JSON.stringify(data).getBeforeChar(".")) });
+
+    // Set Interval
+    var setInterval = window.setInterval || ((func) => { !(typeof func == "function") || func() });
+
+    // Set Timeout
+    var setTimeout = window.setTimeout || (() => {});
+
+    // String
+    var String = window.String || window.toString || JSON.stringify || ((data) => { return data });
 
 /* Window */
     /* Event > Window > Blur > Set Timeout
@@ -23,7 +123,7 @@
             */
             for (var j = 0; j < document.querySelectorAll("input.select-box[data-id]").length; j++)
                 // Modification > Option Box > Hide
-                document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]')[1].hidden = true
+                document.querySelectorAll(`[data-id="${document.querySelectorAll('input.select-box')[j].getAttribute('data-id')}"]`)[1].hidden = true
         })
     }, 0);
 
@@ -31,12 +131,12 @@
     console.print || (console.print = console.log);
 
     // Location > Query Parameters
-    location.queryParameters || (location.queryParameters = (function() {
+    location.queryParameters || (location.queryParameters = (() => {
         /* Logic
                 If
                     Location > Search is not 'empty'.
         */
-        if ((location.search || "").trim()) {
+        if (location.search.trim()) {
             // Initialization > URL
             var url = [];
 
@@ -51,16 +151,20 @@
 
                     // Value
                     value: location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].slice(location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].indexOf("=") + "=".length)
-                };
+               };
 
             // Return
             return url
         }
+
+        else
+            // Return
+            return []
     })());
 
     // Math
         // Range
-        (Math.random || []).range || (Math.random.range = function(start, end) {
+        (Math.random || []).range || (Math.random.range = (start, end) => {
             /* Logic
                     If
                         Start is a number
@@ -69,15 +173,12 @@
 
                 > Return
             */
-            if (
-                typeof start == "number" &&
-                typeof end == "number"
-            )
+            if ((typeof start == "number") == (typeof end == "number"))
                 return ((Math.random() * end) + start)
         });
 
         // Root
-        Math.root || (Math.root = function(data, power) {
+        Math.root || (Math.root = (data, power) => {
             /* Logic
                     If
                         Data is a number
@@ -86,20 +187,67 @@
 
                 > Return
             */
-            if (
-                typeof data == "number" &&
-                typeof power == "number"
-            )
-                return pow(data, (1 / power));
+            if ((typeof data == "number") == (typeof power == "number"))
+                return Math.pow(data, (1 / power));
 
             else
                 return NaN
         });
 
     // Boolean
-    window.bool || (window.bool = function(data) {
+    window.bool || (window.bool = (data) => {
         // Return
         return !!data
+    });
+
+    // Ceiling
+    window.ceil || (window.ceil = (data, invert) => {
+        /* Logic
+                If
+                    Data is a number.
+        */
+        if (typeof data == "number") {
+            /* Logic
+                    If
+                        Invert is false.
+
+                > Return
+            */
+            if (!invert && Math.ceil)
+                /* Logic
+                        If
+                            "Math.ceil" is defined.
+                */
+                if (Math.ceil)
+                    // Return
+                    return Math.ceil(data);
+
+                else
+                    /* Logic
+                            If
+                                there's a decimal in the Data.
+
+                        > Return
+                    */
+                    if (String(data).getAfterChar("."))
+                        return parseFloat(String(data).getBeforeChar(".")) + 1;
+
+                    else
+                        return parseFloat(String(data).getBeforeChar("."));
+
+            else
+                /* Logic
+                        If
+                            "Math.floor" is defined.
+
+                    > Return
+                */
+                if (Math.floor)
+                    return Math.floor(data);
+
+                else
+                    return parseFloat(String(data).getBeforeChar("."))
+        }
     });
 
     /* Cookie
@@ -109,12 +257,24 @@
     window.$_COOKIE || (window.$_COOKIE = document.cookie);
 
     // Cube Root
-    window.cbrt || (window.cbrt = Math.cbrt);
+    window.cbrt || (window.cbrt = Math.cbrt || function(data) {
+        /* Logic
+                If
+                    Data is a number.
+
+            > Return
+        */
+        if (typeof data == "number")
+            return data ** .3333333333333333
+
+        else
+            return NaN
+    });
 
     // Date
     window.date || (window.date = new Date());
         // Date
-        date.date = function(utc) {
+        date.date = (utc) => {
             /* Logic
                     If
                         UTC is false.
@@ -129,7 +289,7 @@
         };
 
         // Day
-        date.day = function() {
+        date.day = () => {
             /* Logic
                     Switch
                         case to the Day of the Week's Index.
@@ -174,7 +334,7 @@
         };
 
         // Hours
-        date.hours = function(utc) {
+        date.hours = (utc) => {
             /* Logic
                     If
                         UTC is false.
@@ -189,7 +349,7 @@
         };
 
         // Milli-Seconds
-        date.mSecs = function(utc) {
+        date.mSecs = (utc) => {
             /* Logic
                     If
                         UTC is false.
@@ -204,7 +364,7 @@
         };
 
         // Minutes
-        date.mins = function(utc) {
+        date.mins = (utc) => {
             /* Logic
                     If
                         UTC is false.
@@ -219,7 +379,7 @@
         };
 
         // Month
-        date.month = function(utc) {
+        date.month = (utc) => {
             /* Logic
                     If
                         UTC is false.
@@ -234,7 +394,7 @@
         };
 
         // Seconds
-        date.secs = function(utc) {
+        date.secs = (utc) => {
             /* Logic
                     If
                         UTC is false.
@@ -249,13 +409,13 @@
         };
 
         // Time
-        date.time = function() {
+        date.time = () => {
             // Return
             return new Date().getTime()
         };
 
         // Year
-        date.year = function(utc) {
+        date.year = (utc) => {
             /* Logic
                     If
                         UTC is false.
@@ -270,7 +430,7 @@
         };
 
     // Decimal Point
-    window.dp || (window.dp = function(data, placeholder = 0) {
+    window.dp || (window.dp = (data, placeholder = 0) => {
         // Update > Placeholder
         !(placeholder > 20) || (placeholder = 20);
 
@@ -281,17 +441,17 @@
             > Return
         */
         if (typeof data == "number")
-            return data .toFixed(placeholder);
+            return parseFloat(data .toFixed(placeholder));
 
         else
-            return
+            return NaN
     });
 
     // Execute
-    window.exec || (window.exec = eval);
+    window.exec || (window.exec = window.eval);
 
     // Fixed
-    window.fix || (window.fix = function(data, placeholder = 0) {
+    window.fix || (window.fix = (data, placeholder = 0) => {
         // Update > Placeholder
         !(placeholder > 20) || (placeholder = 20);
 
@@ -302,32 +462,67 @@
             > Return
         */
         if (typeof data == "number")
-            return data .toFixed(placeholder);
+            return parseFloat(data .toFixed(placeholder));
 
         else
-            return
+            return NaN
     });
 
     // Float
     window.float || (window.float = parseFloat);
 
     // Floor
-    window.floor || (window.floor = function(data, invert) {
+    window.floor || (window.floor = (data, invert) => {
         /* Logic
                 If
-                    Invert is false.
-
-            > Return
+                    Data is a number.
         */
-        if (!invert)
-            return Math.floor(data);
+        if (typeof data == "number") {
+            /* Logic
+                    If
+                        Invert is false.
 
-        else
-            return Math.ceil(data)
+                > Return
+            */
+            if (!invert && Math.floor)
+                /* Logic
+                        If
+                            "Math.floor" is defined.
+
+                    > Return
+                */
+                if (Math.floor)
+                    return Math.floor(data);
+
+                else
+                    return parseFloat(String(data).getBeforeChar("."));
+
+            else
+                /* Logic
+                        If
+                            "Math.ceil" is defined.
+                */
+                if (Math.ceil)
+                    // Return
+                    return Math.ceil(data);
+
+                else
+                    /* Logic
+                            If
+                                there's a decimal in the Data.
+
+                        > Return
+                    */
+                    if (String(data).getAfterChar("."))
+                        return parseFloat(String(data).getBeforeChar(".")) + 1;
+
+                    else
+                        return parseFloat(String(data).getBeforeChar("."))
+        }
     });
 
     // Get
-    window.$_GET || (window.$_GET = (function() {
+    window.$_GET || (window.$_GET = (() => {
         /* Logic
                 If
                     Location > Search is not 'empty'.
@@ -341,16 +536,20 @@
             */
             for (var i = 0; i < location.search.replace("?", "").replace(/\&/g, ",").split(/,/g).length; i++)
                 // Update > URL
-                url[location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].slice(0, location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].indexOf("="))] =  location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].slice(location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].indexOf("=") + "=".length);
+                url[location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].slice(0, location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].indexOf("="))] = location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].slice(location.search.replace("?", "").replace(/\&/g, ",").split(/,/g)[i].indexOf("=") + "=".length);
 
             // Return
             return url
         }
+
+        else
+            // Return
+            return []
     })());
 
     // Globals
         // Set Timeout
-        setTimeout(function() {
+        setTimeout(() => {
             window.$GLOBALS || (window.$GLOBALS = {
                 // Cookie
                 _COOKIE: $_COOKIE,
@@ -370,23 +569,12 @@
     window.int || (window.int = parseInt);
 
     // Length
-    window.len || (window.len = function(data) {
+    window.len || (window.len = (data) => {
         /* Logic
                 If
-                    Data is "Array"
-                        or
-                    Data is "HTMLCollection"
-                        or
-                    Data is "NodeList"
-                        or
-                    Data is "String".
+                    Data's length is a number.
         */
-        if (
-            (data.constructor || "").name == "Array" ||
-            (data.constructor || "").name == "HTMLCollection" ||
-            (data.constructor || "").name == "NodeList" ||
-            (data.constructor || "").name == "String"
-        )
+        if (typeof (data || new Object()).length == "number")
             // Return
             return data.length;
 
@@ -395,17 +583,25 @@
     });
 
     // Left Trim
-    window.ltrim || (window.ltrim = function(data) {
+    window.ltrim || (window.ltrim = (data) => {
         /* Logic
                 If
                     Data is String.
         */
         if (typeof data == "string")
-            // Return
-            return data.replace(/ {1,}([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|\t)/, function(data) {
-                // Return
-                return data.replace(/ /g, "")
-            });
+            /* Logic
+                    If Data has white-spaces within it first.
+
+                > Return
+            */
+            if (data[0] == " ")
+                return data.replace(/ {1,}([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|\t)/, function(data) {
+                    // Return
+                    return data.replace(/ /g, "")
+                });
+
+            else
+                return data;
 
         else
             // Return
@@ -413,10 +609,38 @@
     });
 
     // Max
-    window.max || (window.max = Math.max);
+    window.max || (window.max = Math.max || ((...data) => {
+            // Initialization > Result
+            var result = data[0];
+
+            /* Loop
+                    Index all Data elements.
+
+                > Update > Result
+            */
+            for (var i = 0; i < data.length; i++)
+                !(result < data[i]) || (result = data[i]);
+
+            // Return
+            return result
+        }));
 
     // Min
-    window.min || (window.min = Math.min);
+    window.min || (window.min = Math.min || ((...data) => {
+            // Initialization > Result
+            var result = data[0];
+
+            /* Loop
+                    Index all Data elements.
+
+                > Update > Result
+            */
+            for (var i = 0; i < data.length; i++)
+                !(result > data[i]) || (result = data[i]);
+
+            // Return
+            return result
+        }));
 
     // Name
     window.name || (window.name = document.title);
@@ -425,25 +649,21 @@
     window.PI || (window.PI = Math.PI || 3.141592653589793);
 
     // Power
-    window.pow || (window.pow = (Math.pow || function(data, power) {
-        /* Logic
-                If
-                    both parameters are numbers.
+    window.pow || (window.pow = (Math.pow || ((data, power) => {
+            /* Logic
+                    If
+                        both parameters are numbers.
 
-            > Return
-        */
-        if (
-            typeof data == "number" &&
-            typeof power == "number"
-        )
-            return data ** power
-    }));
+                > Return
+            */
+            if ((typeof data == "number") == (typeof power == "number"))
+                return data ** power
+        })));
 
     // Precision
-    window.prec || (window.prec = function(data, placeholder = 1) {
+    window.prec || (window.prec = (data, placeholder = 1) => {
         // Update > Placeholder
-        !(placeholder < 1) || (placeholder = 1);
-        !(placeholder > 20) || (placeholder = 20);
+        (!(placeholder < 1) || (placeholder = 1)) && (!(placeholder > 20) || (placeholder = 20));
 
         /* Logic
                 If
@@ -455,11 +675,11 @@
             return data .toPrecision(placeholder);
 
         else
-            return
+            return NaN
     });
 
     // Random
-    window.rand || (window.rand = function(data) {
+    window.rand || (window.rand = (data) => {
         /* Logic
                 If
                     Data is defined.
@@ -473,7 +693,7 @@
             return Math.random()
     });
         // Range
-        rand.range || (rand.range = function(start, end) {
+        rand.range || (rand.range = (start, end) => {
             /* Logic
                     If
                         Start is a number
@@ -482,15 +702,12 @@
 
                 > Return
             */
-            if (
-                typeof start == "number" &&
-                typeof end == "number"
-            )
+            if ((typeof start == "number") == (typeof end == "number"))
                 return ((Math.random() * end) + start)
         });
 
     // Request
-    window.$_REQUEST || (window.$_REQUEST = (function() {
+    window.$_REQUEST || (window.$_REQUEST = (() => {
         /* Logic
                 If
                     Location > Search is not 'empty'.
@@ -509,13 +726,31 @@
             // Return
             return url
         }
+
+        else
+            // Return
+            return []
     })());
 
-    // Round
-    window.round || (window.round = Math.round);
+    /* Round
+            --- WARN ---
+                Should be defined after "ceil()" and "floor()" functions.
+    */
+    window.round || (window.round = Math.round || ((data) => {
+            /* Logic
+                    [if:else if:else statement].
+
+                > Return
+            */
+            if (parseInt(String(data).getAfterChar(".")[0]) > 4)
+                return window.ceil(data);
+
+            else
+                return window.floor(data)
+        }));
 
     // Right Trim
-    window.rtrim || (window.rtrim = function(data) {
+    window.rtrim || (window.rtrim = (data) => {
         /* Logic
                 If
                     Data is String.
@@ -532,8 +767,41 @@
             LapysJS.error("You can only trim Strings.")
     });
 
+    /* Run Interval
+            --- WARN ---
+                This function must be defined as such
+                and should not be mutable until this script file ends.
+    */
+    window.runInterval = (func, interval) => {
+        /* Logic
+                If
+                    the Function is a function.
+        */
+        if (typeof func == "function") {
+            // Function > Function
+            func();
+
+            // Set Interval > Function > Function
+            setInterval(() => {
+                func()
+            }, interval)
+        }
+    };
+
     // Square Root
-    window.sqrt || (window.sqrt = Math.sqrt);
+    window.sqrt || (window.sqrt = Math.sqrt || ((data) => {
+            /* Logic
+                    If
+                        Data is a number.
+
+                > Return
+            */
+            if (typeof data == "number")
+                return data ** .5
+
+            else
+                return NaN
+        }));
 
     // Server
     window.$_SERVER || (window.$_SERVER = {
@@ -544,7 +812,7 @@
         QUERY_STRING: location.search,
 
         // Request URI
-        REQUEST_URI: (location.pathname.split("/").pop() || location.pathname.split("#").shift()),
+        REQUEST_URI: location.pathname.split("/").pop() || location.pathname.split("#").shift(),
 
         // Server Name
         SERVER_NAME: location.host,
@@ -554,31 +822,139 @@
     });
 
     // String
-    window.str || (window.str = (window.String || window.toString()));
+    window.str || (window.str = (data) => {
+        /* Logic
+                If
+                    Data is an Object.
+        */
+        if ((data || []).constructor.name == "Object") {
+            var sample = "";
+            var stringify = "";
+
+            /* Loop
+                    Index all properties of Data.
+            */
+            for (var i in data)
+                /* Logic
+                        [if:else if:else statement]
+
+                    > Update > Sample
+                */
+                if (i != "def" && i != "foreach" && i != "empty" && i != "isArray" && i != "isDouble" && i != "isFloat" && i != "isFunction" && i != "isHTMLCollection" && i != "isInteger" && i != "isNodeList" && i != "isNumber" && i != "isObject" && i != "isRegex" && i != "isRegExp" && i != "isString" && i != "length" && i != "keys" && i != "undef" && i != "values")
+                    sample += ("\"" + i + "\":" + data[i] + ",");
+
+            if (sample.indexOf("\n") >= 0) {
+                /* Loop
+                        Index all properties of Data.
+                */
+                for (var i in data)
+                    /* Logic
+                            [if:else if:else statement]
+
+                        > Update > Stringify
+                    */
+                    if (i != "def" && i != "foreach" && i != "empty" && i != "isArray" && i != "isDouble" && i != "isFloat" && i != "isFunction" && i != "isHTMLCollection" && i != "isInteger" && i != "isNodeList" && i != "isNumber" && i != "isObject" && i != "isRegex" && i != "isRegExp" && i != "isString" && i != "length" && i != "keys" && i != "undef" && i != "values")
+                        stringify += ("\"" + i + "\": " + (() => {
+                            /* Logic
+                                    If
+                                        Data property is a String.
+
+                                > Return
+                            */
+                            if ((data[i] || []).constructor.name == "String")
+                                return "\"" + data[i] + "\"";
+
+                            else
+                                return data[i]
+                        })() + ",\n");
+
+                // Update > Stringify
+                stringify = stringify.slice(0, -2)
+            }
+
+            else {
+                /* Loop
+                        Index all properties of Data.
+                */
+                for (var i in data)
+                    /* Logic
+                            [if:else if:else statement]
+
+                        > Update > Stringify
+                    */
+                    if (i != "def" && i != "empty" && i != "isArray" && i != "isDouble" && i != "isFloat" && i != "isFunction" && i != "isHTMLCollection" && i != "isInteger" && i != "isNodeList" && i != "isNumber" && i != "isObject" && i != "isRegex" && i != "isRegExp" && i != "isString" && i != "undef")
+                        stringify += ("\"" + i + "\":" + (() => {
+                            /* Logic
+                                    If
+                                        Data property is a String.
+
+                                > Return
+                            */
+                            if ((data[i] || []).constructor.name == "String")
+                                return "\"" + data[i] + "\"";
+
+                            else
+                                return data[i]
+                        })() + ",");
+
+                // Update > Stringify
+                stringify = stringify.slice(0, -1)
+            }
+
+            // Return
+            return stringify
+        }
+
+        else {
+            // Initialization > Stringify
+            var stringify = window.String || window.toString || JSON.stringify;
+
+            /* Logic
+                    Switch
+                        case to Stringify.
+
+                > Return
+            */
+            switch (stringify) {
+                // Window > String
+                case window.String:
+                    return String(data);
+                    break;
+
+                // Window > To String
+                case window.toString:
+                    return data.toString();
+                    break;
+
+                // JSON > Stringify
+                case JSON.stringify:
+                    return JSON.stringify(data)
+            }
+        }
+    });
 
     // Trim
-    window.trim || (window.trim = function(data) {
+    window.trim || (window.trim = (data) => {
         /* Logic
                 If
                     Data is String.
-
-            > Return
         */
         if (typeof data == "string")
+            // Return
             return data.trim();
 
         else
+            // LapysJS > Error
             LapysJS.error("You can only trim Strings.")
     });
 
 /* Custom Data */
-    /* Version Number */
-        // Initialization
-        var VER_NUMBER = "0.0.1";
-
     /* LapysJS */
         // Initialization
         var LapysJS = new (function LapysJS() {
+            // Initialization > Version Number
+            var VER_NUMBER = "0.0.1";
+
             // Author
             this.author = "Lapys Dev Team";
 
@@ -587,14 +963,14 @@
                 /* Function */
                     // Log LapysJS Error
                     const logLapysJSError = (data) => {
-                        console.error("[LapysJS v" + VER_NUMBER + "]: " + data)
+                        console.error(`[LapysJS v${VER_NUMBER}]: ${data}`)
                     };
                         // Log Help Sheet
                         const logLapysJSErrorLogHelpSheet = () => {
                             /* Console */
                                 // Group
                                     // LapysJS Error Log Help Sheet
-                                    console.group("[LapysJS v" + VER_NUMBER + "]: LapysJS Error Log Help Sheet: ");
+                                    console.group(`[LapysJS v${VER_NUMBER}]: LapysJS Error Log Help Sheet: `);
                                         console.info("~: Log this help sheet into the browser console.");
                                         console.info("~h: Log this help sheet into the browser console.");
                                         console.info("~help: Log this help sheet into the browser console.");
@@ -657,7 +1033,7 @@
             this.name = "LapysJS";
 
             // Script
-            this.script = document.querySelectorAll("script")[document.querySelectorAll("script").length - 1];
+            this.script = document.querySelector('script[src*="lapys."][src*=".js"]') || ((document.scripts || [])[(document.scripts || [0]).length - 1] || document.querySelectorAll("script")[document.querySelectorAll("script").length - 1]);
 
             // Strict Mode
             this.strictMode = (function() {
@@ -673,14 +1049,14 @@
                 /* Function */
                     // Log LapysJS Warning
                     const logLapysJSWarning = (data) => {
-                        console.warn("[LapysJS v" + VER_NUMBER + "]: " + data)
+                        console.warn(`[LapysJS v${VER_NUMBER}]: ${data}`)
                     };
                         // Log Help Sheet
                         const logLapysJSWarningLogHelpSheet = () => {
                             /* Console */
                                 // Group
                                     // LapysJS Warning Log Help Sheet
-                                    console.group("[LapysJS v" + VER_NUMBER + "]: LapysJS Warning Log Help Sheet: ");
+                                    console.group(`[LapysJS v${VER_NUMBER}]: LapysJS Warning Log Help Sheet: `);
                                         console.info("~: Log this help sheet into the browser console.");
                                         console.info("~h: Log this help sheet into the browser console.");
                                         console.info("~help: Log this help sheet into the browser console.");
@@ -739,102 +1115,54 @@
 
 /* Array Data */
     // Add Element
-    Array.prototype.addElement || (Array.prototype.addElement = function(element, isArray) {
-        /* Logic
-                If
-                    Element is not an Array,
+    Array.prototype.addElement || (Array.prototype.addElement = function(...element) {
+        // Initialization > Array
+        var array = [];
 
-                else if
-                    Is Array is true.
+        /* Loop
+                Index all elements of Element.
+
+            > Update > Array.
         */
-        if ((element || []).constructor.name != "Array" || !element)
-            // Return
-            return [element].concat(this);
+        for (var i = 0; i < element.length; i++)
+            array[i] = element[i];
 
-        else if (isArray)
-            // Return
-            return [element].concat(this);
-
-        else {
-            // Initialization > Array
-            var array = [];
-
-            /* Loop
-                    Index all members of Element.
-            */
-            for (var i = 0; i < (element || []).length; i++)
-                // Update > Array
-                array[i] = element[i];
-
-            // Return
-            return array.concat(this)
-        }
+        // Return
+        return array.concat(this)
     });
 
     // Add Element To Back
-    Array.prototype.addElementToBack || (Array.prototype.addElementToBack = function(element, isArray) {
-        /* Logic
-                If
-                    Element is not an Array,
+    Array.prototype.addElementToBack || (Array.prototype.addElementToBack = function(...element) {
+        // Initialization > Array
+        var array = [];
 
-                else if
-                    Is Array is true.
+        /* Loop
+                Index all elements of Element.
+
+            > Update > Array.
         */
-        if ((element || []).constructor.name != "Array" || !element)
-            // Return
-            return [element].concat(this);
+        for (var i = 0; i < element.length; i++)
+            array[i] = element[i];
 
-        else if (isArray)
-            // Return
-            return [element].concat(this);
-
-        else {
-            // Initialization > Array
-            var array = [];
-
-            /* Loop
-                    Index all members of Element.
-            */
-            for (var i = 0; i < (element || []).length; i++)
-                // Update > Array
-                array[i] = element[i];
-
-            // Return
-            return array.concat(this)
-        }
+        // Return
+        return array.concat(this)
     });
 
     // Add Element To Front
-    Array.prototype.addElementToFront || (Array.prototype.addElementToFront = function(element, isArray) {
-        /* Logic
-                If
-                    Element is not an Array,
+    Array.prototype.addElementToFront || (Array.prototype.addElementToFront = function(...element) {
+        // Initialization > Array
+        var array = [];
 
-                else if
-                    Is Array is true.
+        /* Loop
+                Index all elements of Element.
+
+            > Update > Array.
         */
-        if ((element || []).constructor.name != "Array" || !element)
-            // Return
-            return this.concat([element]);
+        for (var i = 0; i < element.length; i++)
+            array[i] = element[i];
 
-        else if (isArray)
-            // Return
-            return this.concat([element]);
-
-        else {
-            // Initialization > Array
-            var array = [];
-
-            /* Loop
-                    Index all members of Element.
-            */
-            for (var i = 0; i < (element || []).length; i++)
-                // Update > Array
-                array[i] = element[i];
-
-            // Return
-            return this.concat(array)
-        }
+        // Return
+        return this.concat(array)
     });
 
     // Empty
@@ -874,10 +1202,26 @@
         return repeatedElements
     });
 
-     // Has Member
-     Array.prototype.hasElement || (Array.prototype.hasElement = function(element) {
-        // Return
-        return !(!(this.indexOf(element) >= 0) || false)
+     // Has Element
+     Array.prototype.hasElement || (Array.prototype.hasElement = function(...element) {
+        var definedElement = false;
+        /* Logic
+                If
+                    the first element in Element exists.
+        */
+        for (var i = 0; i < element.length; i++) {
+            // Return
+            return !(!(element[0] in this) || false);
+
+            // Update > Defined Element
+            definedElement = true;
+
+            // Break
+            break
+        }
+
+        // LapysJS > Error
+        definedElement || LapysJS.error("Element not specified in 'hasElement()' method.")
     });
 
     /* Index Of
@@ -921,71 +1265,26 @@
             --- NOTE ---
                 Removes the first instance specified element of an array.
     */
-    Array.prototype.removeElement || (Array.prototype.removeElement = function(element) {
-        /* Logic
-                If
-                    Element is false.
+    Array.prototype.removeElement || (Array.prototype.removeElement = function(...element) {
+        /* Loop
+                Index all elements of Element.
         */
-        if (!element) {
-            // LapysJS > Error
-            LapysJS.error("Non-truthy values can not be removed from an Array with this method.\n\tTry the 'removeFalsyElements()' Array method or specifying your target item in another Array.");
-
-            // Return
-            return
-        }
-
-        /* Logic
-                If
-                    Element is not an Array.
-        */
-        if ((element || []).constructor.name != "Array")
-            // Update >  Target
-            !(this.indexOf(element) > -1) || this.splice(this.indexOf(element), 1);
-
-
-        else {
-            /* Loop
-                    Index all members of Element.
-            */
-            for (var i = 0; i < (element || []).length; i++)
-                // Update >  Target
-                !(this.indexOf(element[i]) > -1) || this.splice(this.indexOf(element[i]), 1);
-        };
+        for (var i = 0; i < element.length; i++)
+            // Update > Target
+            !(this.indexOf(element[i]) > -1) || this.splice(this.indexOf(element[i]), 1);
 
         // Return
         return this
     });
 
     // Remove Element From Back
-    Array.prototype.removeElementFromBack || (Array.prototype.removeElementFromBack = function(element) {
-        /* Logic
-                If
-                    Element is false.
+    Array.prototype.removeElementFromBack || (Array.prototype.removeElementFromBack = function(...element) {
+        /* Loop
+                Index all elements of Element.
         */
-        if (!element) {
-            // LapysJS > Error
-            LapysJS.error("Non-truthy values can not be removed from an Array with this method.\n\tTry the 'removeFalsyElements()' Array method or specifying your target item in another Array.");
-
-            // Return
-            return
-        }
-
-        /* Logic
-                If
-                    Element is not an Array.
-        */
-        if ((element || []).constructor.name != "Array")
-            // Update >  Target
-            !(this.indexOf(element) > -1) || this.splice(this.indexOf(element), 1);
-
-        else {
-            /* Loop
-                    Index all members of Element.
-            */
-            for (var i = 0; i < (element || []).length; i++)
-                // Update >  Target
-                !(this.indexOf(element[i]) > -1) || this.splice(this.indexOf(element[i]), 1);
-        };
+        for (var i = 0; i < element.length; i++)
+            // Update > Target
+            !(this.indexOf(element[i]) > -1) || this.splice(this.indexOf(element[i]), 1);
 
         // Return
         return this
@@ -995,74 +1294,113 @@
             --- NOTE ---
                 Removes the last instance specified element of an array.
     */
-     Array.prototype.removeElementFromFront || (Array.prototype.removeElementFromFront = function(element) {
-        /* Logic
-                If
-                    Element is false.
+     Array.prototype.removeElementFromFront || (Array.prototype.removeElementFromFront = function(...element) {
+        /* Loop
+                Index all elements of Element.
         */
-        if (!element) {
-            // LapysJS > Error
-            LapysJS.error("Non-truthy values can not be removed from an Array with this\n method.\nTry the 'removeFalsyElements()' Array method or specifying your target item in another Array.");
-
-            // Return
-            return
-        }
-
-        /* Logic
-                If
-                    Element is not an Array.
-        */
-        if ((element || []).constructor.name != "Array")
-            // Update >  Target
-            !(this.lastIndexOf(element) > -1) || this.splice(this.lastIndexOf(element), 1);
-
-        else {
-            /* Loop
-                    Index all members of Element.
-            */
-            for (var i = 0; i < (element || []).length; i++)
-                // Update >  Target
-                !(this.lastIndexOf(element[i]) > -1) || this.splice(this.lastIndexOf(element[i]), 1);
-        };
+        for (var i = 0; i < element.length; i++)
+            // Update > Target
+            !(this.lastIndexOf(element[i]) > -1) || this.splice(this.lastIndexOf(element[i]), 1);
 
         // Return
         return this
     });
 
     // Remove Elements
-    Array.prototype.removeElements || (Array.prototype.removeElements = function(element) {
+    Array.prototype.removeElements || (Array.prototype.removeElements = function(...element) {
+        // Initialization > Target
+        var that = this;
+
+        // Function > Remove Element
+        function removeElement() {
+            /* Loop
+                    Index all elements of Element.
+            */
+            for (var i = 0; i < element.length; i++) {
+                // Update > Target
+                !(that.indexOf(element[0]) > -1) || that.splice(that.indexOf(element[0]), 1);
+
+                // Break
+                break
+            };
+
+            // Function > Remove Element
+            !(that.indexOf(element[0]) >= 0) || removeElement()
+        };
+        removeElement()
+
         // Return
-        return this.filter(function(data) {
-            // Return
-            return (data !== element)
-        })
+        return this
     });
 
     // Remove Falsy Elements
      Array.prototype.removeFalsyElements || (Array.prototype.removeFalsyElements = function() {
+        /* Loop
+                Index all elements of Target.
+        */
+        for (var i = 0; i < this.length; i++)
+            // Update > Target Element
+            this[i] = !!this[i];
+
+        // Update > Target
+        this.removeElements(false);
+
         // Return
-        return this.filter(Boolean)
+        return this
     });
 
     // Remove Repeated Elements
      Array.prototype.removeRepeatedElements || (Array.prototype.removeRepeatedElements = function() {
-        // Initialization > Target
-        var that = this;
+        // Initialization
+            // Target
+            var that = this;
+
+            // Scanned Element
+            var scannedElement = ["::lapys_null::"];
+
+            // Delete Elements
+            var deleteElements = [];
+
+        /* Loop
+                Index all elements of Target.
+        */
+        for (var i = 0; i < this.length; i++) {
+            /* Loop
+                    Index all elements of Scanned Element.
+            */
+            for (var j = 0; j < scannedElement.length; j++)
+                // Update > Delete Elements
+                !(scannedElement[j] == this[i] && deleteElements.indexOf(this[i]) <= -1) || deleteElements.push(this[i]);
+
+            // Update > Scanned Elements
+            scannedElement.push(this[i])
+        };
+
+        /* Loop
+                Index all elements of Delete Elements
+        */
+        for (var i = 0; i < deleteElements.length; i++)
+            // Update > Target
+            this.removeElements(deleteElements[i]);
 
         // Return
-        return this.filter(function(element, index) {
-            // Return
-            return (that.indexOf(element) == index)
-        })
+        return this
     });
 
     // Remove Truthy Elements
      Array.prototype.removeTruthyElements || (Array.prototype.removeTruthyElements = function() {
+        /* Loop
+                Index all elements of Target.
+        */
+        for (var i = 0; i < this.length; i++)
+            // Update > Target Element
+            this[i] = !!this[i];
+
+        // Update > Target
+        this.removeElements(true);
+
         // Return
-        return this.filter(function(data) {
-            // Return
-            return !data
-        })
+        return this
     });
 
 /* Object Data */
@@ -1107,16 +1445,34 @@
                     LapysJS.error("This function can not override itself.");
 
                 else
-                    LapysJS.error("'" + name + "' is not a valid variable name.")
+                    LapysJS.error(`'${name}' is not a valid variable name.`)
      });
 
     // Empty
     Object.prototype.empty || (Object.prototype.empty = function() {
-        /* --- UPDATE REQUIRED ---
-                Detect if the Object has an element within.
+        return !JSON.stringify(this).slice(1, -1).replace(/("|')([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'):/, function(data) {
+            // Return
+            return data.replace(/("|')/g, "")
+        }).slice(0, JSON.stringify(this).slice(1, -1).replace(/("|')([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'):/, function(data) {
+            // Return
+            return data.replace(/("|')/g, "")
+        }).indexOf(":"))
+    });
 
-                Also works with the 'isset()' function.
+    // For Each
+    Object.prototype.foreach || (Object.prototype.foreach = function(func) {
+        /* Logic
+                If
+                    Function is a function.
         */
+        if (typeof func == "function")
+            /* Loop
+                    For the length of the Target.
+
+                > Function > Function
+            */
+            for (var i = 0; i < this.length; i++)
+                func()
     });
 
     // Is Array
@@ -1326,8 +1682,38 @@
         }
     }));
 
+    // Length
+    Object.prototype.length || (Object.defineProperty(Object.prototype, "length", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Initialization > Loop Counter
+            var j = 0;
+
+            /* Loop
+                    Index all the Target's properties.
+            */
+            for (var i in this)
+                /* Logic
+                        [if:else if:else statement]
+
+                    > Update > Loop Counter
+                */
+                if (i != "def" && i != "foreach" && i != "empty" && i != "isArray" && i != "isDouble" && i != "isFloat" && i != "isFunction" && i != "isHTMLCollection" && i != "isInteger" && i != "isNodeList" && i != "isNumber" && i != "isObject" && i != "isRegex" && i != "isRegExp" && i != "isString" && i != "length" && i != "keys" && i != "undef" && i != "values")
+                    j++;
+
+            // Return
+            return j
+        }
+    }));
+
     // Undefine
-     Object.prototype.undef || (Object.prototype.undef = function(name) {
+    Object.prototype.undef || (Object.prototype.undef = function(name) {
         /* Logic
                 If
                     the "." character is not in Name
@@ -1358,8 +1744,56 @@
                 LapysJS.error("This function can not override itself.");
 
             else
-                LapysJS.error("'" + name + "' is not a valid variable name.")
+                LapysJS.error(`'${name}' is not a valid variable name.`)
      });
+
+    // Keys
+    Object.prototype.keys || (Object.prototype.keys = function() {
+        // Initialization > (Array, Loop Counter)
+        var array = [],
+            j = 0;
+
+        /* Loop
+                Index all the Target's properties.
+        */
+        for (var i in this)
+            /* Logic
+                    [if:else if:else statement]
+
+                > Update > (Array, Loop Counter)
+            */
+            if (i != "def" && i != "foreach" && i != "empty" && i != "isArray" && i != "isDouble" && i != "isFloat" && i != "isFunction" && i != "isHTMLCollection" && i != "isInteger" && i != "isNodeList" && i != "isNumber" && i != "isObject" && i != "isRegex" && i != "isRegExp" && i != "isString" && i != "length" && i != "keys" && i != "undef" && i != "values") {
+                array[j] = i;
+                j++
+            }
+
+        // Return
+        return array
+    });
+
+    // Values
+    Object.prototype.values || (Object.prototype.values = function() {
+        // Initialization > (Array, Loop Counter)
+        var array = [],
+            j = 0;
+
+        /* Loop
+                Index all the Target's properties.
+        */
+        for (var i in this)
+            /* Logic
+                    [if:else if:else statement]
+
+                > Update > (Array, Loop Counter)
+            */
+            if (i != "def" && i != "foreach" && i != "empty" && i != "isArray" && i != "isDouble" && i != "isFloat" && i != "isFunction" && i != "isHTMLCollection" && i != "isInteger" && i != "isNodeList" && i != "isNumber" && i != "isObject" && i != "isRegex" && i != "isRegExp" && i != "isString" && i != "length" && i != "keys" && i != "undef" && i != "values") {
+                array[j] = this[i];
+                j++
+            }
+
+        // Return
+        return array
+    });
 
     /* Lapys
             --- UPDATE REQUIRED ---
@@ -1390,180 +1824,317 @@
     const lapys = window;
 
 /* String Data */
-    // Function
-        // Capitalize
-        String.prototype.capital || (String.prototype.capital = function() {
+    // Capitalize
+    String.prototype.capital || (String.prototype.capital = function() {
+        // Return
+        return this.replace(/\b\w/g, function(data) {
             // Return
-            return this.replace(/\b\w/g, function(data) {
-                // Return
-                return data.toUpperCase()
-            })
-        });
+            return data.toUpperCase()
+        })
+    });
 
-        /* Empty
-                --- CONSIDER ---
-                    This method apparently removes a pre-built "empty()" String method.
+    // Count
+    String.prototype.count || (String.prototype.count = function(data) {
+        /* Logic
+                If
+                    Target is defined.
+
+            > Return
         */
-        String.prototype.empty = function() {
+        if (this)
+            return (this.match(new RegExp(data.toString().replace(/(\(|\)|\{|\}|\:|\<|\>|\[|\]|\.|\+|\*|\\|\-|\&|\$)/g, "\\$&"), "g")) || []).length;
+
+        else
+            return
+    });
+
+    /* Empty
+            --- CONSIDER ---
+                This method apparently removes a pre-built "empty()" String method.
+    */
+    String.prototype.empty = function() {
+        // Return
+        return !(this[0] || false)
+    };
+
+    // First Character
+    String.prototype.firstChar || Object.defineProperty(String.prototype, "firstChar", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
             // Return
-            return !(this[0] || false)
-        };
+            return this[0]
+        }
+    });
 
-        // First Character
-        String.prototype.firstChar || Object.defineProperty(String.prototype, "firstChar", {
-            // Configurable
-            configurable: true,
-
-            // Enumerable
-            enumerable: true,
-
-            // Get
-            get: function() {
+    // Get After Character
+    String.prototype.getAfterChar || (String.prototype.getAfterChar = function(data) {
+        /* Logic
+                Switch Data data type case to
+                    "number" and "string".
+        */
+        switch (typeof data) {
+            // Number
+            case "number":
                 // Return
-                return this[0]
-            }
-        });
+                return this.slice(data);
+                break;
 
-        // Get After Character
-        String.prototype.getAfterChar || (String.prototype.getAfterChar = function(data) {
+            // String
+            case "string":
+                /* Logic
+                        If
+                            the Target has the Data.
+
+                    > Return
+                */
+                if (this.indexOf(data) >= 0)
+                    return this.slice(this.indexOf(data) + data.length);
+
+                else
+                    return ""
+        }
+    });
+
+    // Get Before Character
+    String.prototype.getBeforeChar || (String.prototype.getBeforeChar = function(data) {
+        // Initialization > Target
+        var that = this;
+
+        /* Logic
+                Switch "data" data type case to
+                    "number" and "string".
+
+            > Return
+        */
+        switch (typeof data) {
+            // Number
+            case "number":
+                return this.slice(0, data);
+                break;
+
+            // String
+            case "string":
+                return (function() {
+                    /* Logic
+                            If
+                                the Target has the Data in it.
+
+                        > Return
+                    */
+                    if (that.indexOf(data) >= 0)
+                        return that.slice(0, that.indexOf(data));
+
+                    else
+                        return that
+                })()
+        }
+    });
+
+    // Has Text
+    String.prototype.hasText || (String.prototype.hasText = function(data) {
+        // Return
+        return !(!(this.indexOf(data) >= 0) || false)
+    });
+
+    // HTML
+    String.prototype.html || Object.defineProperty(String.prototype, "html", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Return
+            return document.createElement(this)
+        }
+    });
+
+    /* Is Registered
+            --- NOTE ---
+                Check if an element is registered.
+    */
+    String.prototype.isRegistered || Object.defineProperty(String.prototype, "isRegistered", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Return
+            return (document.createElement(this.toLowerCase()).constructor !== HTMLElement)
+        }
+    });
+
+    // Last Character
+    String.prototype.lastChar || Object.defineProperty(String.prototype, "lastChar", {
+        // Configurable
+        configurable: true,
+
+        // Enumerable
+        enumerable: true,
+
+        // Get
+        get: function() {
+            // Return
+            return this[this.length - 1]
+        }
+    });
+
+    /* Lower
+            --- NOTE ---
+                Shorter form of "toLowerCase()".
+    */
+    String.prototype.lower || (String.prototype.lower = String.prototype.toLowerCase);
+
+    /* Markup To String
+            --- CONSIDER ---
+                Are the replacing characters cross-platform supported?
+    */
+    String.prototype.markupToString || (String.prototype.markupToString = function() {
+        // Return
+        return this.replace(/(<|>)/g, (data) => {
             /* Logic
-                    Switch Data data type case to
-                        "number" and "string".
+                    Switch
+                        case to Data.
 
                 > Return
             */
-            switch (typeof data) {
-                // Number
-                case "number":
-                    return this.slice(data);
+            switch (data) {
+                // <
+                case "<":
+                    return "&lt;";
                     break;
 
-                // String
-                case "string":
-                    return this.slice(this.indexOf(data) + 1)
+                // >
+                case ">":
+                    return "&gt;"
             }
-        });
+        })
+    });
 
-        // Get Before Character
-        String.prototype.getBeforeChar || (String.prototype.getBeforeChar = function(data) {
-            /* Logic
-                    Switch "data" data type case to
-                        "number" and "string".
+    // To Array
+    String.prototype.toArray || (String.prototype.toArray = function() {
+        // Return
+        return JSON.parse(`[${this.replace(/'/g, "\"")}]`)
+    });
 
-                > Return
-            */
-            switch (typeof data) {
-                // Number
-                case "number":
-                    return this.slice(0, data);
-                    break;
+    // To Object
+    String.prototype.toObject || (String.prototype.toObject = function() {
+        // Initialization > Target
+        var that = this;
 
-                // String
-                case "string":
-                    return this.slice(0, this.indexOf(data))
-            }
-        });
+        // Return
+        return JSON.parse("{" +
+            (function() {
+                var array = [];
 
-        // Has Text
-        String.prototype.hasText || (String.prototype.hasText = function(data) {
-            // Return
-            return !(!(this.indexOf(data) >= 0) || false)
-        });
+                for (var i = 0; i < that.split(/,/g).length; i++)
+                    array[i] = "\"" + that.split(/,/g)[i].trim().getBeforeChar(":").replace(/\"/g, "") + "\":" + that.split(/,/g)[i].trim().getAfterChar(":");
 
-        // HTML
-        String.prototype.html || Object.defineProperty(String.prototype, "html", {
-            // Configurable
-            configurable: true,
+                if (array[0] != "\"\":")
+                    return array.toString().replace(/\'/g, "\"");
 
-            // Enumerable
-            enumerable: true,
+                else
+                    return ""
+            })() +
+        "}")
+    });
 
-            // Get
-            get: function() {
-                // Return
-                return document.createElement(this)
-            }
-        });
+    // To String Array
+    String.prototype.toStringArray || (String.prototype.toStringArray = function() {
+        // Return
+        return this.split(/,/g)
+    });
 
-        /* Is Registered
-                --- NOTE ---
-                    Check if an element is registered.
-        */
-        String.prototype.isRegistered || Object.defineProperty(String.prototype, "isRegistered", {
-            // Configurable
-            configurable: true,
-
-            // Enumerable
-            enumerable: true,
-
-            // Get
-            get: function() {
-                // Return
-                return (document.createElement(this.toLowerCase()).constructor !== HTMLElement)
-            }
-        });
-
-        // Last Character
-        String.prototype.lastChar || Object.defineProperty(String.prototype, "lastChar", {
-            // Configurable
-            configurable: true,
-
-            // Enumerable
-            enumerable: true,
-
-            // Get
-            get: function() {
-                // Return
-                return this[this.length - 1]
-            }
-        });
-
-        /* Lower
-                --- NOTE ---
-                    Shorter form of "toLowerCase()".
-        */
-        String.prototype.lower || (String.prototype.lower = function() {
-            // Return
-            return this.toLowerCase()
-        });
-
-        /* Markup To String
-                --- CONSIDER ---
-                    Are the replacing characters cross-platform supported?
-        */
-        String.prototype.markupToString || (String.prototype.markupToString = function() {
-            // Return
-            return this.replace(/</g, "&lt;").replace(/>/g, "&gt;")
-        });
-
-        // To Array
-        String.prototype.toArray || (String.prototype.toArray = function() {
-            // Return
-            return JSON.parse("[" + this.replace(/'/g, "\"") + "]")
-        });
-
-        // To Object
-        String.prototype.toObject || (String.prototype.toObject = function() {
-            // Return
-            return JSON.parse("{" + this.replace(/'/g, "\"") + "}")
-        });
-
-        // To String Array
-        String.prototype.toStringArray || (String.prototype.toStringArray = function() {
-            // Return
-            return this.split(/,/g)
-        });
-
-        /* Upper
-                --- NOTE ---
-                    Shorter form of "toUpperCase()".
-        */
-        String.prototype.upper || (String.prototype.upper = function() {
-            // Return
-            return this.toUpperCase()
-        });
+    /* Upper
+            --- NOTE ---
+                Shorter form of "toUpperCase()".
+    */
+    String.prototype.upper || (String.prototype.upper = String.prototype.toUpperCase);
 
 /* Function */
+    /* Array
+            --- NOTE ---
+                Made for converting HTMLCollections, NodeLists & Objects into arrays.
+    */
+    constructor.prototype.array || (constructor.prototype.array = function(data) {
+        // Initialization > Array
+        var array = [];
+
+        /* Logic
+                If
+                    Data has a length.
+        */
+        if (data.length)
+            /* Logic
+                    If
+                        Data is not an object,
+
+                    else if
+                        Data is an array,
+
+                    else if
+                        Data is a String.
+            */
+            if (
+                data.constructor.name != "Array" &&
+                data.constructor.name != "Object" &&
+                data.constructor.name != "String"
+            ) {
+                /* Loop
+                        Index all elements of Data.
+                */
+                for (var i = 0; i < data.length; i++)
+                    // Update > Array
+                    array[i] = data[i];
+
+                // Return
+                return array
+            }
+
+            else if (data.constructor.name == "Array")
+                // Return
+                return data;
+
+            else if (data.constructor.name == "String")
+                // Return
+                return data.split(new RegExp("", "g"));
+
+            else {
+                // Initialization > Loop Counter
+                var j = 0;
+
+                /* Loop
+                        Index all properties of Data.
+                */
+                for (var i in data)
+                    /* Logic
+                            [if:else if:else statement]
+                    */
+                    if (i != "def" && i != "foreach" && i != "empty" && i != "isArray" && i != "isDouble" && i != "isFloat" && i != "isFunction" && i != "isHTMLCollection" && i != "isInteger" && i != "isNodeList" && i != "isNumber" && i != "isObject" && i != "isRegex" && i != "isRegExp" && i != "isString" && i != "length" && i != "keys" && i != "undef" && i != "values") {
+                        // Update > (Array, Loop Counter)
+                        array[j] = "\"" + data.keys()[j] + "\":" + data.values()[j];
+                        j++
+                    };
+
+                // Return
+                return array
+            }
+
+        // Return
+        return array
+    });
+
     // Assert
     constructor.prototype.assert || (constructor.prototype.assert = console.assert);
 
@@ -1613,7 +2184,7 @@
             // Update > Name
             name = name.replace(/\[([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\{\}\|\\\.\:\;\"\'\<\,\>\?\/]){1,}\]/g, function(data) {
                 // Return
-                return "." + data.slice(2, -2)
+                return `.${data.slice(2, -2)}`
             });
 
             /* Loop
@@ -1651,17 +2222,20 @@
     // Get Query String By Name
     constructor.prototype.getQueryParameterByName || (constructor.prototype.getQueryParameterByName = (name, url) => {
         // Return
-        !(new RegExp("[?&]" + name.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)").exec(url || location.href)) || (() => { return null })();
+        !(new RegExp(`[?&]${name.replace(/[\[\]]/g, "\\$&")}(=([^&#]*)|&|#|$)`).exec(url || location.href)) || (() => { return null })();
 
         // Return
-        !(new RegExp("[?&]" + name.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)").exec(url || location.href))[2] || (() => { return "" })();
+        !(new RegExp(`[?&]${name.replace(/[\[\]]/g, "\\$&")}(=([^&#]*)|&|#|$)`).exec(url || location.href))[2] || (() => { return "" })();
 
         // Return
-        return decodeURIComponent((new RegExp("[?&]" + name.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)").exec(url || location.href))[2].replace(/\+/g, " "))
+        return decodeURIComponent((new RegExp(`[?&]${name.replace(/[\[\]]/g, "\\$&")}(=([^&#]*)|&|#|$)`).exec(url || location.href))[2].replace(/\+/g, " "))
     });
 
     // Log
     constructor.prototype.log || (constructor.prototype.log = console.log);
+
+    // Objectify
+    constructor.prototype.objectify || (constructor.prototype.objectify = JSON.convertArraysToObject);
 
     // On DOM Change
     constructor.prototype.onDOMChange || (constructor.prototype.onDOMChange = (func) => {
@@ -1676,7 +2250,7 @@
                 formerDOMContent = currentDOMContent;
 
             // Set Interval
-            setInterval(function() {
+            runInterval(function() {
                 // Update > DOM Content
                 currentDOMContent = document.documentElement.outerHTML;
 
@@ -1708,7 +2282,7 @@
                 formerDOMNodesLength = DOMNodesLength;
 
             // Set Interval
-            setInterval(function() {
+            runInterval(function() {
                 // Update > DOM Nodes Length
                 DOMNodesLength = document.querySelectorAll("*").length;
 
@@ -1740,7 +2314,7 @@
                 formerDOMNodesLength = DOMNodesLength;
 
             // Set Interval
-            setInterval(function() {
+            runInterval(function() {
                 // Update > DOM Nodes Length
                 DOMNodesLength = document.querySelectorAll("*").length;
 
@@ -1772,7 +2346,7 @@
                 formerDOMNodesLength = DOMNodesLength;
 
             // Set Interval
-            setInterval(function() {
+            runInterval(function() {
                 // Update > DOM Nodes Length
                 DOMNodesLength = document.querySelectorAll("*").length;
 
@@ -1827,7 +2401,7 @@
     */
     constructor.prototype.parseNumber || (constructor.prototype.parseNumber = (data) => {
         // Return
-        return (parseFloat(data.toString().replace(data.toString().replace(/[0-9]|\./g, ""), "")) || 0)
+        return parseFloat(String(data).replace(String(data).replace(/[0-9]|\./g, ""), "")) || 0
     });
 
     // Redirect
@@ -1852,6 +2426,22 @@
     constructor.prototype.reload || (constructor.prototype.reload = function() {
         // Location > Reload
         location.reload()
+    });
+
+    // Repeat
+    constructor.prototype.repeat || (constructor.prototype.repeat = function(func, start = 0, end = 0) {
+        /* Logic
+                If
+                    Function is a function.
+        */
+        if (typeof func == "function")
+            /* Loop
+                    [for statement]
+
+                > Function > Function
+            */
+            for (var i = (parseInt(start) || 0); i < (parseInt(end) || 0); i++)
+                func()
     });
 
     // Warn
@@ -1895,7 +2485,7 @@ if (
         // App
         constructor.prototype.app || (constructor.prototype.app = new (function App() {
             // Return
-            return (navigator || window.navigator)
+            return navigator || window.navigator || []
         })());
 
         // Browser
@@ -1922,12 +2512,12 @@ if (
         // CSS
         constructor.prototype.css || (constructor.prototype.css = new (function CSS() {
             // Link
-            this.link = function(dataID, array) {
+            this.link = (dataID, array) => {
                 // Initialization > <link>
                 var link = document.createElement("link");
 
                 // Insertion > <link>
-                document.head.append(link);
+                document.head.appendChild(link);
 
                 // Modification > <link>
                     // Data ID
@@ -1944,24 +2534,24 @@ if (
             };
 
             // Style
-            this.style = function(dataID, innerHTML) {
+            this.style = (dataID, innerHTML) => {
                 // Initialization > <style>
                 var style = document.createElement("style");
 
                 // Insertion > <style>
-                document.head.append(style);
+                document.head.appendChild(style);
 
                 // Modification > <style>
                     // Data ID
                     style.dataset.id = dataID;
 
                     // Inner HTML
-                    style.innerHTML = ("\r\t" + innerHTML + "\n\r\t")
+                    style.innerHTML = (`\r\t${innerHTML}\n\r\t`)
             }
         }));
 
         // Delete
-        constructor.prototype.del || (constructor.prototype.del = function(dataID, element) {
+        constructor.prototype.del || (constructor.prototype.del = (dataID, element) => {
             /* Logic
                     Switch "element" case to
                         "link", "style" and "script".
@@ -1970,19 +2560,19 @@ if (
                 // <link>
                 case "link":
                     // Deletion
-                    (document.querySelector('link[data-id="' + dataID + '"]') || document.createElement("div")).remove();
+                    (document.querySelector(`link[data-id="${dataID}"]`) || document.createElement("div")).remove();
                     break;
 
                 // <style>
                 case "style":
                     // Deletion
-                    (document.querySelector('style[data-id="' + dataID + '"]') || document.createElement("div")).remove();
+                    (document.querySelector(`style[data-id="${dataID}"]`) || document.createElement("div")).remove();
                     break;
 
                 // <script>
                 case "script":
                     // Deletion
-                    (document.querySelector('script[data-id="' + dataID + '"]') || document.createElement("div")).remove();
+                    (document.querySelector(`script[data-id="${dataID}"]`) || document.createElement("div")).remove();
                     break;
 
                 // [Default]
@@ -2000,14 +2590,14 @@ if (
 
                             > Deletion
                         */
-                        if (document.querySelector('link[data-id="' + dataID + '"]'))
-                            document.querySelector('link[data-id="' + dataID + '"]').remove();
+                        if (document.querySelector(`link[data-id="${dataID}"]`))
+                            document.querySelector(`link[data-id="${dataID}"]`).remove();
 
-                        else if (document.querySelector('style[data-id="' + dataID + '"]'))
-                            document.querySelector('style[data-id="' + dataID + '"]').remove();
+                        else if (document.querySelector(`style[data-id="${dataID}"]`))
+                            document.querySelector(`style[data-id="${dataID}"]`).remove();
 
-                        else if (document.querySelector('script[data-id="' + dataID + '"]'))
-                            document.querySelector('script[data-id="' + dataID + '"]').remove()
+                        else if (document.querySelector(`script[data-id="${dataID}"]`))
+                            document.querySelector(`script[data-id="${dataID}"]`).remove()
                     })()
             }
         });
@@ -2026,7 +2616,7 @@ if (
                     return;
 
                 else
-                    return (location.pathname.split("/").pop() || location.pathname.split("#").shift())
+                    return location.pathname.split("/").pop() || location.pathname.split("#").shift()
             })();
 
             // Name
@@ -2063,7 +2653,7 @@ if (
         // HTML Document Type
         constructor.prototype.HTMLDoctype || (constructor.prototype.HTMLDoctype = (function() {
             // Return
-            return !document.doctype || (
+            return (!document.doctype || (
                 '<!DOCTYPE ' +
                     (document.doctype.name) +
 
@@ -2094,34 +2684,34 @@ if (
                         ''
                     ) +
                 '>'
-            )
+            )).toString().replace("true", "")
         })());
 
         // JavaScript
         constructor.prototype.js || (constructor.prototype.js = new (function JS() {
             // Script
-            this.script = function(dataID, innerHTML) {
+            this.script = (dataID, innerHTML) => {
                 // Initialization > <script>
                 var script = document.createElement("script");
 
                 // Insertion > <script>
-                document.head.append(script);
+                document.head.appendChild(script);
 
                 // Modification > <script>
                     // Data ID
                     script.dataset.id = dataID;
 
                     // Inner HTML
-                    script.innerHTML = ("\r\t" + innerHTML + "\n\r\t")
+                    script.innerHTML = (`\r\t${innerHTML}\n\r\t`)
             };
 
             // Source
-            this.src = function(dataID, array) {
+            this.src = (dataID, array) => {
                 // Initialization > <script>
                 var script = document.createElement("script");
 
                 // Insertion > <script>
-                document.head.append(script);
+                document.head.appendChild(script);
 
                 // Modification > <script>
                     // Data ID
@@ -2150,16 +2740,16 @@ if (
         // Operating System
         constructor.prototype.operatingSystem || (constructor.prototype.operatingSystem = new (function operatingSystem() {
             // Is Macintosh?
-            this.macintosh = (navigator.appVersion.indexOf("Mac") >= 0);
+            this.macintosh = navigator.appVersion.indexOf("Mac") >= 0;
 
             // Is Linux?
-            this.linux = (navigator.appVersion.indexOf("Linux") >= 0);
+            this.linux = navigator.appVersion.indexOf("Linux") >= 0;
 
             // Is Unix?
-            this.unix = (navigator.appVersion.indexOf("X11") >= 0);
+            this.unix = navigator.appVersion.indexOf("X11") >= 0;
 
             // Is Windows?
-            this.windows = (navigator.appVersion.indexOf("Win") >= 0)
+            this.windows = navigator.appVersion.indexOf("Win") >= 0
         }));
 
     /* Document */
@@ -2172,7 +2762,7 @@ if (
                 */
                 if (name != "*")
                     // Return
-                    return this.querySelectorAll("[" + name + "]");
+                    return this.querySelectorAll(`[${name}]`);
 
                 else {
                     // Initialization > (Array, Count)
@@ -2208,7 +2798,7 @@ if (
             });
 
             // Get Elements By Attribute Name and Value
-            Document.prototype.getElementsByAttributeNameAndValue || (Document.prototype.getElementsByAttributeNameAndValue = function(name, value) {
+            Document.prototype.getElementsByAttributeNameAndValue || (Document.prototype.getElementsByAttributeNameAndValue = function(name, value = "") {
                 /* Logic
                         If
                             the Name is not "*",
@@ -2219,11 +2809,11 @@ if (
                 */
                 if (name != "*")
                     // Return
-                    return this.querySelectorAll('[' + name + '="' + value + '"]');
+                    return this.querySelectorAll(`[${name}="${value}"]`);
 
                 else if (
                     name == "*" &&
-                    (value || "").toString()
+                    value.toString()
                 ) {
                     // Initialization > (Array, Count)
                     var array = [],
@@ -2298,7 +2888,7 @@ if (
             });
 
             // Get Elements By Attribute Name and Value except Value
-            Document.prototype.getElementsByAttributeNameAndValueExceptValue || (Document.prototype.getElementsByAttributeNameAndValueExceptValue = function(name, value1, value2) {
+            Document.prototype.getElementsByAttributeNameAndValueExceptValue || (Document.prototype.getElementsByAttributeNameAndValueExceptValue = function(name, value1 = "", value2 = "") {
                 /* Logic
                         If
                             the Name is not "*",
@@ -2326,11 +2916,11 @@ if (
                 */
                 if (name != "*")
                     // Return
-                    return this.querySelectorAll('[' + name + '="' + value1 + '"]:not([' + name + '="' + value2 + '"])');
+                    return this.querySelectorAll(`[${name}="${value1}"]:not([${name}="${value2}"])`);
 
                 else if (
                     name == "*" &&
-                    (value1 || "").toString() &&
+                    value1.toString() &&
                     !value2
                 )
                     // Return
@@ -2338,7 +2928,7 @@ if (
 
                 else if (
                     name == "*" &&
-                    (value2 || "").toString() &&
+                    value2.toString() &&
                     !value1
                 ) {
                     // Initialization > (Array, Count)
@@ -2378,8 +2968,8 @@ if (
 
                 else if (
                     name == "*" &&
-                    (value1 || "").toString() &&
-                    (value2 || "").toString()
+                    value1.toString() &&
+                    value2.toString()
                 ) {
                     // Initialization > (Array, Count)
                     var array = [],
@@ -2457,7 +3047,7 @@ if (
             });
 
             // Get Elements By Attribute Name and Value without Value
-            Document.prototype.getElementsByAttributeNameAndValueWithoutValue || (Document.prototype.getElementsByAttributeNameAndValueWithoutValue = function(name, value1, value2) {
+            Document.prototype.getElementsByAttributeNameAndValueWithoutValue || (Document.prototype.getElementsByAttributeNameAndValueWithoutValue = function(name, value1 = "", value2 = "") {
                 /* Logic
                         If
                             the Name is not "*",
@@ -2485,11 +3075,11 @@ if (
                 */
                 if (name != "*")
                     // Return
-                    return this.querySelectorAll('[' + name + '="' + value1 + '"]:not([' + name + '*="' + value2 + '"])');
+                    return this.querySelectorAll(`[${name}="${value1}"]:not([${name}*="${value2}"])`);
 
                 else if (
                     name == "*" &&
-                    (value1 || "").toString() &&
+                    value1.toString() &&
                     !value2
                 )
                     // Return
@@ -2497,7 +3087,7 @@ if (
 
                 else if (
                     name == "*" &&
-                    (value2 || "").toString() &&
+                    value2.toString() &&
                     !value1
                 ) {
                     // Initialization > (Array, Count)
@@ -2537,8 +3127,8 @@ if (
 
                 else if (
                     name == "*" &&
-                    (value1 || "").toString() &&
-                    (value2 || "").toString()
+                    value1.toString() &&
+                    value2.toString()
                 ) {
                     // Initialization > (Array, Count)
                     var array = [],
@@ -2616,7 +3206,7 @@ if (
             });
 
             // Get Elements By Attribute Name except Value
-            Document.prototype.getElementsByAttributeNameExceptValue || (Document.prototype.getElementsByAttributeNameExceptValue = function(name, value) {
+            Document.prototype.getElementsByAttributeNameExceptValue || (Document.prototype.getElementsByAttributeNameExceptValue = function(name, value = "") {
                 /* Logic
                         If
                             the Name is not "*",
@@ -2628,11 +3218,11 @@ if (
                 */
                 if (name != "*")
                     // Return
-                    return this.querySelectorAll('[' + name + ']:not([' + name + '="' + value + '"])');
+                    return this.querySelectorAll(`[${name}]:not([${name}="${value}"])`);
 
                 else if (
                     name == "*" &&
-                    (value || "").toString()
+                    value.toString()
                 ) {
                     // Initialization > (Array, Count)
                     var array = [],
@@ -2703,7 +3293,7 @@ if (
             });
 
             // Get Elements By Attribute Name with Value
-            Document.prototype.getElementsByAttributeNameWithValue || (Document.prototype.getElementsByAttributeNameWithValue = function(name, value) {
+            Document.prototype.getElementsByAttributeNameWithValue || (Document.prototype.getElementsByAttributeNameWithValue = function(name, value = "") {
                 /* Logic
                         If
                             the Name is not "*",
@@ -2715,11 +3305,11 @@ if (
                 */
                 if (name != "*")
                     // Return
-                    return this.querySelectorAll('[' + name + '*="' + value + '"]');
+                    return this.querySelectorAll(`[${name}*="${value}"]`);
 
                 else if (
                     name == "*" &&
-                    (value || "").toString()
+                    value.toString()
                 ) {
                     // Initialization > (Array, Count)
                     var array = [],
@@ -2790,7 +3380,7 @@ if (
             });
 
             // Get Elements By Attribute Name with Value except Value
-            Document.prototype.getElementsByAttributeNameWithValueExceptValue || (Document.prototype.getElementsByAttributeNameWithValueExceptValue = function(name, value1, value2) {
+            Document.prototype.getElementsByAttributeNameWithValueExceptValue || (Document.prototype.getElementsByAttributeNameWithValueExceptValue = function(name, value1 = "", value2 = "") {
                 /* Logic
                         If
                             the Name is not "*",
@@ -2818,11 +3408,11 @@ if (
                 */
                 if (name != "*")
                     // Return
-                    return this.querySelectorAll('[' + name + '*="' + value1 + '"]:not([' + name + '="' + value2 + '"])');
+                    return this.querySelectorAll(`[${name}*="${value1}"]:not([${name}="${value2}"])`);
 
                 else if (
                     name == "*" &&
-                    (value1 || "").toString() &&
+                    value1.toString() &&
                     !value2
                 ) {
                     // Initialization > (Array, Count)
@@ -2862,7 +3452,7 @@ if (
 
                 else if (
                     name == "*" &&
-                    (value2 || "").toString() &&
+                    value2.toString() &&
                     !value1
                 ) {
                     // Initialization > (Array, Count)
@@ -2902,8 +3492,8 @@ if (
 
                 else if (
                     name == "*" &&
-                    (value1 || "").toString() &&
-                    (value2 || "").toString()
+                    value1.toString() &&
+                    value2.toString()
                 ) {
                     // Initialization > (Array, Count)
                     var array = [],
@@ -2977,7 +3567,7 @@ if (
             });
 
             // Get Elements By Attribute Name with Value without Value
-            Document.prototype.getElementsByAttributeNameWithValueWithoutValue || (Document.prototype.getElementsByAttributeNameWithValueWithoutValue = function(name, value1, value2) {
+            Document.prototype.getElementsByAttributeNameWithValueWithoutValue || (Document.prototype.getElementsByAttributeNameWithValueWithoutValue = function(name, value1 = "", value2 = "") {
                 /* Logic
                         If
                             the Name is not "*",
@@ -3005,11 +3595,11 @@ if (
                 */
                 if (name != "*")
                     // Return
-                    return this.querySelectorAll('[' + name + '*="' + value1 + '"]:not([' + name + '*="' + value2 + '"])');
+                    return this.querySelectorAll(`[${name}*="${value1}"]:not([${name}*="${value2}"])`);
 
                 else if (
                     name == "*" &&
-                    (value1 || "").toString() &&
+                    value1.toString() &&
                     !value2
                 ) {
                     // Initialization > (Array, Count)
@@ -3049,7 +3639,7 @@ if (
 
                 else if (
                     name == "*" &&
-                    (value2 || "").toString() &&
+                    value2.toString() &&
                     !value1
                 ) {
                     // Initialization > (Array, Count)
@@ -3089,8 +3679,8 @@ if (
 
                 else if (
                     name == "*" &&
-                    (value1 || "").toString() &&
-                    (value2 || "").toString()
+                    value1.toString() &&
+                    value2.toString()
                 ) {
                     // Initialization > (Array, Count)
                     var array = [],
@@ -3164,7 +3754,7 @@ if (
             });
 
             // Get Elements By Attribute Name without Value
-            Document.prototype.getElementsByAttributeNameWithoutValue || (Document.prototype.getElementsByAttributeNameWithoutValue = function(name, value) {
+            Document.prototype.getElementsByAttributeNameWithoutValue || (Document.prototype.getElementsByAttributeNameWithoutValue = function(name, value = "") {
                 /* Logic
                         If
                             the Name is not "*",
@@ -3176,11 +3766,11 @@ if (
                 */
                 if (name != "*")
                     // Return
-                    return this.querySelectorAll('[' + name + ']:not([' + name + '*="' + value + '"])');
+                    return this.querySelectorAll(`[${name}]:not([${name}*="${value}"])`);
 
                 else if (
                     name == "*" &&
-                    (value || "").toString()
+                    value.toString()
                 ) {
                     // Initialization > (Array, Count)
                     var array = [],
@@ -3265,7 +3855,7 @@ if (
             // Initialization
                 // <key-command>
                     // Registration
-                    (!window.customElements || (document.createElement("key-command").constructor !== HTMLElement) || customElements.define("key-command", class KeyCommand extends HTMLElement {}));
+                    (!window.customElements || (document.createElement("key-command").constructor !== HTMLElement) || window.customElements.define("key-command", class KeyCommand extends HTMLElement {}));
 
                     // On DOM Ready
                     onDOMReady(function() {
@@ -3280,13 +3870,13 @@ if (
                                 */
                                 for (var i = 0; i < document.getElementsByTagName("key-command").length; i++)
                                     // Execution
-                                    !(((event || []).code || "") == document.getElementsByTagName("key-command")[i].getAttribute("data-event-key")) || eval(document.getElementsByTagName("key-command")[i].getAttribute("data-event-function"))
+                                    !(event.code == document.getElementsByTagName("key-command")[i].getAttribute("data-event-key")) || eval(document.getElementsByTagName("key-command")[i].getAttribute("data-event-function"))
                             })
                     });
 
                 // <lorem-ipsum>
                     // Registration
-                    (!window.customElements ||  (document.createElement("lorem-ipsum").constructor !== HTMLElement) || customElements.define("lorem-ipsum", class LoremIpsum extends HTMLElement {}));
+                    (!window.customElements ||  (document.createElement("lorem-ipsum").constructor !== HTMLElement) || window.customElements.define("lorem-ipsum", class LoremIpsum extends HTMLElement {}));
 
                     /* Set Timeout
                             --- NOTE ---
@@ -3386,1192 +3976,1200 @@ if (
                         document.getElementsByTagName("fav-icon")[i--].remove()
                     };
 
-            // Modification
-                // On DOM Ready
-                onDOMReady(function() {
-                    // On DOM Node Added
-                    onDOMNodeAdded(function() {
-                        /* Loop
-                                Index all DOM elements.
-                        */
-                        for (var j = 0; j < document.querySelectorAll("*").length; j++) {
-                            /* Data Event Function
-                                    --- UPDATE REQUIRED ---
-                                        If the element's "data-event-type" attribute is removed,
-                                        then remove the event(s) attached to it.
-                            */
-                                /* Logic
-                                        If
-                                            the element has the
-                                            "data-event-function" attribute
-                                                and
-                                            "data-event-type" attribute.
-                                */
-                                if (
-                                    document.querySelectorAll("*")[j].hasAttribute("data-event-function") &&
-                                    document.querySelectorAll("*")[j].hasAttribute("data-event-type")
-                                ) {
-                                    // Initialization > Target Element
-                                    var that = document.querySelectorAll("*")[j];
-
-                                    // Set Timeout
-                                    setTimeout(function() {
-                                        /* Loop
-                                                Index all the Target Element's 'Event By Type''s members.
-                                        */
-                                        for (var j = 0; j < that.getAttribute("data-event-type").replace(/ /g, "").split(/,/g).removeRepeatedElements().length; j++)
-                                            // Event > Target Element > [Data Event Type]
-                                            that.setEvent(
-                                                that.getAttribute("data-event-type").replace(/ /g, "").split(/,/g).removeRepeatedElements()[j],
-
-                                                function eventByTypeFunction() {
-                                                    // Execution
-                                                    eval(that.getAttribute('data-event-function'))
-                                                }
-                                            )
-                                    }, 0)
-                                }
-                        }
-                    })
-                });
-
-            // Function
-                // Modify DOM Elements
-                function modifyDOMElements() {
+            // Modification > On DOM Node Added > Data Event
+            onDOMNodeAdded(function() {
+                /* Loop
+                        Index all Data Event Element
+                */
+                for (var j = 0; j < document.querySelectorAll("[data-event-function][data-event-type]").length; j++)
                     /* Loop
-                            Index all items of the LapysJS script's "data-enable" attribute.
+                            Index all Data Event Element Event Attributes
                     */
-                    for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
-                        /* Logic
-                                If
-                                    the LapysJS script has "_all" enabled or
-                                    the LapysJS script has "dataFocus" enabled.
-                        */
-                        if (
-                            (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "dataFocus" ||
-                            (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "dataFocus"
-                        ) {
-                            /* Set Timeout
-                                    --- NOTE ---
-                                        "setEvent()" method should be defined.
-                            */
-                            setTimeout(function() {
-                                document.body.setEvent("mouseup", function() {
-                                    /* Loop
-                                            Index all elements.
-                                    */
-                                    for (var i = 0; i < document.querySelectorAll("[data-focus]").length; i++)
-                                        // Modification
-                                            // Element
-                                                // Data Focus
-                                                document.querySelectorAll("[data-focus]")[i].removeAttribute("data-focus");
+                    for (var k = 0; k < document.querySelectorAll("[data-event-function][data-event-type]")[j].getAttribute("data-event-type").replace(/ /g, "").split(/,/g).length; k++) {
+                        // Event > Data Event Element > [Event Attribute]
+                        document.querySelectorAll("[data-event-function][data-event-type]")[j][`LapysJS ${document.querySelectorAll("[data-event-function][data-event-type]")[j].getAttribute("data-event-type").replace(/ /g, "").split(/,/g)[k]} EventSet`] || document.querySelectorAll("[data-event-function][data-event-type]")[j].setEvent(
+                            document.querySelectorAll("[data-event-function][data-event-type]")[j].getAttribute("data-event-type").replace(/ /g, "").split(/,/g)[k],
 
-                                    // Modification
-                                        // Event Target
-                                            // Data Focus
-                                            ((event || []).path || [])[0].setAttribute("data-focus", "")
-                                })
-                            }, 100);
+                            function() {
+                                eval(this.getAttribute("data-event-function"))
+                            }
+                        );
+                        document.querySelectorAll("[data-event-function][data-event-type]")[j][`LapysJS ${document.querySelectorAll("[data-event-function][data-event-type]")[j].getAttribute("data-event-type").replace(/ /g, "").split(/,/g)[k]} EventSet`] = true
+                    }
+            });
 
-                            // Break
-                            break
-                        };
-
-                    // <br>
-                        /* Loop
-                                Index all <br> elements.
-                        */
-                        for (var i = 0; i < document.getElementsByTagName("br").length; i++)
-                            /* Logic
-                                    If
-                                        the element has an attribute of "2"
-                                            or
-                                        the element has an attribute of "3".
-
-                                > Modification > Outer HTML
-                            */
-                            if (document.getElementsByTagName("br")[i].hasAttribute("2"))
-                                document.getElementsByTagName("br")[i].outerHTML = "<br> <br>";
-
-                            else if (document.getElementsByTagName("br")[i].hasAttribute("3"))
-                                document.getElementsByTagName("br")[i].outerHTML = "<br> <br> <br>";
-
-                    // <form>
-                        /* Loop
-                                Index all <form> elements.
-                        */
-                        for (var i = 0; i < document.getElementsByTagName("form").length; i++)
-                            /* Loop
-                                    Index all the element's children.
-                            */
-                            for (var j = 0; j < document.getElementsByTagName("form")[i].querySelectorAll("*").length; j++)
-                                /* Logic
-                                        If the element has a "name" attribute
-                                            and
-                                        its child does not have a "form" attribute
-                                            and
-                                        its children are <button>, <input>, <label>.
-                                */
-                                if (
-                                    document.getElementsByTagName("form")[i].hasAttribute("name") &&
-                                    !document.getElementsByTagName("form")[i].querySelectorAll("*")[j].hasAttribute("form") &&
-                                    (
-                                        document.getElementsByTagName("form")[i].querySelectorAll("*")[j].tagName == "BUTTON" ||
-                                        document.getElementsByTagName("form")[i].querySelectorAll("*")[j].tagName == "FIELDSET" ||
-                                        document.getElementsByTagName("form")[i].querySelectorAll("*")[j].tagName == "INPUT" ||
-                                        document.getElementsByTagName("form")[i].querySelectorAll("*")[j].tagName == "LABEL"
-                                    )
-                                )
-                                    // Modification > Form
-                                    document.getElementsByTagName("form")[i].querySelectorAll("*")[j].setAttribute("form", document.getElementsByTagName("form")[i].getAttribute("name"));
-
-                    // <label>
-                        /* Loop
-                                Index all <label> elements.
-                        */
-                        for (var i = 0; i < document.getElementsByTagName("label").length; i++)
-                            /* Logic
-                                    If
-                                        the element
-                                        does not have a "for" attribute
-                                            and
-                                        does not have a "data-no-for" attribute.
-                            */
-                            if (
-                                !document.getElementsByTagName("label")[i].hasAttribute("for") &&
-                                !document.getElementsByTagName("label")[i].hasAttribute("data-no-for")
-                            )
-                                /* Logic
-                                        If
-                                            the element has an <input> child element with an ID,
-
-                                        else if
-                                            the element's next element sibling is an <input> with an ID,
-
-                                        else if
-                                            the element's previous element sibling is an <input> with an ID.
-                                */
-                                if ((document.getElementsByTagName("label")[i].querySelector("input") || document.createElement("input")).hasAttribute("id"))
-                                    // Modification > For
-                                    document.getElementsByTagName("label")[i].setAttribute("for", document.getElementsByTagName("label")[i].querySelector("input").id);
-
-                                else if (
-                                    (document.getElementsByTagName("label")[i].nextElementSibling || document.createElement("input")).tagName == "INPUT" &&
-                                    (document.getElementsByTagName("label")[i].nextElementSibling || document.createElement("input")).hasAttribute("id")
-                                )
-                                    // Modification > For
-                                    document.getElementsByTagName("label")[i].setAttribute("for", document.getElementsByTagName("label")[i].nextElementSibling.id);
-
-                                else if (
-                                    (document.getElementsByTagName("label")[i].previousElementSibling || document.createElement("input")).tagName == "INPUT" &&
-                                    (document.getElementsByTagName("label")[i].previousElementSibling || document.createElement("input")).hasAttribute("id")
-                                )
-                                    // Modification > For
-                                    document.getElementsByTagName("label")[i].setAttribute("for", document.getElementsByTagName("label")[i].previousElementSibling.id);
-
-                    // <html>
-                        // Modification
-                            // Language
-                            document.documentElement.lang = (document.documentElement.lang || (navigator.languages || "").toString().replace(/, /, ",").replace(/,/g, ", "));
-
-                    // <input>
-                        /* Loop
-                                Index all <input> elements.
-                        */
-                        for (var i = 0; i < document.getElementsByTagName("input").length; i++) {
-                            /* Logic
-                                    If
-                                        the element has a type of "number"
-                            */
-                            if (
-                                !document.getElementsByTagName("input")[i].min &&
-                                (
-                                    document.getElementsByTagName("input")[i].type == "meter" ||
-                                    document.getElementsByTagName("input")[i].type == "number" ||
-                                    document.getElementsByTagName("input")[i].type == "range"
-                                )
-                            )
-                                // Modification
-                                    // Minimum
-                                    document.getElementsByTagName("input")[i].min = 0;
-
-                                    // Value
-                                        /* Logic
-                                                Switch <input> Value case to
-                                                    "_lorem1", "_lorem2", "_lorem3", "_lorem4" and "_lorem5".
-                                        */
-                                        switch (document.getElementsByTagName("input")[i].value) {
-                                            // _lorem1
-                                            case "_lorem1":
-                                                document.getElementsByTagName("input")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.";
-                                                break;
-
-                                            // _lorem2
-                                            case "_lorem2":
-                                                document.getElementsByTagName("input")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.";
-                                                break;
-
-                                            // _lorem3
-                                            case "_lorem3":
-                                                document.getElementsByTagName("input")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.";
-                                                break;
-
-                                            // _lorem4
-                                            case "_lorem4":
-                                                document.getElementsByTagName("input")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.";
-                                                break;
-
-                                            // _lorem5
-                                            case "_lorem5":
-                                                document.getElementsByTagName("input")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc."
-                                        }
-                        };
-
-                    // <option>
-                        /* Loop
-                                Index all <option> elements.
-                        */
-                        for (var i = 0; i < document.getElementsByTagName("option").length; i++)
-                            // Modification
-                                // Label
-                                document.getElementsByTagName("option")[i].setAttribute(
-                                    "label",
-                                    (
-                                        document.getElementsByTagName("option")[i].getAttribute("label") ||
-                                        document.getElementsByTagName("option")[i].innerText.replace(/ /g, "")
-                                    )
-                                );
-
-                    // <textarea>
-                        /* Loop
-                                Index all <textarea> elements.
-                        */
-                        for (var i = 0; i < document.getElementsByTagName("textarea").length; i++)
-                            /* Logic
-                                    If
-                                        the element has a value of "<lorem-ipsum 1> </lorem-ipsum>",
-
-                                    else if
-                                        the element has a value of "<lorem-ipsum 2> </lorem-ipsum>",
-
-                                    else if
-                                        the element has a value of "<lorem-ipsum 3> </lorem-ipsum>",
-
-                                    else if
-                                        the element has a value of "<lorem-ipsum 4> </lorem-ipsum>",
-
-                                    else if
-                                        the element has a value of "<lorem-ipsum 5> </lorem-ipsum>".
-                            */
-                            if (
-                                document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum 1") >= 0 &&
-                                document.getElementsByTagName("textarea")[i].value.indexOf("</lorem-ipsum>") > document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum ")
-                            )
-                                document.getElementsByTagName("textarea")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.";
-
-                            else if (
-                                document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum 2") >= 0 &&
-                                document.getElementsByTagName("textarea")[i].value.indexOf("</lorem-ipsum>") > document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum ")
-                            )
-                                document.getElementsByTagName("textarea")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.";
-
-                            else if (
-                                document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum 3") >= 0 &&
-                                document.getElementsByTagName("textarea")[i].value.indexOf("</lorem-ipsum>") > document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum ")
-                            )
-                                document.getElementsByTagName("textarea")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.";
-
-                            else if (
-                                document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum 4") >= 0 &&
-                                document.getElementsByTagName("textarea")[i].value.indexOf("</lorem-ipsum>") > document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum ")
-                            )
-                                document.getElementsByTagName("textarea")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.";
-
-                            else if (
-                                document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum 5") >= 0 &&
-                                document.getElementsByTagName("textarea")[i].value.indexOf("</lorem-ipsum>") > document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum ")
-                            )
-                                document.getElementsByTagName("textarea")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.";
-
-                    // <time>
+            // Function > Modify DOM Elements
+            function modifyDOMElements() {
+                /* Loop
+                        Index all items of the LapysJS script's "data-enable" attribute.
+                */
+                for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
+                    /* Logic
+                            If
+                                the LapysJS script has "_all" enabled or
+                                the LapysJS script has "dataFocus" enabled.
+                    */
+                    if (
+                        (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "_all" ||
+                        (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "dataFocus"
+                    ) {
                         /* Set Timeout
-                                --- WARN ---
-                                    Allow for a few methods to be defined first.
+                                --- NOTE ---
+                                    "setEvent()" method should be defined.
                         */
                         setTimeout(function() {
-                            /* Logic
-                                    If
-                                        a "non-dynamic time" <time> element exists.
-                            */
-                            if (document.querySelector("time:not(.dynamic-time)"))
+                            document.body.setEvent("mouseup", function() {
                                 /* Loop
-                                        Index all <time> elements.
+                                        Index all elements.
                                 */
-                                for (var i = 0; i < document.querySelectorAll("time:not(.dynamic-time)").length; i++)
-                                    /* Logic
-                                            [if:else if:else function].
-                                    */
-                                        // Date
-                                        if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dt") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("date")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getDate()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Octal UTC Date
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dt_octal_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("date_octal_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dt_utc_octal") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("date_utc_octal")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                /* Logic
-                                                        If
-                                                            the "data" does not have a second character.
-                                                */
-                                                if (!new Date().getDate().toString()[1])
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = ("0" + new Date().getUTCDate());
-
-                                                else
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = new Date().getUTCDate()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Octal Date
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dt_octal") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("date_octal")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                /* Logic
-                                                        If
-                                                            the "data" does not have a second character.
-                                                */
-                                                if (!new Date().getDate().toString()[1])
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = ("0" + new Date().getDate());
-
-                                                else
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = new Date().getDate()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // UTC Date
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dt_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("date_utc")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getUTCDate()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Day
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dy") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("day")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getDay()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Octal UTC Day
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dy_octal_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("day_octal_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dy_utc_octal") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("day_utc_octal")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                /* Logic
-                                                        If
-                                                            the "data" does not have a second character.
-                                                */
-                                                if (!new Date().getUTCDay().toString()[1])
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = ("0" + new Date().getUTCDay());
-
-                                                else
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = new Date().getUTCDay()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Octal Day
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dy_octal") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("day_octal")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                /* Logic
-                                                        If
-                                                            the "data" does not have a second character.
-                                                */
-                                                if (!new Date().getDay().toString()[1])
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = ("0" + new Date().getDay());
-
-                                                else
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = new Date().getDay()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // UTC Day
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dy_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("day_utc")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getUTCDay()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Full Date
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("f-dt") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("full-date")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = Date()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Full Year
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("f-yr") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("full-year")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getFullYear()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // UTC Full Year
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("f-yr_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("full-year_utc")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getUTCFullYear()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Hour
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hr") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hour")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getHours()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Octal UTC Hour
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hr_octal_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hour_octal_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hr_utc_octal") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hour_utc_octal")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                /* Logic
-                                                        If
-                                                            the "data" does not have a second character.
-                                                */
-                                                if (!new Date().getUTCHours().toString()[1])
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = ("0" + new Date().getUTCHours());
-
-                                                else
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = new Date().getUTCHours()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Octal Hour
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hr_octal") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hour_octal")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                /* Logic
-                                                        If
-                                                            the "data" does not have a second character.
-                                                */
-                                                if (!new Date().getHours().toString()[1])
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = ("0" + new Date().getHours());
-
-                                                else
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = new Date().getHours()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // UTC Hour
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hr_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hour_utc")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getUTCHours()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Milliseconds
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mil") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("milliseconds")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getMilliseconds()
-                                            }, 100)
-                                        }
-
-                                        // UTC Milliseconds
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mil_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("milliseconds_utc")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getUTCMilliseconds()
-                                            }, 100)
-                                        }
-
-                                        // Minute
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("min") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("minute")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getMinutes()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Octal UTC Minute
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("min_octal_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("minute_octal_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("min_utc_octal") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("minute_utc_octal")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                /* Logic
-                                                        If
-                                                            the "data" does not have a second character.
-                                                */
-                                                if (!new Date().getUTCMinutes().toString()[1])
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = ("0" + new Date().getUTCMinutes());
-
-                                                else
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = new Date().getUTCMinutes()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Octal Minute
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("min_octal") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("minute_octal")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                /* Logic
-                                                        If
-                                                            the "data" does not have a second character.
-                                                */
-                                                if (!new Date().getMinutes().toString()[1])
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = ("0" + new Date().getMinutes());
-
-                                                else
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = new Date().getMinutes()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // UTC Minute
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("min_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("minute_utc")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getUTCMinutes()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Month
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mth") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("month")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getMonth()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Octal UTC Month
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mth_octal_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("month_octal_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mth_utc_octal") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("month_utc_octal")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                /* Logic
-                                                        If
-                                                            the "data" does not have a second character.
-                                                */
-                                                if (!new Date().getUTCMonth().toString()[1])
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = ("0" + new Date().getUTCMonth());
-
-                                                else
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = new Date().getUTCMonth()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Octal Month
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mth_octal") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("month_octal")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                /* Logic
-                                                        If
-                                                            the "data" does not have a second character.
-                                                */
-                                                if (!new Date().getMonth().toString()[1])
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = ("0" + new Date().getMonth());
-
-                                                else
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = new Date().getMonth()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // UTC Month
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mth_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("month_utc")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getUTCMonth()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Second
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("sec") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("second")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getSeconds()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Octal UTC Second
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("sec_octal_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("second_octal_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("sec_utc_octal") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("second_utc_octal")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                /* Logic
-                                                        If
-                                                            the "data" does not have a second character.
-                                                */
-                                                if (!new Date().getUTCSeconds().toString()[1])
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = ("0" + new Date().getUTCSeconds());
-
-                                                else
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = new Date().getUTCSeconds()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Octal Second
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("sec_octal") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("second_octal")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                /* Logic
-                                                        If
-                                                            the "data" does not have a second character.
-                                                */
-                                                if (!new Date().getSeconds().toString()[1])
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = ("0" + new Date().getSeconds());
-
-                                                else
-                                                    // Modification
-                                                        // Inner HTML
-                                                        that.innerHTML = new Date().getSeconds()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // UTC Second
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("sec_utc") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("second_utc")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getUTCSeconds()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Time
-                                        else if (document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("time")) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = (+new Date() || new Date().getTime())
-                                            }, 100)
-                                        }
-
-                                        // Time Zone Offset
-                                        else if (document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("timezone-offset")) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getTimezoneOffset()
-                                            }, (1 * 1000))
-                                        }
-
-                                        // Year
-                                        else if (
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("yr") ||
-                                            document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("year")
-                                        ) {
-                                            // Initialization > Target Element
-                                            var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
-
-                                            // Set Interval
-                                            setInterval(function() {
-                                                // Modification
-                                                    // Class
-                                                    that.addClass("dynamic-time");
-
-                                                    // Inner HTML
-                                                    that.innerHTML = new Date().getYear()
-                                            }, (1 * 1000))
-                                        }
+                                for (var i = 0; i < document.querySelectorAll("[data-focus]").length; i++)
+                                    // Modification
+                                        // Element
+                                            // Data Focus
+                                            document.querySelectorAll("[data-focus]")[i].removeAttribute("data-focus");
+
+                                // Modification
+                                    // Event Target
+                                        // Data Focus
+                                        event.path[0].setAttribute("data-focus", "")
+                            })
                         }, 100);
 
-                    // Modification
-                        // Element | EventTarget | HTML Collection | HTML Element | Node | NodeList
-                            /* Has Class
-                                    --- WARN ---
-                                        Should be defined before the "addClass()" and "delClass()" methods.
+                        // Break
+                        break
+                    };
+
+                // <br>
+                    /* Loop
+                            Index all <br> elements.
+                    */
+                    for (var i = 0; i < document.getElementsByTagName("br").length; i++)
+                        /* Logic
+                                If
+                                    the element has an attribute of "2"
+                                        or
+                                    the element has an attribute of "3".
+
+                            > Modification > Outer HTML
+                        */
+                        if (document.getElementsByTagName("br")[i].hasAttribute("2"))
+                            document.getElementsByTagName("br")[i].outerHTML = "<br> <br>";
+
+                        else if (document.getElementsByTagName("br")[i].hasAttribute("3"))
+                            document.getElementsByTagName("br")[i].outerHTML = "<br> <br> <br>";
+
+                // <form>
+                    /* Loop
+                            Index all <form> elements.
+                    */
+                    for (var i = 0; i < document.getElementsByTagName("form").length; i++)
+                        /* Loop
+                                Index all the element's children.
+                        */
+                        for (var j = 0; j < document.getElementsByTagName("form")[i].querySelectorAll("*").length; j++)
+                            /* Logic
+                                    If the element has a "name" attribute
+                                        and
+                                    its child does not have a "form" attribute
+                                        and
+                                    its children are <button>, <input>, <label>.
                             */
-                            Element.prototype.hasClass || (Element.prototype.hasClass = function(name) {
-                                // Initialization > Has Class
-                                var hasClass = false;
-
-                                /* Logic
-                                        If
-                                            the Target Element has a class value.
-                                */
-                                if (this.getAttribute("class"))
-                                    /* Loop
-                                            Index all class values.
-                                    */
-                                    for (var i = 0; i < this.getAttribute("class").trim().split(/ /g).length; i++)
-                                        /* Logic
-                                                If
-                                                    any of the values (modified) are the specified Name.
-                                        */
-                                        if (this.getAttribute("class").trim().split(/ /g)[i].trim() == name) {
-                                            // Update
-                                                // Has Class
-                                                hasClass = true;
-
-                                            // Break
-                                            break
-                                        };
-
-                                // Return
-                                return hasClass
-                            });
-
-                            // Add Class
-                            Element.prototype.addClass || (Element.prototype.addClass = function(name = "") {
-                                // Target Element > Definition
-                                var that = this;
-
-                                // Modification > Target Element > Class
+                            if (
+                                document.getElementsByTagName("form")[i].hasAttribute("name") &&
+                                !document.getElementsByTagName("form")[i].querySelectorAll("*")[j].hasAttribute("form") &&
                                 (
-                                    this.hasClass(name) ||
-                                    (function() {
-                                        /* Logic
-                                                If
-                                                    the Target Element has a class value.
-                                        */
-                                        if (that.getAttribute("class"))
+                                    document.getElementsByTagName("form")[i].querySelectorAll("*")[j].tagName == "BUTTON" ||
+                                    document.getElementsByTagName("form")[i].querySelectorAll("*")[j].tagName == "FIELDSET" ||
+                                    document.getElementsByTagName("form")[i].querySelectorAll("*")[j].tagName == "INPUT" ||
+                                    document.getElementsByTagName("form")[i].querySelectorAll("*")[j].tagName == "LABEL"
+                                )
+                            )
+                                // Modification > Form
+                                document.getElementsByTagName("form")[i].querySelectorAll("*")[j].setAttribute("form", document.getElementsByTagName("form")[i].getAttribute("name"));
+
+                // <label>
+                    /* Loop
+                            Index all <label> elements.
+                    */
+                    for (var i = 0; i < document.getElementsByTagName("label").length; i++)
+                        /* Logic
+                                If
+                                    the element
+                                    does not have a "for" attribute
+                                        and
+                                    does not have a "data-no-for" attribute.
+                        */
+                        if (
+                            !document.getElementsByTagName("label")[i].hasAttribute("for") &&
+                            !document.getElementsByTagName("label")[i].hasAttribute("data-no-for")
+                        )
+                            /* Logic
+                                    If
+                                        the element has an <input> child element with an ID,
+
+                                    else if
+                                        the element's next element sibling is an <input> with an ID,
+
+                                    else if
+                                        the element's previous element sibling is an <input> with an ID.
+                            */
+                            if ((document.getElementsByTagName("label")[i].querySelector("input") || document.createElement("input")).hasAttribute("id"))
+                                // Modification > For
+                                document.getElementsByTagName("label")[i].setAttribute("for", document.getElementsByTagName("label")[i].querySelector("input").id);
+
+                            else if (
+                                (document.getElementsByTagName("label")[i].nextElementSibling || document.createElement("input")).tagName == "INPUT" &&
+                                (document.getElementsByTagName("label")[i].nextElementSibling || document.createElement("input")).hasAttribute("id")
+                            )
+                                // Modification > For
+                                document.getElementsByTagName("label")[i].setAttribute("for", document.getElementsByTagName("label")[i].nextElementSibling.id);
+
+                            else if (
+                                (document.getElementsByTagName("label")[i].previousElementSibling || document.createElement("input")).tagName == "INPUT" &&
+                                (document.getElementsByTagName("label")[i].previousElementSibling || document.createElement("input")).hasAttribute("id")
+                            )
+                                // Modification > For
+                                document.getElementsByTagName("label")[i].setAttribute("for", document.getElementsByTagName("label")[i].previousElementSibling.id);
+
+                // <html>
+                    // Modification > Language
+                    document.documentElement.lang = (document.documentElement.lang || (navigator.languages || "").toString().replace(/, /, ",").replace(/,/g, ", "));
+
+                // <input>
+                    /* Loop
+                            Index all <input> elements.
+                    */
+                    for (var i = 0; i < document.getElementsByTagName("input").length; i++) {
+                        /* Logic
+                                If
+                                    the element has a type of "number"
+                        */
+                        if (
+                            !document.getElementsByTagName("input")[i].min &&
+                            (
+                                document.getElementsByTagName("input")[i].type == "meter" ||
+                                document.getElementsByTagName("input")[i].type == "number" ||
+                                document.getElementsByTagName("input")[i].type == "range"
+                            )
+                        )
+                            // Modification
+                                // Minimum
+                                document.getElementsByTagName("input")[i].min = 0;
+
+                                // Value
+                                    /* Logic
+                                            Switch <input> Value case to
+                                                "_lorem1", "_lorem2", "_lorem3", "_lorem4" and "_lorem5".
+                                    */
+                                    switch (document.getElementsByTagName("input")[i].value) {
+                                        // _lorem1
+                                        case "_lorem1":
+                                            document.getElementsByTagName("input")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.";
+                                            break;
+
+                                        // _lorem2
+                                        case "_lorem2":
+                                            document.getElementsByTagName("input")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.";
+                                            break;
+
+                                        // _lorem3
+                                        case "_lorem3":
+                                            document.getElementsByTagName("input")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.";
+                                            break;
+
+                                        // _lorem4
+                                        case "_lorem4":
+                                            document.getElementsByTagName("input")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.";
+                                            break;
+
+                                        // _lorem5
+                                        case "_lorem5":
+                                            document.getElementsByTagName("input")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc."
+                                    }
+                    };
+
+                // <option>
+                    /* Loop
+                            Index all <option> elements.
+                    */
+                    for (var i = 0; i < document.getElementsByTagName("option").length; i++)
+                        // Modification
+                            // Label
+                            document.getElementsByTagName("option")[i].setAttribute(
+                                "label",
+                                (
+                                    document.getElementsByTagName("option")[i].getAttribute("label") ||
+                                    document.getElementsByTagName("option")[i].innerText.replace(/ /g, "")
+                                )
+                            );
+
+                // <textarea>
+                    /* Loop
+                            Index all <textarea> elements.
+                    */
+                    for (var i = 0; i < document.getElementsByTagName("textarea").length; i++)
+                        /* Logic
+                                If
+                                    the element has a value of "<lorem-ipsum 1> </lorem-ipsum>",
+
+                                else if
+                                    the element has a value of "<lorem-ipsum 2> </lorem-ipsum>",
+
+                                else if
+                                    the element has a value of "<lorem-ipsum 3> </lorem-ipsum>",
+
+                                else if
+                                    the element has a value of "<lorem-ipsum 4> </lorem-ipsum>",
+
+                                else if
+                                    the element has a value of "<lorem-ipsum 5> </lorem-ipsum>".
+                        */
+                        if (
+                            document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum 1") >= 0 &&
+                            document.getElementsByTagName("textarea")[i].value.indexOf("</lorem-ipsum>") > document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum ")
+                        )
+                            document.getElementsByTagName("textarea")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.";
+
+                        else if (
+                            document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum 2") >= 0 &&
+                            document.getElementsByTagName("textarea")[i].value.indexOf("</lorem-ipsum>") > document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum ")
+                        )
+                            document.getElementsByTagName("textarea")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.";
+
+                        else if (
+                            document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum 3") >= 0 &&
+                            document.getElementsByTagName("textarea")[i].value.indexOf("</lorem-ipsum>") > document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum ")
+                        )
+                            document.getElementsByTagName("textarea")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.";
+
+                        else if (
+                            document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum 4") >= 0 &&
+                            document.getElementsByTagName("textarea")[i].value.indexOf("</lorem-ipsum>") > document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum ")
+                        )
+                            document.getElementsByTagName("textarea")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.";
+
+                        else if (
+                            document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum 5") >= 0 &&
+                            document.getElementsByTagName("textarea")[i].value.indexOf("</lorem-ipsum>") > document.getElementsByTagName("textarea")[i].value.indexOf("<lorem-ipsum ")
+                        )
+                            document.getElementsByTagName("textarea")[i].value = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.";
+
+                // <time>
+                    /* Set Timeout
+                            --- WARN ---
+                                Allow for a few methods to be defined first.
+                    */
+                    setTimeout(function() {
+                        /* Logic
+                                If
+                                    a "non-dynamic time" <time> element exists.
+                        */
+                        if (document.querySelector("time:not(.dynamic-time)"))
+                            /* Loop
+                                    Index all <time> elements.
+                            */
+                            for (var i = 0; i < document.querySelectorAll("time:not(.dynamic-time)").length; i++)
+                                /* Logic
+                                        [if:else if:else function].
+                                */
+                                    // Date
+                                    if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dt") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("date")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getDate()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Octal UTC Date
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dt_octal_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("date_octal_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dt_utc_octal") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("date_utc_octal")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
                                             /* Logic
                                                     If
-                                                        there are multiple class values.
+                                                        the "data" does not have a second character.
                                             */
-                                            if (that.getAttribute("class").indexOf(" ") >= 0)
-                                                // Return
-                                                return (that.getAttribute("class").indexOf(name) >= 0);
+                                            if (!new Date().getDate().toString()[1])
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = `0${new Date().getUTCDate()}`;
 
                                             else
-                                                // Return
-                                                return that.hasClass(name);
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = new Date().getUTCDate()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Octal Date
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dt_octal") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("date_octal")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                            /* Logic
+                                                    If
+                                                        the "data" does not have a second character.
+                                            */
+                                            if (!new Date().getDate().toString()[1])
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = `0${new Date().getDate()}`;
+
+                                            else
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = new Date().getDate()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // UTC Date
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dt_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("date_utc")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getUTCDate()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Day
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dy") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("day")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getDay()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Octal UTC Day
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dy_octal_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("day_octal_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dy_utc_octal") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("day_utc_octal")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                            /* Logic
+                                                    If
+                                                        the "data" does not have a second character.
+                                            */
+                                            if (!new Date().getUTCDay().toString()[1])
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = `0${new Date().getUTCDay()}`;
+
+                                            else
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = new Date().getUTCDay()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Octal Day
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dy_octal") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("day_octal")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                            /* Logic
+                                                    If
+                                                        the "data" does not have a second character.
+                                            */
+                                            if (!new Date().getDay().toString()[1])
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = `0${new Date().getDay()}`;
+
+                                            else
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = new Date().getDay()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // UTC Day
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("dy_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("day_utc")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getUTCDay()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Full Date
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("f-dt") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("full-date")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = Date()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Full Year
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("f-yr") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("full-year")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getFullYear()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // UTC Full Year
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("f-yr_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("full-year_utc")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getUTCFullYear()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Hour
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hr") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hour")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getHours()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Octal UTC Hour
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hr_octal_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hour_octal_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hr_utc_octal") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hour_utc_octal")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                            /* Logic
+                                                    If
+                                                        the "data" does not have a second character.
+                                            */
+                                            if (!new Date().getUTCHours().toString()[1])
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = `0${new Date().getUTCHours()}`;
+
+                                            else
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = new Date().getUTCHours()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Octal Hour
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hr_octal") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hour_octal")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                            /* Logic
+                                                    If
+                                                        the "data" does not have a second character.
+                                            */
+                                            if (!new Date().getHours().toString()[1])
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = `0${new Date().getHours()}`;
+
+                                            else
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = new Date().getHours()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // UTC Hour
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hr_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("hour_utc")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getUTCHours()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Milliseconds
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mil") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("milliseconds")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getMilliseconds()
+                                        }, 100)
+                                    }
+
+                                    // UTC Milliseconds
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mil_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("milliseconds_utc")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getUTCMilliseconds()
+                                        }, 100)
+                                    }
+
+                                    // Minute
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("min") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("minute")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getMinutes()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Octal UTC Minute
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("min_octal_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("minute_octal_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("min_utc_octal") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("minute_utc_octal")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                            /* Logic
+                                                    If
+                                                        the "data" does not have a second character.
+                                            */
+                                            if (!new Date().getUTCMinutes().toString()[1])
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = `0${new Date().getUTCMinutes()}`;
+
+                                            else
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = new Date().getUTCMinutes()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Octal Minute
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("min_octal") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("minute_octal")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                            /* Logic
+                                                    If
+                                                        the "data" does not have a second character.
+                                            */
+                                            if (!new Date().getMinutes().toString()[1])
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = `0${new Date().getMinutes()}`;
+
+                                            else
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = new Date().getMinutes()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // UTC Minute
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("min_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("minute_utc")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getUTCMinutes()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Month
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mth") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("month")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getMonth()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Octal UTC Month
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mth_octal_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("month_octal_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mth_utc_octal") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("month_utc_octal")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                            /* Logic
+                                                    If
+                                                        the "data" does not have a second character.
+                                            */
+                                            if (!new Date().getUTCMonth().toString()[1])
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = `0${new Date().getUTCMonth()}`;
+
+                                            else
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = new Date().getUTCMonth()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Octal Month
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mth_octal") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("month_octal")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                            /* Logic
+                                                    If
+                                                        the "data" does not have a second character.
+                                            */
+                                            if (!new Date().getMonth().toString()[1])
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = `0${new Date().getMonth()}`;
+
+                                            else
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = new Date().getMonth()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // UTC Month
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("mth_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("month_utc")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getUTCMonth()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Second
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("sec") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("second")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getSeconds()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Octal UTC Second
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("sec_octal_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("second_octal_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("sec_utc_octal") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("second_utc_octal")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                            /* Logic
+                                                    If
+                                                        the "data" does not have a second character.
+                                            */
+                                            if (!new Date().getUTCSeconds().toString()[1])
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = `0${new Date().getUTCSeconds()}`;
+
+                                            else
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = new Date().getUTCSeconds()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Octal Second
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("sec_octal") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("second_octal")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                            /* Logic
+                                                    If
+                                                        the "data" does not have a second character.
+                                            */
+                                            if (!new Date().getSeconds().toString()[1])
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = `0${new Date().getSeconds()}`;
+
+                                            else
+                                                // Modification
+                                                    // Inner HTML
+                                                    that.innerHTML = new Date().getSeconds()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // UTC Second
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("sec_utc") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("second_utc")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getUTCSeconds()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Time
+                                    else if (document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("time")) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = (+new Date() || new Date().getTime())
+                                        }, 100)
+                                    }
+
+                                    // Time Zone Offset
+                                    else if (document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("timezone-offset")) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getTimezoneOffset()
+                                        }, (1 * 1000))
+                                    }
+
+                                    // Year
+                                    else if (
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("yr") ||
+                                        document.querySelectorAll("time:not(.dynamic-time)")[i].hasClass("year")
+                                    ) {
+                                        // Initialization > Target Element
+                                        var that = document.querySelectorAll("time:not(.dynamic-time)")[i];
+
+                                        // Run Interval
+                                        runInterval(function() {
+                                            // Modification
+                                                // Class
+                                                that.addClass("dynamic-time");
+
+                                                // Inner HTML
+                                                that.innerHTML = new Date().getYear()
+                                        }, (1 * 1000))
+                                    }
+                    }, 100);
+
+                // Modification
+                    // Element | EventTarget | HTML Collection | HTML (*) Element | Node | NodeList
+                        /* Has Class
+                                --- WARN ---
+                                    Should be defined before the "addClass()" and "delClass()" methods.
+                        */
+                        Element.prototype.hasClass || (Element.prototype.hasClass = function(...name) {
+                            /* Logic
+                                    If
+                                        the Target has a class.
+                            */
+                            if (this.getAttribute("class")) {
+                                // Update > Name
+                                name || (name = []);
+
+                                /* Loop
+                                        Index all elements of Name.
+                                */
+                                for (var i = 0; i < name.length; i++)
+                                    // Update > Name Element
+                                    name[i] = name[i].toString();
+
+                                // Initialization > (Has Class, Input Class)
+                                var hasClass = [],
+                                    inputClass = name;
+
+                                /* Loop
+                                        Index all elements of Name
+                                */
+                                for (var i = 0; i < name.length; i++)
+                                    /* Logic
+                                            If
+                                                the the element has white-space.
+                                    */
+                                    if (name[i].split(/ /g).length > 1)
+                                        /* Loop
+                                                Index all split elements of that element.
+                                        */
+                                        for (var j = 0; j < name[i].split(/ /g).length; j++)
+                                            // Update > Input Class
+                                            inputClass.push(name[i].split(/ /g)[j]);
+
+                                // Update > Input Class
+                                inputClass = inputClass.removeRepeatedElements().filter(function(data) {
+                                    return data.indexOf(" ") <= -1
+                                });
+
+                                /* Loop
+                                        Index all elements of Input Class.
+                                */
+                                for (var i = 0; i < inputClass.length; i++)
+                                    // Update > Has Class
+                                    hasClass[i] = (this.getAttribute("class").trim().split(/ /g).indexOf(inputClass[i]) >= 0);
+
+                                // Return
+                                return hasClass.indexOf(false) <= -1
+                            }
+
+                            else
+                                // Return
+                                return false
+                        });
+
+                        // Add Class
+                        Element.prototype.addClass || (Element.prototype.addClass = function(name = "") {
+                            // Initialization > Target
+                            var that = this;
+
+                            /* Loop
+                                    For the number of white-spaces Name has.
+                            */
+                            for (var i = 0; i < name.split(/ /g).length; i++)
+                                // Update > Name
+                                !((this.getAttribute("class") || "").trim().split(/ /g).indexOf(name.split(/ /g)[i]) >= 0) || (name = name.replace(name.split(/ /g)[i], ""));
+
+                            // Update > Name
+                            name = name.trim();
+
+                            // Modification > Target > Class
+                            (
+                                this.hasClass(name) ||
+                                (function() {
+                                    /* Logic
+                                            If
+                                                the Target has a class value.
+                                    */
+                                    if (that.getAttribute("class"))
+                                        /* Logic
+                                                If
+                                                    there are multiple class values.
+
+                                            > Return
+                                        */
+                                        if (that.getAttribute("class").indexOf(" ") >= 0)
+                                            return (that.getAttribute("class").indexOf(name) >= 0);
 
                                         else
-                                            // Return
-                                            return that.hasClass(name)
-                                    })()
-                                ) ||
-                                this.setAttribute(
-                                    "class",
-                                    ((this.getAttribute("class") || "") + " " + name).trim()
-                                );
-                                !(name == "" && !(void name == false)) || (this.getAttribute("class") || this.removeAttribute("class"))
-                            });
+                                            return that.hasClass(name);
 
-                            // Close
-                            Element.prototype.close || (Element.prototype.close = function() {
-                                // Modification
-                                    // Target Element
-                                        // Data Open
-                                        this.removeAttribute("data-open");
+                                    else
+                                        // Return
+                                        return that.hasClass(name)
+                                })()
+                            ) ||
+                            this.setAttribute(
+                                "class",
+                                (`${(this.getAttribute("class") || "")} ${name}`).trim()
+                            );
+                            !(name == "" && !(void name == false)) || (this.getAttribute("class") || this.removeAttribute("class"))
+                        });
 
-                                        // Data Close
-                                        this.setAttribute("data-close", "")
-                            });
+                        // Close
+                        Element.prototype.close || (Element.prototype.close = function() {
+                            // Modification > Target
+                                // Data Open
+                                this.removeAttribute("data-open");
 
-                            // Delete Attribute
-                            Element.prototype.delAttr || (Element.prototype.delAttr = function(name) {
-                                /* Logic
-                                        If
-                                            Name is not "_all".
+                                // Data Close
+                                this.setAttribute("data-close", "")
+                        });
+
+                        // Delete Attribute
+                        Element.prototype.delAttr || (Element.prototype.delAttr = function(name) {
+                            /* Logic
+                                    If
+                                        Name is not "_all".
+                            */
+                            if (name != "_all")
+                                /* Loop
+                                        Index all Names.
                                 */
-                                if (name != "_all")
-                                    /* Loop
-                                            Index all Names.
-                                    */
-                                    for (var i = 0; i < name.replace(/ /g, "").split(/,/).length; i++)
-                                        // Modification
-                                            // Target Element
-                                                // [Name]
-                                                this.removeAttribute(name.replace(/ /g, "").split(/,/)[i]);
+                                for (var i = 0; i < name.replace(/ /g, "").split(/,/).length; i++)
+                                    // Modification
+                                        // Target
+                                            // [Name]
+                                            this.removeAttribute(name.replace(/ /g, "").split(/,/)[i]);
 
-                                else
-                                    /* Loop
-                                            Index all the Target Element's attributes.
-                                    */
-                                    for (var i = 0; i < this.attributes.length; i++)
-                                        // Modification
-                                            // Target Element
-                                                // [Name]
-                                                this.removeAttribute(this.attributes[i--].name)
-                            });
+                            else
+                                /* Loop
+                                        Index all the Target Element's attributes.
+                                */
+                                for (var i = 0; i < this.attributes.length; i++)
+                                    // Modification
+                                        // Target Element
+                                            // [Name]
+                                            this.removeAttribute(this.attributes[i--].name)
+                        });
 
-                            // Delete Class
-                            Element.prototype.delClass || (Element.prototype.delClass = function(data) {
+                        // Delete Class
+                        Element.prototype.delClass || (Element.prototype.delClass = function(data) {
+                            if (this.getAttribute("class")) {
                                 // Target Element
                                     /* Logic
                                             If
@@ -4590,196 +5188,216 @@ if (
                                         /* Logic
                                                 If
                                                     the element has a single class only.
+
+                                            > Modification > Target > Class
                                         */
                                         if (
                                             this.getAttribute("class").indexOf(" ") <= -1 &&
                                             data == 0
                                         )
-                                            // Modification
-                                                // Class
-                                                this.removeAttribute("class");
+                                            this.removeAttribute("class");
 
                                         else
-                                            // Modification
-                                                // Class
-                                                this.setAttribute("class", this.getAttribute("class").replace((this.getAttribute("class").trim().split(/ /g)[data] || ""), "").trim())
+                                            this.setAttribute("class", this.getAttribute("class").trim().split(/ /g).removeElement(this.getAttribute("class").trim().split(/ /g)[data]).toString().replace(/,/g, " ").trim())
                                     }
 
                                     else if (typeof data == "string") {
-                                        /* Logic
-                                                If
-                                                    the element has a single class only.
+                                        /* Loop
+                                                Index all Data class values.
+
+                                            > Modification > Target > Class
                                         */
-                                        if (this.getAttribute("class").indexOf(" ") <= -1) {
-                                            /* Logic
-                                                    If
-                                                        the element's class is the specified "data".
-                                            */
-                                            if (this.getAttribute("class") == data)
-                                                // Modification
-                                                    // Class
-                                                    this.removeAttribute("class")
-                                        }
-
-                                        else {
-                                            var that = this;
-
-                                            /* Logic
-                                                    If the class node is the specified "data".
-                                            */
-                                            if (this.hasClass(data) || (function() { if (that.getAttribute("class")) if (that.getAttribute("class").indexOf(" ") >= 0) return (that.getAttribute("class").indexOf(data) >= 0); else return that.hasClass(data); else return that.hasClass(data) })())
-                                                this.setAttribute("class", this.getAttribute("class").replace(data, "").trim())
-                                        }
+                                        for (var i = 0; i < data.trim().split(/ /g).length; i++)
+                                            this.setAttribute("class", this.getAttribute("class").trim().split(/ /g).removeElement(data.trim().split(/ /g)[i]).toString().replace(/,/g, " ").trim())
                                     };
 
+                                    // Modification > Target > Class
                                     this.getAttribute("class") || this.removeAttribute("class")
-                            });
+                            }
+                        });
 
-                            // Delete (Inline) Style
-                            Element.prototype.delStyle || (Element.prototype.delStyle = function(style) {
+                        // Delete (Inline) Style
+                        Element.prototype.delStyle || (Element.prototype.delStyle = function(style) {
+                            /* Logic
+                                    If
+                                        Style is not "_all"
+                                            and
+                                        has a "style" attribute.
+                            */
+                            if (style != "_all" && this.getAttribute("style")) {
                                 /* Logic
                                         If
-                                            Style is not "_all"
-                                                and
-                                            has a "style" attribute.
+                                            the element has the "style" attribute.
                                 */
-                                if (style != "_all" && this.getAttribute("style")) {
-                                    /* Logic
-                                            If
-                                                the element has the "style" attribute.
-                                    */
-                                    if (this.hasAttribute("style")) {
-                                        // Initialization
-                                            // Target Element
-                                            var that = this;
+                                if (this.hasAttribute("style")) {
+                                    // Initialization
+                                        // Target Element
+                                        var that = this;
 
-                                        // Modification
-                                            // Style
-                                            that.style = that.getAttribute("style").replace(
+                                    // Modification
+                                        // Style
+                                        that.style = that.getAttribute("style").replace(
+                                            /* --- NOTE ---
+                                                    Modify the element's "style" attribute.
+                                            */
+                                            that.getAttribute("style").slice(
                                                 /* --- NOTE ---
-                                                        Modify the element's "style" attribute.
+                                                        The first instance of the style.
                                                 */
-                                                that.getAttribute("style").slice(
-                                                    /* --- NOTE ---
-                                                            The first instance of the style.
-                                                    */
-                                                        // [property]
-                                                        that.getAttribute("style").indexOf(style),
-
-                                                    /* --- NOTE ---
-                                                            The length of the style and its value.
-                                                    */
-                                                        // [property: value]
-                                                        (function() {
-                                                            /* Logic
-                                                                    If
-                                                                        [property: value],
-
-                                                                    else if
-                                                                        [property:value],
-
-                                                                    else if
-                                                                        [property :value],
-
-                                                                    else if
-                                                                        [property : value].
-                                                            */
-                                                            if (that.getAttribute("style").indexOf(style + ": " + (that.style[style] || getComputedStyle(that).getPropertyValue(style))) >= 0)
-                                                                // Return
-                                                                return (that.getAttribute("style").indexOf(style) + (style + ": " + (that.style[style] || getComputedStyle(that).getPropertyValue(style))).toString().length);
-
-                                                            else if (that.getAttribute("style").indexOf(style + ":" + (that.style[style] || getComputedStyle(that).getPropertyValue(style))) >= 0)
-                                                                // Return
-                                                                return (that.getAttribute("style").indexOf(style) + (style + ":" + (that.style[style] || getComputedStyle(that).getPropertyValue(style))).toString().length);
-
-                                                            else if (that.getAttribute("style").indexOf(style + " :" + (that.style[style] || getComputedStyle(that).getPropertyValue(style))) >= 0)
-                                                                // Return
-                                                                return (that.getAttribute("style").indexOf(style) + (style + " :" + (that.style[style] || getComputedStyle(that).getPropertyValue(style))).toString().length);
-
-                                                            else if (that.getAttribute("style").indexOf(style + " : " + (that.style[style] || getComputedStyle(that).getPropertyValue(style))) >= 0)
-                                                                // Return
-                                                                return (that.getAttribute("style").indexOf(style) + (style + " : " + (that.style[style] || getComputedStyle(that).getPropertyValue(style))).toString().length);
-
-                                                            else
-                                                                // Return
-                                                                return 0
-                                                        })() +
-
-                                                        // [value;]
-                                                        (function() {
-                                                            /* Logic
-                                                                    If
-                                                                        [value; ],
-
-                                                                    else if
-                                                                        [value ;],
-
-                                                                    else if
-                                                                        [value;],
-
-                                                                    else if
-                                                                        [value ; ].
-                                                            */
-                                                            if (that.getAttribute("style").indexOf((that.style[style] || getComputedStyle(that).getPropertyValue(style)) + "; ") >= 0)
-                                                                // Return
-                                                                return (that.getAttribute("style").indexOf(style) + "; ".length);
-
-                                                            else if (that.getAttribute("style").indexOf((that.style[style] || getComputedStyle(that).getPropertyValue(style)) + " ;") >= 0)
-                                                                // Return
-                                                                return (that.getAttribute("style").indexOf(style) + " ;".length);
-
-                                                            else if (that.getAttribute("style").indexOf((that.style[style] || getComputedStyle(that).getPropertyValue(style)) + ";") >= 0)
-                                                                // Return
-                                                                return (that.getAttribute("style").indexOf(style) + ";".length);
-
-                                                            else if (that.getAttribute("style").indexOf((that.style[style] || getComputedStyle(that).getPropertyValue(style)) + " ; ") >= 0)
-                                                                // Return
-                                                                return (that.getAttribute("style").indexOf(style) + " ; ".length);
-
-                                                            else
-                                                                // Return
-                                                                return 0
-                                                        })()
-                                                ),
+                                                    // [property]
+                                                    that.getAttribute("style").indexOf(style),
 
                                                 /* --- NOTE ---
-                                                        Replace with nothing.
+                                                        The length of the style and its value.
                                                 */
-                                                ""
-                                            )
-                                    };
+                                                    // [property: value]
+                                                    (function() {
+                                                        /* Logic
+                                                                If
+                                                                    [property: value],
 
-                                    /* Logic
-                                            If
-                                                the element's "style" is 'empty'.
-                                    */
-                                    if (!that.getAttribute("style"))
-                                        // Modification
-                                            // Style
-                                            that.removeAttribute("style")
-                                }
+                                                                else if
+                                                                    [property:value],
 
-                                else
-                                    this.removeAttribute("style")
-                            });
+                                                                else if
+                                                                    [property :value],
 
-                            // Get Attribute
-                            Element.prototype.getAttr || (Element.prototype.getAttr = function(data) {
+                                                                else if
+                                                                    [property : value].
+                                                        */
+                                                        if (that.getAttribute("style").indexOf(style + ": " + (that.style[style] || getComputedStyle(that).getPropertyValue(style))) >= 0)
+                                                            // Return
+                                                            return (that.getAttribute("style").indexOf(style) + (style + ": " + (that.style[style] || getComputedStyle(that).getPropertyValue(style))).toString().length);
+
+                                                        else if (that.getAttribute("style").indexOf(style + ":" + (that.style[style] || getComputedStyle(that).getPropertyValue(style))) >= 0)
+                                                            // Return
+                                                            return (that.getAttribute("style").indexOf(style) + (style + ":" + (that.style[style] || getComputedStyle(that).getPropertyValue(style))).toString().length);
+
+                                                        else if (that.getAttribute("style").indexOf(style + " :" + (that.style[style] || getComputedStyle(that).getPropertyValue(style))) >= 0)
+                                                            // Return
+                                                            return (that.getAttribute("style").indexOf(style) + (style + " :" + (that.style[style] || getComputedStyle(that).getPropertyValue(style))).toString().length);
+
+                                                        else if (that.getAttribute("style").indexOf(style + " : " + (that.style[style] || getComputedStyle(that).getPropertyValue(style))) >= 0)
+                                                            // Return
+                                                            return (that.getAttribute("style").indexOf(style) + (style + " : " + (that.style[style] || getComputedStyle(that).getPropertyValue(style))).toString().length);
+
+                                                        else
+                                                            // Return
+                                                            return 0
+                                                    })() +
+
+                                                    // [value;]
+                                                    (function() {
+                                                        /* Logic
+                                                                If
+                                                                    [value; ],
+
+                                                                else if
+                                                                    [value ;],
+
+                                                                else if
+                                                                    [value;],
+
+                                                                else if
+                                                                    [value ; ].
+                                                        */
+                                                        if (that.getAttribute("style").indexOf((that.style[style] || getComputedStyle(that).getPropertyValue(style)) + "; ") >= 0)
+                                                            // Return
+                                                            return (that.getAttribute("style").indexOf(style) + "; ".length);
+
+                                                        else if (that.getAttribute("style").indexOf((that.style[style] || getComputedStyle(that).getPropertyValue(style)) + " ;") >= 0)
+                                                            // Return
+                                                            return (that.getAttribute("style").indexOf(style) + " ;".length);
+
+                                                        else if (that.getAttribute("style").indexOf((that.style[style] || getComputedStyle(that).getPropertyValue(style)) + ";") >= 0)
+                                                            // Return
+                                                            return (that.getAttribute("style").indexOf(style) + ";".length);
+
+                                                        else if (that.getAttribute("style").indexOf((that.style[style] || getComputedStyle(that).getPropertyValue(style)) + " ; ") >= 0)
+                                                            // Return
+                                                            return (that.getAttribute("style").indexOf(style) + " ; ".length);
+
+                                                        else
+                                                            // Return
+                                                            return 0
+                                                    })()
+                                            ),
+
+                                            /* --- NOTE ---
+                                                    Replace with nothing.
+                                            */
+                                            ""
+                                        )
+                                };
+
                                 /* Logic
                                         If
-                                            Data data type is a "number",
-
-                                        else if
-                                            Data data type is a "object",
-
-                                        else if
-                                            Data data type is a "string".
+                                            the element's "style" is 'empty'.
                                 */
-                                if (typeof data == "number")
+                                if (!that.getAttribute("style"))
+                                    // Modification
+                                        // Style
+                                        that.removeAttribute("style")
+                            }
+
+                            else
+                                this.removeAttribute("style")
+                        });
+
+                        // Get Attribute
+                        Element.prototype.getAttr || (Element.prototype.getAttr = function(data) {
+                            /* Logic
+                                    If
+                                        Data data type is a "number",
+
+                                    else if
+                                        Data data type is a "object",
+
+                                    else if
+                                        Data data type is a "string".
+                            */
+                            if (typeof data == "number")
+                                // Return
+                                return this.getAttribute((this.attributes[data] || document.createElement("div")).name);
+
+                            else if (typeof data == "object") {
+                                // Initialization
+                                    // Attributes
+                                    var attributes = [];
+
+                                /* Loop
+                                        Index all members of Data.
+                                */
+                                for (var i = 0; i < data.length; i++)
+                                    // Update
+                                        // Attributes
+                                        attributes[i] = this.getAttribute((this.attributes[data[i]] || document.createElement("div")).name);
+
+                                // Return
+                                return attributes
+                            }
+
+                            else if (typeof data == "string")
+                                /* Logic
+                                        If
+                                            Data is "_all" and
+                                            the element does not have an "_all" attribute,
+
+                                        else if
+                                            Data does not have a comma.
+                                */
+                                if (
+                                    data == "_all" &&
+                                    !this.hasAttribute("_all")
+                                )
                                     // Return
-                                    return this.getAttribute((this.attributes[data] || document.createElement("div")).name);
+                                    return this.attributes;
 
-                                else if (typeof data == "object") {
+                                else if (data.indexOf(",") <= -1)
+                                    // Return
+                                    return this.getAttribute(data);
+
+                                else {
                                     // Initialization
                                         // Attributes
                                         var attributes = [];
@@ -4787,2372 +5405,2297 @@ if (
                                     /* Loop
                                             Index all members of Data.
                                     */
-                                    for (var i = 0; i < data.length; i++)
+                                    for (var i = 0; i < (data.match(/,/g) || []).length + 1; i++)
                                         // Update
                                             // Attributes
-                                            attributes[i] = this.getAttribute((this.attributes[data[i]] || document.createElement("div")).name);
+                                            attributes[i] = this.getAttribute((data.replace(/ /g, "").split(/,/)[i] || ""));
 
                                     // Return
                                     return attributes
                                 }
+                        });
 
-                                else if (typeof data == "string")
+                        // Get CSS
+                        Element.prototype.getCSS || (Element.prototype.getCSS = function(property) {
+                            // Return
+                            return (this.style[property.replace(/[A-Z]/g, function(data) { return ("-" + data.toLowerCase()) })] || getComputedStyle(this).getPropertyValue(property.replace(/[A-Z]/g, function(data) { return ("-" + data.toLowerCase()) })))
+                        });
+
+                        // Get Elements By Attribute Name
+                        Element.prototype.getElementsByAttributeName || (Element.prototype.getElementsByAttributeName = document.getElementsByAttributeName);
+
+                        // Get Elements By Attribute Name and Value
+                        Element.prototype.getElementsByAttributeNameAndValue || (Element.prototype.getElementsByAttributeNameAndValue = document.getElementsByAttributeNameAndValue);
+
+                        // Get Elements By Attribute Name and Value except Value
+                        Element.prototype.getElementsByAttributeNameAndValueExceptValue || (Element.prototype.getElementsByAttributeNameAndValueExceptValue = document.getElementsByAttributeNameAndValueExceptValue);
+
+                        // Get Elements By Attribute Name and Value without Value
+                        Element.prototype.getElementsByAttributeNameAndValueWithoutValue || (Element.prototype.getElementsByAttributeNameAndValueWithoutValue = document.getElementsByAttributeNameAndValueWithoutValue);
+
+                        // Get Elements By Attribute Name except Value
+                        Element.prototype.getElementsByAttributeNameExceptValue || (Element.prototype.getElementsByAttributeNameExceptValue = document.getElementsByAttributeNameExceptValue);
+
+                        // Get Elements By Attribute Name with Value
+                        Element.prototype.getElementsByAttributeNameWithValue || (Element.prototype.getElementsByAttributeNameWithValue = document.getElementsByAttributeNameWithValue);
+
+                        // Get Elements By Attribute Name with Value except Value
+                        Element.prototype.getElementsByAttributeNameWithValueExceptValue || (Element.prototype.getElementsByAttributeNameWithValueExceptValue = document.getElementsByAttributeNameWithValueExceptValue);
+
+                        // Get Elements By Attribute Name with Value without Value
+                        Element.prototype.getElementsByAttributeNameWithValueWithoutValue || (Element.prototype.getElementsByAttributeNameWithValueWithoutValue = document.getElementsByAttributeNameWithValueWithoutValue);
+
+                        // Get Elements By Attribute Name without Value
+                        Element.prototype.getElementsByAttributeNameWithoutValue || (Element.prototype.getElementsByAttributeNameWithoutValue = document.getElementsByAttributeNameWithoutValue);
+
+                        // Get Elements Related By Data ID
+                        Element.prototype.getElementsRelatedByDataID || (Element.prototype.getElementsRelatedByDataID = function() {
+                            // Return
+                            return document.querySelectorAll('[data-id="' + this.getAttribute('data-id') + '"]')
+                        });
+
+                        // Has Attribute
+                        Element.prototype.hasAttr || (Element.prototype.hasAttr = function(name) {
+                            // Return
+                            return this.hasAttribute(name)
+                        });
+
+                        Element.prototype.hasChild || (Element.prototype.hasChild = function(child) {
+                            // Return
+                            return (this != child && this.contains((child || document.createElement("div"))))
+                        });
+
+                        // Has Child (Element) By Query Selector
+                        Element.prototype.hasChildByQuerySelector || (Element.prototype.hasChildByQuerySelector = function(selector) {
+                            // Return
+                            return !!this.querySelector(selector)
+                        });
+
+                        // Node Index
+                            /* Logic
+                                    If
+                                        'Element.prototype.nodeIndex' is undefined.
+                            */
+                            if (!Element.prototype.nodeIndex)
+                                /* Loop
+                                        Index all items of the LapysJS script's "data-enable" attribute.
+                                */
+                                for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
                                     /* Logic
                                             If
-                                                Data is "_all" and
-                                                the element does not have an "_all" attribute,
-
-                                            else if
-                                                Data does not have a comma.
+                                                the LapysJS script has "_all" enabled or
+                                                the LapysJS script has "nodeIndex" enabled.
                                     */
                                     if (
-                                        data == "_all" &&
-                                        !this.hasAttribute("_all")
-                                    )
-                                        // Return
-                                        return this.attributes;
-
-                                    else if (data.indexOf(",") <= -1)
-                                        // Return
-                                        return this.getAttribute(data);
-
-                                    else {
-                                        // Initialization
-                                            // Attributes
-                                            var attributes = [];
-
+                                        (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "_all" ||
+                                        (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "nodeIndex"
+                                    ) {
                                         /* Loop
-                                                Index all members of Data.
+                                                Index all DOM Elements.
                                         */
-                                        for (var i = 0; i < (data.match(/,/g) || []).length + 1; i++)
-                                            // Update
-                                                // Attributes
-                                                attributes[i] = this.getAttribute((data.replace(/ /g, "").split(/,/)[i] || ""));
+                                        for (var i = 0; i < document.querySelectorAll("*").length; i++)
+                                            // Modification > DOM Element > Node Index
+                                            document.querySelectorAll("*")[i].nodeIndex = i;
 
-                                        // Return
-                                        return attributes
-                                    }
-                            });
+                                        // Break
+                                        break
+                                    };
 
-                            // Get CSS
-                            Element.prototype.getCSS || (Element.prototype.getCSS = function(property) {
-                                // Return
-                                return (this.style[property.replace(/[A-Z]/g, function(data) { return ("-" + data.toLowerCase()) })] || getComputedStyle(this).getPropertyValue(property.replace(/[A-Z]/g, function(data) { return ("-" + data.toLowerCase()) })))
-                            });
+                        // Open
+                        Element.prototype.open || (Element.prototype.open = function() {
+                            // Modification > Target
+                                // Data Close
+                                this.removeAttribute("data-close");
 
-                            // Get Elements By Attribute Name
-                            Element.prototype.getElementsByAttributeName || (Element.prototype.getElementsByAttributeName = document.getElementsByAttributeName);
+                                // Data Open
+                                this.setAttribute("data-open", "")
+                        });
 
-                            // Get Elements By Attribute Name and Value
-                            Element.prototype.getElementsByAttributeNameAndValue || (Element.prototype.getElementsByAttributeNameAndValue = document.getElementsByAttributeNameAndValue);
+                        // Relate Element By Data ID
+                        Element.prototype.relateElementByDataID || (Element.prototype.relateElementByDataID = function(element) {
+                            element.setAttribute("data-id", this.getAttribute("data-id"))
+                        });
 
-                            // Get Elements By Attribute Name and Value except Value
-                            Element.prototype.getElementsByAttributeNameAndValueExceptValue || (Element.prototype.getElementsByAttributeNameAndValueExceptValue = document.getElementsByAttributeNameAndValueExceptValue);
+                        // Scroll To
+                        Element.prototype.scrollToElement || (Element.prototype.scrollToElement = Element.prototype.scrollIntoView);
 
-                            // Get Elements By Attribute Name and Value without Value
-                            Element.prototype.getElementsByAttributeNameAndValueWithoutValue || (Element.prototype.getElementsByAttributeNameAndValueWithoutValue = document.getElementsByAttributeNameAndValueWithoutValue);
-
-                            // Get Elements By Attribute Name except Value
-                            Element.prototype.getElementsByAttributeNameExceptValue || (Element.prototype.getElementsByAttributeNameExceptValue = document.getElementsByAttributeNameExceptValue);
-
-                            // Get Elements By Attribute Name with Value
-                            Element.prototype.getElementsByAttributeNameWithValue || (Element.prototype.getElementsByAttributeNameWithValue = document.getElementsByAttributeNameWithValue);
-
-                            // Get Elements By Attribute Name with Value except Value
-                            Element.prototype.getElementsByAttributeNameWithValueExceptValue || (Element.prototype.getElementsByAttributeNameWithValueExceptValue = document.getElementsByAttributeNameWithValueExceptValue);
-
-                            // Get Elements By Attribute Name with Value without Value
-                            Element.prototype.getElementsByAttributeNameWithValueWithoutValue || (Element.prototype.getElementsByAttributeNameWithValueWithoutValue = document.getElementsByAttributeNameWithValueWithoutValue);
-
-                            // Get Elements By Attribute Name without Value
-                            Element.prototype.getElementsByAttributeNameWithoutValue || (Element.prototype.getElementsByAttributeNameWithoutValue = document.getElementsByAttributeNameWithoutValue);
-
-                            // Get Elements Related By Data ID
-                            Element.prototype.getElementsRelatedByDataID || (Element.prototype.getElementsRelatedByDataID = function() {
-                                // Return
-                                return document.querySelectorAll('[data-id="' + this.getAttribute('data-id') + '"]')
-                            });
-
-                            // Has Attribute
-                            Element.prototype.hasAttr || (Element.prototype.hasAttr = function(name) {
-                                // Return
-                                return this.hasAttribute(name)
-                            });
-
-                            Element.prototype.hasChild || (Element.prototype.hasChild = function(child) {
-                                // Return
-                                return (this != child && this.contains((child || document.createElement("div"))))
-                            });
-
-                            // Has Child (Element) By Query Selector
-                            Element.prototype.hasChildByQuerySelector || (Element.prototype.hasChildByQuerySelector = function(selector) {
-                                // Return
-                                return !!this.querySelector(selector)
-                            });
-
-                            // Node Index
-                                /* Logic
-                                        If
-                                            'Element.prototype.nodeIndex' is undefined.
-                                */
-                                if (!Element.prototype.nodeIndex)
-                                    /* Loop
-                                            Index all items of the LapysJS script's "data-enable" attribute.
-                                    */
-                                    for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
-                                        /* Logic
-                                                If
-                                                    the LapysJS script has "_all" enabled or
-                                                    the LapysJS script has "nodeIndex" enabled.
-                                        */
-                                        if (
-                                            (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "_all" ||
-                                            (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "nodeIndex"
-                                        ) {
-                                            /* Loop
-                                                    Index all DOM Elements.
-                                            */
-                                            for (var i = 0; i < document.querySelectorAll("*").length; i++)
-                                                // Modification > DOM Element > Node Index
-                                                document.querySelectorAll("*")[i].nodeIndex = i;
-
-                                            // Break
-                                            break
-                                        };
-
-                            // Open
-                            Element.prototype.open || (Element.prototype.open = function() {
+                        // Set Attribute
+                        Element.prototype.setAttr || (Element.prototype.setAttr = function(name, value) {
+                            /* Loop
+                                    Index all Names.
+                            */
+                            for (var i = 0; i < name.split(/,/g).length; i++)
                                 // Modification
                                     // Target Element
-                                        // Data Close
-                                        this.removeAttribute("data-close");
+                                        // [Name]
+                                        this.setAttribute(name.split(/,/g)[i], ((value.split(/,/g) || [])[i] || ""));
 
-                                        // Data Open
-                                        this.setAttribute("data-open", "")
-                            });
-
-                            // Relate Element By Data ID
-                            Element.prototype.relateElementByDataID || (Element.prototype.relateElementByDataID = function(element) {
-                                element.setAttribute("data-id", this.getAttribute("data-id"))
-                            });
-
-                            // Scroll To
-                            Element.prototype.scrollToElement || (Element.prototype.scrollToElement = function() {
+                            // Modification (if Name is "class" or "style")
                                 // Target Element
-                                    // Scroll Into View
-                                    this.scrollIntoView()
-                            });
+                                    // [Name]
+                                    !(name == "class" || name == "style") || this.setAttribute(name, this.getAttribute(name).trim())
+                        });
 
-                            // Set Attribute
-                            Element.prototype.setAttr || (Element.prototype.setAttr = function(name, value) {
-                                /* Loop
-                                        Index all Names.
-                                */
-                                for (var i = 0; i < name.split(/,/g).length; i++)
-                                    // Modification
-                                        // Target Element
-                                            // [Name]
-                                            this.setAttribute(name.split(/,/g)[i], (((value || "").split(/,/g) || [])[i] || ""));
-
-                                // Modification (if Name is "class" or "style")
+                        /* Attribute
+                                --- WARN ---
+                                    This method can only be defined after the "getAttr()" and "setAttr()" method.
+                        */
+                        Element.prototype.attr || (Element.prototype.attr = function(name, value) {
+                            /* Logic
+                                    If
+                                        Value is specified.
+                            */
+                            if (value)
+                                // Modification
                                     // Target Element
                                         // [Name]
-                                        !(name == "class" || name == "style") || this.setAttribute(name, this.getAttribute(name).trim())
-                            });
+                                        this.setAttr(name, value);
 
-                            /* Attribute
-                                    --- WARN ---
-                                        This method can only be defined after the "getAttr()" and "setAttr()" method.
+                            else
+                                // Return
+                                return this.getAttr(name)
+                        });
+
+                        // Set CSS
+                        Element.prototype.setCSS || (Element.prototype.setCSS = function(property, value) {
+                            // Style > Target > Property
+                            this.style[property.replace(/[A-Z]/g, function(data) { return ("-" + data.toLowerCase()) })] = String(value)
+                        });
+
+                        // Add Event
+                        EventTarget.prototype.addEvent || (EventTarget.prototype.addEvent = function(type, listener) {
+                            /* Logic
+                                    If
+                                        "EventTarget.prototype.customEvents" is undefined.
                             */
-                            Element.prototype.attr || (Element.prototype.attr = function(name, value) {
+                            if (!(this || window).customEvents) {
+                                // Modification > Target Element > New Event
+                                    (this || window).customEvents = ((this || window).customEvents || {});
+                                        // Modification > [Type]
+                                        (this || window).customEvents[type] = document.createEvent("Event");
+                                            // Initialize Event
+                                            (this || window).customEvents[type].initEvent(type, true, true);
+
+                                // Event > Target Element > [New Event]
+                                (this || window).addEventListener(type, listener, false)
+                            }
+                        });
+
+                        // Delete Event
+                        EventTarget.prototype.delEvent || (EventTarget.prototype.delEvent = function(type, listener) {
+                            /* Loop
+                                    Index all Types
+                            */
+                            for (var i = 0; i < type.replace(/ /g, "").split(/,/g).length; i++)
+                                // Event
+                                    // [if]
+                                    (document.removeEventListener) ?
+                                        // [true]
+                                            // [Type]
+                                            (this || window).removeEventListener(type.replace(/ /g, "").split(/,/g)[i], listener) :
+
+                                        // [false]
+                                            // On [Type]
+                                            (this || window).detachEvent(("on" + type.replace(/ /g, "").split(/,/g)[i]), listener)
+                        });
+
+                        // Event Listeners
+                        EventTarget.prototype.eventListeners || (EventTarget.prototype.eventListeners = function() {
+                            /* Logic
+                                    If
+                                        "getEventListeners()" is defined.
+                            */
+                            if (getEventListeners)
+                                // Return
+                                return getEventListeners(this);
+
+                            else
+                                LapysJS.error("Sorry, your browser does not support the 'getEventListeners()' function.")
+                        });
+
+                        // [Query Selector (All)]
+                        EventTarget.prototype.$$ || (EventTarget.prototype.$$ = function(selector, index) {
+                            // Update > Target
+                            var that = (this || document);
+                            (this == window) ? that = document : false;
+
+                            // Update > Selector
+                            selector = selector.replace(/\$\$([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|){1,}\;/g, function(data) {
+                                // Return
+                                return ('[data-id="' + data.slice(2, -1) + '"]')
+                            });
+
+                            /* Logic
+                                    If
+                                        "selector" is a "string".
+                            */
+                            if (typeof selector == "string") {
                                 /* Logic
                                         If
-                                            Value is specified.
+                                            [if:else if:else statement].
                                 */
-                                if (value)
-                                    // Modification
-                                        // Target Element
-                                            // [Name]
-                                            this.setAttr(name, value);
-
-                                else
-                                    // Return
-                                    return this.getAttr(name)
-                            });
-
-                            // Set CSS
-                            Element.prototype.setCSS || (Element.prototype.setCSS = function(property, value) {
-                                // Style > Target > Property
-                                this.style[property.replace(/[A-Z]/g, function(data) { return ("-" + data.toLowerCase()) })] = String(value)
-                            });
-
-                            // Add Event
-                            EventTarget.prototype.addEvent || (EventTarget.prototype.addEvent = function(type, listener) {
-                                /* Logic
-                                        If
-                                            "EventTarget.prototype.customEvents" is undefined.
-                                */
-                                if (!(this || window).customEvents) {
-                                    // Modification > Target Element > New Event
-                                        (this || window).customEvents = ((this || window).customEvents || {});
-                                            // Modification > [Type]
-                                            (this || window).customEvents[type] = document.createEvent("Event");
-                                                // Initialize Event
-                                                (this || window).customEvents[type].initEvent(type, true, true);
-
-                                    // Event > Target Element > [New Event]
-                                    (this || window).addEventListener(type, listener, false)
-                                }
-                            });
-
-                            // Delete Event
-                            EventTarget.prototype.delEvent || (EventTarget.prototype.delEvent = function(type, listener) {
-                                /* Loop
-                                        Index all Types
-                                */
-                                for (var i = 0; i < type.replace(/ /g, "").split(/,/g).length; i++)
-                                    // Event
-                                        // [if]
-                                        (document.removeEventListener) ?
-                                            // [true]
-                                                // [Type]
-                                                (this || window).removeEventListener(type.replace(/ /g, "").split(/,/g)[i], listener) :
-
-                                            // [false]
-                                                // On [Type]
-                                                (this || window).detachEvent(("on" + type.replace(/ /g, "").split(/,/g)[i]), listener)
-                            });
-
-                            // Event Listeners
-                            EventTarget.prototype.eventListeners || (EventTarget.prototype.eventListeners = function() {
-                                /* Logic
-                                        If
-                                            "getEventListeners()" is defined.
-                                */
-                                if (getEventListeners)
-                                    // Return
-                                    return getEventListeners(this);
-
-                                else
-                                    LapysJS.error("Sorry, your browser does not support the 'getEventListeners()' function.")
-                            });
-
-                            // [Query Selector (All)]
-                            EventTarget.prototype.$$ || (EventTarget.prototype.$$ = function(selector, index) {
-                                // Update > Target
-                                var that = (this || document);
-                                (this == window) ? that = document : false;
-
-                                // Update > Selector
-                                selector = selector.replace(/\$\$([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|){1,}\;/g, function(data) {
-                                    // Return
-                                    return ('[data-id="' + data.slice(2, -1) + '"]')
-                                });
-
-                                /* Logic
-                                        If
-                                            "selector" is a "string".
-                                */
-                                if (typeof selector == "string") {
+                                if (
+                                    selector != "[]" &&
+                                    selector != "[*]" &&
+                                    selector != "[=]" &&
+                                    selector != "[*=]" &&
+                                    selector != "[=]:not([])" &&
+                                    selector != "[=]:not([=])" &&
+                                    selector != "[=]:not([*=])" &&
+                                    selector != "[*=]:not([])" &&
+                                    selector != "[*=]:not([=])" &&
+                                    selector != "[*=]:not([*=])" &&
+                                    selector != ":not([])" &&
+                                    selector != ":not([=])" &&
+                                    selector != ":not([*=])"
+                                ) {
                                     /* Logic
                                             If
-                                                [if:else if:else statement].
+                                                "index" is not 0,
+
+                                            else if
+                                                the returned node list does not have a second member
                                     */
-                                    if (
-                                        selector != "[]" &&
-                                        selector != "[=]" &&
-                                        selector != "[*=]" &&
-                                        selector != "[=]:not([])" &&
-                                        selector != "[=]:not([=])" &&
-                                        selector != "[=]:not([*=])" &&
-                                        selector != "[*=]:not([])" &&
-                                        selector != "[*=]:not([=])" &&
-                                        selector != "[*=]:not([*=])" &&
-                                        selector != ":not([])" &&
-                                        selector != ":not([=])" &&
-                                        selector != ":not([*=])"
-                                    ) {
+                                    if (index != 0) {
+                                        /* Logic
+                                                Switch "index" case to
+                                                    "array", "length" and "_length".
+                                        */
+                                        switch (index) {
+                                            case "array":
+                                                // Return
+                                                return that.querySelectorAll(selector);
+                                                break;
+
+                                            case "length":
+                                                // Return
+                                                return that.querySelectorAll(selector).length;
+                                                break;
+
+                                            case "_length":
+                                                // Return
+                                                return (that.querySelectorAll(selector).length - 1)
+                                        };
+
                                         /* Logic
                                                 If
-                                                    "index" is not 0,
+                                                    "index" is a number,
 
                                                 else if
-                                                    the returned node list does not have a second member
+                                                    multiple instances of the specified element is not defined.
                                         */
-                                        if (index != 0) {
+                                        if (typeof index == "number")
+                                            // Return
+                                            return that.querySelectorAll(selector)[index];
+
+                                        else if (!that.querySelectorAll(selector)[1])
+                                            // Return
+                                            return that.querySelector(selector);
+
+                                        else
+                                            // Return
+                                            return that.querySelectorAll(selector);
+                                    }
+
+                                    else
+                                        // Return
+                                        return that.querySelector(selector)
+                                };
+
+                                /* Logic
+                                        If
+                                            [switch statement].
+                                */
+                                switch (selector) {
+                                    // []
+                                    case "[]":
+                                        // Return
+                                        return document.getElementsByAttributeName("*");
+                                        break;
+
+                                    // [*]
+                                    case "[*]":
+                                        // Return
+                                        return document.getElementsByAttributeName("*");
+                                        break;
+
+                                    // [=]
+                                    case "[=]":
+                                        // Return
+                                        return document.getElementsByAttributeNameAndValue("*");
+                                        break;
+
+                                    // [*=]
+                                    case "[*=]":
+                                        // Return
+                                        return document.getElementsByAttributeNameWithValue("*");
+                                        break;
+
+                                    // [=]:not([])
+                                    case "[=]:not([])":
+                                        // Return
+                                        return [];
+                                        break;
+
+                                    // [*=]:not([])
+                                    case "[*=]:not([])":
+                                        // Return
+                                        return [];
+                                        break;
+
+                                    // [*=]:not([*=])
+                                    case "[*=]:not([*=])":
+                                        // Return
+                                        return [];
+                                        break;
+
+                                    // [=]:not([=])
+                                    case "[=]:not([=])":
+                                        // Return
+                                        return document.getElementsByAttributeNameAndValueExceptValue("*");
+                                        break;
+
+                                    // [*=]:not([=])
+                                    case "[*=]:not([=])":
+                                        // Return
+                                        return document.getElementsByAttributeNameWithValueExceptValue("*");
+                                        break;
+
+                                    // [=]:not([*=])
+                                    case "[=]:not([*=])":
+                                        // Return
+                                        return document.getElementsByAttributeNameAndValueWithoutValue("*");
+                                        break;
+
+                                    // [*=]:not([*=])
+                                    case "[*=]:not([*=])":
+                                        // Return
+                                        return document.getElementsByAttributeNameWithValueWithoutValue("*");
+                                        break;
+
+                                    // :not([])
+                                    case ":not([])":
+                                        // Return
+                                        return [];
+                                        break;
+
+                                    // :not([=])
+                                    case ":not([=])":
+                                        // Return
+                                        return document.getElementsByAttributeNameExceptValue("*");
+                                        break;
+
+                                    // :not([*=])
+                                    case ":not([*=])":
+                                        // Return
+                                        return document.getElementsByAttributeNameWithoutValue("*")
+                                }
+                            }
+                        });
+
+                        // Run Event
+                        EventTarget.prototype.runEvent || (EventTarget.prototype.runEvent = function(type) {
+                            // Execution
+                                // Target Element
+                                    // [New Event]
+                                    (this || window).dispatchEvent((this || window).customEvents[type])
+                        });
+
+                        // Set Event
+                        EventTarget.prototype.setEvent || (EventTarget.prototype.setEvent = function(type, listener, useCapture, wantsUntrusted) {
+                            /* Loop
+                                    Index all Types.
+
+                                > Update > Type
+                            */
+                            for (var i = 0; i < type.replace(/ /g, "").split(/,/g).length; i++) {
+                                !(type.replace(/ /g, "").split(/,/g)[i] == "_hover") || (type = type.replace("_hover", "mouseleave, mouseover"));
+                                !(type.replace(/ /g, "").split(/,/g)[i] == "_update") || (type = type.replace("_update", "change, input"))
+                            };
+
+                            // Modification > Target > Events
+                            (this || window).events = ((this || window).events || new (function LapysJSEventMap() {}));
+
+                            /* Loop
+                                    Index all Types.
+                            */
+                            for (var i = 0; i < type.replace(/ /g, "").split(/,/g).length; i++) {
+                                // Modification > Target > Events
+                                (this || window).events[
+                                    (function() {
+                                        /* Logic
+                                                If
+                                                    the Type is not "online".
+                                        */
+                                        if (type.replace(/ /g, "").split(/,/g)[i] != "online")
+                                            // Return
+                                            return type.replace(/ /g, "").split(/,/g)[i].replace("on", "");
+
+                                        else
+                                            // Return
+                                            return type.replace(/ /g, "").split(/,/g)[i]
+                                    })()
+                                ] = ((this || window).events[(function() { if (type.replace(/ /g, "").split(/,/g)[i] != "online") return type.replace(/ /g, "").split(/,/g)[i].replace("on", ""); else return type.replace(/ /g, "").split(/,/g)[i] })()] || []);
+
+                                // Update > Target > Events
+                                (this || window).events[(function() { if (type.replace(/ /g, "").split(/,/g)[i] != "online") return type.replace(/ /g, "").split(/,/g)[i].replace("on", ""); else return type.replace(/ /g, "").split(/,/g)[i] })()].push({
+                                    // Listener
+                                    listener: (function() { return listener })(),
+
+                                    // Type
+                                    type: (function() { return (function() { if (type.replace(/ /g, "").split(/,/g)[i] != "online") return type.replace(/ /g, "").split(/,/g)[i].replace("on", ""); else return type.replace(/ /g, "").split(/,/g)[i] })() })(),
+
+                                    // Use Capture
+                                    useCapture: (function() { return (useCapture || false) })(),
+
+                                    // Wants Untrusted
+                                    wantsUntrusted: (function() { return (wantsUntrusted || false) })()
+                                });
+
+                                // Event > [if]
+                                (document.addEventListener) ?
+                                    // [true] > [Type]
+                                    (this || window).addEventListener(type.replace(/ /g, "").split(/,/g)[i], listener, useCapture, wantsUntrusted) :
+
+                                    // [false] > On [Type]
+                                    (this || window).attachEvent(("on" + type.replace(/ /g, "").split(/,/g)[i]), listener, useCapture, wantsUntrusted)
+                            }
+                        });
+
+                        // Load
+                        HTMLHeadElement.prototype.load || (HTMLHeadElement.prototype.load = function(dataID, array) {
+                            /* Logic
+                                    If
+                                        Array has ".css" in it,
+
+                                    else if
+                                        Array has ".js" in it.
+                            */
+                            if (array.indexOf(".css") >= 0)
+                                css.link(dataID, array);
+
+                            else if (array.indexOf(".js") >= 0)
+                                js.src(dataID, array);
+
+                            else
+                                LapysJS.warn("The 'load()' method can only call to '.css' and '.js' files.")
+                        });
+
+                        // Add Class
+                        HTMLCollection.prototype.addClass || (HTMLCollection.prototype.addClass = function(name) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Modification > Target Element > Class
+                                this[i].addClass(name)
+                        });
+
+                        // Add Event
+                        HTMLCollection.prototype.addEvent || (HTMLCollection.prototype.addEvent = function(type, listener) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Event > Target Element > [Type]
+                                this[i].addEvent(type, listener)
+                        });
+
+                        // Add Event Listener
+                        HTMLCollection.prototype.addEventListener || (HTMLCollection.prototype.addEventListener = function(type, listener, useCapture, wantsUntrusted) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Event > Target Element > [Type]
+                                this[i].addEventListener(type, listener, useCapture, wantsUntrusted)
+                        });
+
+                        // Close
+                        HTMLCollection.prototype.close || (HTMLCollection.prototype.close = function() {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Target Element > Close
+                                this[i].close()
+                        });
+
+                        // CSS Selector
+                        HTMLCollection.prototype.CSSSelector || (HTMLCollection.prototype.CSSSelector = function(value) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Modification > Target Element > CSS Selector
+                                this[i].CSSSelector = value
+                        });
+
+                        // Delete
+                        HTMLCollection.prototype.delete || (HTMLCollection.prototype.delete = function() {
+                            /* Logic
+                                    If
+                                        the number of DOM Elements is greater than
+                                        the number of members of the HTML Collection.
+                            */
+                            if (document.querySelectorAll("*").length > this.length) {
+                                // Initialization > Node List
+                                var nodeList = this;
+
+                                /* Loop
+                                        Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Deletion > Target Element
+                                    (nodeList[i] || document.createElement("div")).remove()
+                            }
+
+                            else
+                                // LapysJS > Error
+                                LapysJS.error("LapysJS cannot delete all DOM Elements.")
+                        });
+
+                        // Delete Attribute
+                        HTMLCollection.prototype.delAttr || (HTMLCollection.prototype.delAttr = function(name) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Modification > Target Element > [Name]
+                                this[i].delAttr(name)
+                        });
+
+                        // Delete Class
+                        HTMLCollection.prototype.delClass || (HTMLCollection.prototype.delClass = function(data) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Modification > Target Element > Class
+                                this[i].delClass(data)
+                        });
+
+                        // Delete Event
+                        HTMLCollection.prototype.delEvent || (HTMLCollection.prototype.delEvent = function(type, listener) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Event > Target Element > [Type]
+                                this[i].delEvent(type, listener)
+                        });
+
+                        // Delete Style
+                        HTMLCollection.prototype.delStyle || (HTMLCollection.prototype.delStyle = function(style) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Modification > Target Element > Style
+                                this[i].delStyle(style)
+                        });
+
+                        /* Empty
+                                --- CONSIDER ---
+                                    This method apparently removes a pre-built "empty()" String method.
+                        */
+                        HTMLCollection.prototype.empty = function() {
+                            // Return
+                            return !(this[0] || false)
+                        };
+
+                        // Get Attr[ibute]
+                        HTMLCollection.prototype.getAttr || (HTMLCollection.prototype.getAttr = function(name) {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].getAttr(name);
+
+                            // Return
+                            return array
+                        });
+
+                        // Get Attribute
+                        HTMLCollection.prototype.getAttribute || (HTMLCollection.prototype.getAttribute = function(name) {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].getAttribute(name);
+
+                            // Return
+                            return array
+                        });
+
+                        // Get CSS
+                        HTMLCollection.prototype.getCSS || (HTMLCollection.prototype.getCSS = function(property) {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                    array[i] = this[i].getCSS(property);
+
+                            // Return
+                            return array
+                        });
+
+                        // Get Elements By Attribute Name
+                        HTMLCollection.prototype.getElementsByAttributeName || (HTMLCollection.prototype.getElementsByAttributeName = function(name) {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].getElementsByAttributeName(name);
+
+                            // Return
+                            return array
+                        });
+
+                        // Get Elements By Attribute Name and Value
+                        HTMLCollection.prototype.getElementsByAttributeNameAndValue || (HTMLCollection.prototype.getElementsByAttributeNameAndValue = function(name, value = "") {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].getElementsByAttributeNameAndValue(name, value);
+
+                            // Return
+                            return array
+                        });
+
+                        // Get Elements By Attribute Name and Value except Value
+                        HTMLCollection.prototype.getElementsByAttributeNameAndValueExceptValue || (HTMLCollection.prototype.getElementsByAttributeNameAndValueExceptValue = function(name, value1 = "", value2 = "") {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].getElementsByAttributeNameAndValueExceptValue(name, value1, value2);
+
+                            // Return
+                            return array
+                        });
+
+                        // Get Elements By Attribute Name and Value without Value
+                        HTMLCollection.prototype.getElementsByAttributeNameAndValueWithoutValue || (HTMLCollection.prototype.getElementsByAttributeNameAndValueWithoutValue = function(name, value1 = "", value2 = "") {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].getElementsByAttributeNameAndValueWithoutValue(name, value1, value2);
+
+                            // Return
+                            return array
+                        });
+
+                        // Get Elements By Attribute Name except Value
+                        HTMLCollection.prototype.getElementsByAttributeNameExceptValue || (HTMLCollection.prototype.getElementsByAttributeNameExceptValue = function(name, value = "") {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].getElementsByAttributeNameExceptValue(name, value);
+
+                            // Return
+                            return array
+                        });
+
+                        // Get Elements By Attribute Name with Value
+                        HTMLCollection.prototype.getElementsByAttributeNameWithValue || (HTMLCollection.prototype.getElementsByAttributeNameWithValue = function(name, value = "") {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].getElementsByAttributeNameWithValue(name, value);
+
+                            // Return
+                            return array
+                        });
+
+                        // Get Elements By Attribute Name with Value except Value
+                        HTMLCollection.prototype.getElementsByAttributeNameWithValueExceptValue || (HTMLCollection.prototype.getElementsByAttributeNameWithValueExceptValue = function(name, value1 = "", value2 = "") {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].getElementsByAttributeNameWithValueExceptValue(name, value1, value2);
+
+                            // Return
+                            return array
+                        });
+
+                        // Get Elements By Attribute Name with Value without Value
+                        HTMLCollection.prototype.getElementsByAttributeNameWithValueWithoutValue || (HTMLCollection.prototype.getElementsByAttributeNameWithValueWithoutValue = function(name, value1 = "", value2 = "") {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].getElementsByAttributeNameWithValueWithoutValue(name, value1, value2);
+
+                            // Return
+                            return array
+                        });
+
+                        // Get Elements By Attribute Name without Value
+                        HTMLCollection.prototype.getElementsByAttributeNameWithoutValue || (HTMLCollection.prototype.getElementsByAttributeNameWithoutValue = function(name, value = "") {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].getElementsByAttributeNameWithoutValue(name, value);
+
+                            // Return
+                            return array
+                        });
+
+                        // Get Elements Related By Data ID
+                        HTMLCollection.prototype.getElementsRelatedByDataID || (HTMLCollection.prototype.getElementsRelatedByDataID = function() {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].getElementsRelatedByDataID();
+
+                            // Return
+                            return array
+                        });
+
+                        // Has Attr[ibute]
+                        HTMLCollection.prototype.hasAttr || (HTMLCollection.prototype.hasAttr = function(name) {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].hasAttr(name);
+
+                            // Return
+                            return array
+                        });
+
+                        // Has Attribute
+                        HTMLCollection.prototype.hasAttribute || (HTMLCollection.prototype.hasAttribute = function(name) {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].hasAttribute(name);
+
+                            // Return
+                            return array
+                        });
+
+                        // Has Class
+                        HTMLCollection.prototype.hasClass || (HTMLCollection.prototype.hasClass = function(name) {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTMLCollection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].hasClass(name);
+
+                            // Return
+                            return array
+                        });
+
+                        // Has Child (Element)
+                        HTMLCollection.prototype.hasChild || (HTMLCollection.prototype.hasChild = function(child) {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].hasChild(child);
+
+                            // Return
+                            return array
+                        });
+
+                        // Has Child By Query Selector
+                        HTMLCollection.prototype.hasChildByQuerySelector || (HTMLCollection.prototype.hasChildByQuerySelector = function(child) {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].hasChildByQuerySelector(child);
+
+                            // Return
+                            return array
+                        });
+
+                        // Hide
+                        HTMLCollection.prototype.hide || (HTMLCollection.prototype.hide = function(child) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Modification > Target Element > Hidden
+                                this[i].hidden = true
+                        });
+
+                        // Open
+                        HTMLCollection.prototype.open || (HTMLCollection.prototype.open = function(child) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Modification > Target Element > Open
+                                this[i].open()
+                        });
+
+                        // [Query Selector (All)]
+                        HTMLCollection.prototype.$$ || (HTMLCollection.prototype.$$ = function(selector, index) {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i].$$(selector, index);
+
+                            // Return
+                            return array
+                        });
+
+                        // Relate Element By Data ID
+                        HTMLCollection.prototype.relateElementByDataID || (HTMLCollection.prototype.relateElementByDataID = function(element) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Target Element > Relate Element By Data ID
+                                this[i].relateElementByDataID(element)
+                        });
+
+                        // Remove Attribute
+                        HTMLCollection.prototype.removeAttribute || (HTMLCollection.prototype.removeAttribute = function(name) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Modification > Target Element > [Name]
+                                this[i].removeAttribute(name)
+                        });
+
+                        // Remove Event Listener
+                        HTMLCollection.prototype.removeEventListener || (HTMLCollection.prototype.removeEventListener = function(type, listener) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Event > Target Element > [Type]
+                                this[i].removeEventListener(type, listener)
+                        });
+
+                        // Run Event
+                        HTMLCollection.prototype.runEvent || (HTMLCollection.prototype.runEvent = function(type) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Event > Target Element > [Type]
+                                this[i].runEvent(type)
+                        });
+
+                        // Set Attr[ibute]
+                        HTMLCollection.prototype.setAttr || (HTMLCollection.prototype.setAttr = function(name, value) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Modification > Target Element > [Name]
+                                this[i].setAttr(name, value)
+                        });
+
+                        // Set Attribute
+                        HTMLCollection.prototype.setAttribute || (HTMLCollection.prototype.setAttribute = function(name, value) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Modification > Target Element > [Name]
+                                this[i].setAttribute(name, value)
+                        });
+
+                        // Attr[ibute]
+                        HTMLCollection.prototype.attr || (HTMLCollection.prototype.attr = function(name, value) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Modification > Target Element > [Name]
+                                this[i].attr(name, value)
+                        });
+
+                        // Insert
+                        HTMLCollection.prototype.insertChild || (HTMLCollection.prototype.insertChild = function(position, element) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Insertion > Element
+                                this[i].insertChild(position, element)
+                        });
+
+                        // Get CSS
+                        HTMLCollection.prototype.setCSS || (HTMLCollection.prototype.setCSS = function(property, value) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Style > Target Element > [Property]
+                                this[i].setCSS(property, value)
+                        });
+
+                        // Set Event
+                        HTMLCollection.prototype.setEvent || (HTMLCollection.prototype.setEvent = function(type, listener, useCapture, wantsUntrusted) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Event > Target Element > [Type]
+                                this[i].setEvent(type, listener, useCapture, wantsUntrusted)
+                        });
+
+                        // Show
+                        HTMLCollection.prototype.show || (HTMLCollection.prototype.show = function() {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Target Element > Show
+                                this[i].show()
+                        });
+
+                        // Style
+                        HTMLCollection.prototype.style || (HTMLCollection.prototype.style = function(declaration, value) {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Modification > Target Element > Style > [Declaration]
+                                this[i].style[declaration] = value
+                        });
+
+                        // To Array
+                        HTMLCollection.prototype.toArray || (HTMLCollection.prototype.toArray = function() {
+                            // Initialization > Array
+                            var array = [];
+
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Update > Array
+                                array[i] = this[i];
+
+                            // Return
+                            return array
+                        });
+
+                        // Hide
+                        HTMLElement.prototype.hide || (HTMLElement.prototype.hide = function() {
+                            // Modification > Target Element > Hidden
+                            this.hidden = true
+                        });
+
+                        // Insert
+                        HTMLElement.prototype.insertChild || (HTMLElement.prototype.insertChild = function(position, element) {
+                            // Insertion > Element
+                            this[(str(!(position == "begin") || str((!this.prepend || "prepend")).replace("true", "cloneNode")).replace("true", str(!(position == "end") || str((!this.append || "append")).replace("true", "appendChild")).replace("true", "")) || "cloneNode")](element)
+                        });
+
+                        // Show
+                        HTMLElement.prototype.show || (HTMLElement.prototype.show = function() {
+                            // Modification > Target Element > Hidden
+                            this.hidden = false
+                        });
+
+                        // Delete
+                        Node.prototype.delete || (Node.prototype.delete = function() {
+                            // Deletion
+                                // Target Element
+                                this.remove()
+                        });
+
+                        // Add Class
+                        NodeList.prototype.addClass || (NodeList.prototype.addClass = HTMLCollection.prototype.addClass);
+
+                        // Add Event
+                        NodeList.prototype.addEvent || (NodeList.prototype.addEvent = HTMLCollection.prototype.addEvent);
+
+                        // Add Event Listener
+                        NodeList.prototype.addEventListener || (NodeList.prototype.addEventListener = HTMLCollection.prototype.addEventListener);
+
+                        // Close
+                        NodeList.prototype.close || (NodeList.prototype.close = HTMLCollection.prototype.close);
+
+                        // CSS Selector
+                        NodeList.prototype.CSSSelector || (NodeList.prototype.CSSSelector = HTMLCollection.prototype.CSSSelector);
+
+                        // Delete Attr[ibute]
+                        NodeList.prototype.delAttr || (NodeList.prototype.delAttr = HTMLCollection.prototype.delAttr);
+
+                        // Delete Class
+                        NodeList.prototype.delClass || (NodeList.prototype.delClass = HTMLCollection.prototype.delClass);
+
+                        // Delete
+                        NodeList.prototype.delete || (NodeList.prototype.delete = HTMLCollection.prototype.delete);
+
+                        // Delete Event
+                        NodeList.prototype.delEvent || (NodeList.prototype.delEvent = HTMLCollection.prototype.delEvent);
+
+                        // Delete Style
+                        NodeList.prototype.delStyle || (NodeList.prototype.delStyle = HTMLCollection.prototype.delStyle);
+
+                        // Empty
+                        NodeList.prototype.empty = HTMLCollection.prototype.empty;
+
+                        // Get Attr[ibute]
+                        NodeList.prototype.getAttr || (NodeList.prototype.getAttr = HTMLCollection.prototype.getAttr);
+
+                        // Get Attribute
+                        NodeList.prototype.getAttribute || (NodeList.prototype.getAttribute = HTMLCollection.prototype.getAttribute);
+
+                        // Get CSS
+                        NodeList.prototype.getCSS || (NodeList.prototype.getCSS = HTMLCollection.prototype.getCSS);
+
+                        // Get Elements By Attribute Name
+                        NodeList.prototype.getElementsByAttributeName || (NodeList.prototype.getElementsByAttributeName = HTMLCollection.prototype.getElementsByAttributeName);
+
+                        // Get Elements By Attribute Name and Value
+                        NodeList.prototype.getElementsByAttributeNameAndValue || (NodeList.prototype.getElementsByAttributeNameAndValue = HTMLCollection.prototype.getElementsByAttributeNameAndValue);
+
+                        // Get Elements By Attribute Name and Value except Value
+                        NodeList.prototype.getElementsByAttributeNameAndValueExceptValue || (NodeList.prototype.getElementsByAttributeNameAndValueExceptValue = HTMLCollection.prototype.getElementsByAttributeNameAndValueExceptValue);
+
+                        // Get Elements By Attribute Name and Value without Value
+                        NodeList.prototype.getElementsByAttributeNameAndValueWithoutValue || (NodeList.prototype.getElementsByAttributeNameAndValueWithoutValue = HTMLCollection.prototype.getElementsByAttributeNameAndValueWithoutValue);
+
+                        // Get Elements By Attribute Name except Value
+                        NodeList.prototype.getElementsByAttributeNameExceptValue || (NodeList.prototype.getElementsByAttributeNameExceptValue = HTMLCollection.prototype.getElementsByAttributeNameExceptValue);
+
+                        // Get Element By Attribute Name with Value
+                        NodeList.prototype.getElementsByAttributeNameWithValue || (NodeList.prototype.getElementsByAttributeNameWithValue = HTMLCollection.prototype.getElementsByAttributeNameWithValue);
+
+                        // Get Elements By Attribute Name with Value except Value
+                        NodeList.prototype.getElementsByAttributeNameWithValueExceptValue || (NodeList.prototype.getElementsByAttributeNameWithValueExceptValue = HTMLCollection.prototype.getElementsByAttributeNameWithValueExceptValue);
+
+                        // Get Elements By Attribute Name with Value without Value
+                        NodeList.prototype.getElementsByAttributeNameWithValueWithoutValue || (NodeList.prototype.getElementsByAttributeNameWithValueWithoutValue = HTMLCollection.prototype.getElementsByAttributeNameWithValueWithoutValue);
+
+                        // Get Elements By Attribute Name without Value
+                        NodeList.prototype.getElementsByAttributeNameWithoutValue || (NodeList.prototype.getElementsByAttributeNameWithoutValue = HTMLCollection.prototype.getElementsByAttributeNameWithoutValue);
+
+                        // Get Elements Related By Data ID
+                        NodeList.prototype.getElementsRelatedByDataID || (NodeList.prototype.getElementsRelatedByDataID = HTMLCollection.prototype.getElementsRelatedByDataID);
+
+                        // Has Attr[ibute]
+                        NodeList.prototype.hasAttr || (NodeList.prototype.hasAttr = HTMLCollection.prototype.hasAttr);
+
+                        // Has Attribute
+                        NodeList.prototype.hasAttribute || (NodeList.prototype.hasAttribute = HTMLCollection.prototype.hasAttribute);
+
+                        // Has Child
+                        NodeList.prototype.hasChild || (NodeList.prototype.hasChild = HTMLCollection.prototype.hasChild);
+
+                        // Has Child by Query Selector
+                        NodeList.prototype.hasChildByQuerySelector || (NodeList.prototype.hasChildByQuerySelector = HTMLCollection.prototype.hasChildByQuerySelector);
+
+                        // Has Class
+                        NodeList.prototype.hasClass || (NodeList.prototype.hasClass = HTMLCollection.prototype.hasClass);
+
+                        // Hide
+                        NodeList.prototype.hide || (NodeList.prototype.hide = HTMLCollection.prototype.hide);
+
+                        // Insert
+                        NodeList.prototype.insertChild || (NodeList.prototype.insertChild = HTMLCollection.prototype.insertChild);
+
+                        // Open
+                        NodeList.prototype.open || (NodeList.prototype.open = HTMLCollection.prototype.open);
+
+                        // [Query Selector (All)]
+                        NodeList.prototype.$$ || (NodeList.prototype.$$ = HTMLCollection.prototype.$$);
+
+                        // Relate Element By Data ID
+                        NodeList.prototype.relateElementByDataID || (NodeList.prototype.relateElementByDataID = HTMLCollection.prototype.relateElementByDataID);
+
+                        // Remove Attribute
+                        NodeList.prototype.removeAttribute || (NodeList.prototype.removeAttribute = HTMLCollection.prototype.removeAttribute);
+
+                        // Remove Event Listener
+                        NodeList.prototype.removeEventListener || (NodeList.prototype.removeEventListener = HTMLCollection.prototype.removeEventListener);
+
+                        // Run Event
+                        NodeList.prototype.runEvent || (NodeList.prototype.runEvent = HTMLCollection.prototype.runEvent);
+
+                        // Set Attr[ibute]
+                        NodeList.prototype.setAttr || (NodeList.prototype.setAttr = HTMLCollection.prototype.setAttr);
+
+                        // Set Attribute
+                        NodeList.prototype.setAttribute || (NodeList.prototype.setAttribute = HTMLCollection.prototype.setAttribute);
+
+                        // Attr[ibute]
+                        NodeList.prototype.attr || (NodeList.prototype.attr = HTMLCollection.prototype.attr);
+
+                        // Set CSS
+                        NodeList.prototype.setCSS || (NodeList.prototype.setCSS = HTMLCollection.prototype.setCSS);
+
+                        // Set Event
+                        NodeList.prototype.setEvent || (NodeList.prototype.setEvent = HTMLCollection.prototype.setEvent);
+
+                        // Show
+                        NodeList.prototype.show || (NodeList.prototype.show = HTMLCollection.prototype.show);
+
+                        // Style
+                        NodeList.prototype.style || (NodeList.prototype.style = HTMLCollection.prototype.style);
+
+                        // To Array
+                        NodeList.prototype.toArray || (NodeList.prototype.toArray = HTMLCollection.prototype.toArray);
+
+                        // CSS Selector
+                        document.createElement("div").CSSSelector || (Object.defineProperty(Element.prototype, "CSSSelector", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization
+                                    // Target Element
+                                    var that = this;
+
+                                    // CSS Selector
+                                    var CSSSelector = (
+                                        // Element Tag Name
+                                        that.tagName.toLowerCase() +
+
+                                        // Class
+                                        (function() {
                                             /* Logic
-                                                    Switch "index" case to
-                                                        "array", "length" and "_length".
+                                                    If the element has a class.
                                             */
-                                            switch (index) {
-                                                case "array":
+                                            if ((that.getAttribute("class") || " ").indexOf(" ") <= -1)
+                                                /* Loop
+                                                        Index the element's class nodes.
+                                                */
+                                                for (var i = 0; i < (that.getAttribute("class") || " ").trim().split(/ /g).length; i++)
                                                     // Return
-                                                    return that.querySelectorAll(selector);
+                                                    return ("." + (that.getAttribute("class") || " ").trim().split(/ /g)[i]);
+
+                                            else
+                                                // Return
+                                                return ""
+                                        })() +
+
+                                        // ID
+                                        (function() {
+                                            /* Logic
+                                                    If
+                                                        the element has an ID.
+                                            */
+                                            if (that.id)
+                                                // Return
+                                                return ("#" + that.id);
+
+                                            else
+                                                // Return
+                                                return ""
+                                        })() +
+
+                                        // Attributes
+                                        (function() {
+                                            // Initialization
+                                                // Target Element
+                                                    // Attributes
+                                                    var thatAttributes = "";
+
+                                            /* Loop
+                                                    Index the element's attributes.
+                                            */
+                                            for (var i = 0; i < that.attributes.length; i++)
+                                                /* Logic
+                                                        If
+                                                            the attribute name is not "class" and "id".
+                                                */
+                                                if (
+                                                    that.attributes[i].name != "class" &&
+                                                    that.attributes[i].name != "id"
+                                                )
+                                                    // Update
+                                                        // Attributes
+                                                        thatAttributes += ('[' + that.attributes[i].name + '="' + (that.attributes[i].value || "").replace(/"/g, '\'') + '"]');
+
+                                            // Return
+                                                // Attributes
+                                                return thatAttributes
+                                        })()
+                                    );
+
+                                // Return
+                                    // CSS Selector
+                                    return CSSSelector.replace(/=\"\"/g, "")
+                            },
+
+                            // Set
+                            set: function(CSSSelector) {
+                                // Update > CSS Selector
+                                CSSSelector = CSSSelector.replace(/("|')([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}\.([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|')/g, function(data) {
+                                    // Return
+                                    return data.replace(/\./g, "::lapys_period::")
+                                }).replace(/\.( |){1,}\./g, ".").replace(/#( |){1,}#/g, "#").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/, function(data) {
+                                    // Return
+                                    return data.replace("#", "::lapys_hash::")
+                                }).replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/, "").replace(/::lapys_hash::([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/, function(data) {
+                                    // Return
+                                    return data.replace("::lapys_hash::", "#")
+                                }).replace(/\[( |){1,}\]/g, "");
+
+                                /* Loop
+                                        Index all classes in the CSS Selector.
+                                */
+                                for (var i = 1; i < CSSSelector.replace(/\[("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").split(/\./g).length; i++)
+                                    this.addClass(CSSSelector.replace(/\[("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").split(/\./g)[i]);
+
+                                // Modification > Target > ID
+                                !(CSSSelector.indexOf("#") >= 0) || (this.id = CSSSelector.replace(/\.([a-z]|[A-Z]|[0-9]|[\~\`\!\@\.\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/\[("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").slice(1));
+
+                                /* Loop
+                                        Index all attributes except Class, ID & Style in the CSS Selector.
+                                */
+                                for (var i = 1; i < CSSSelector.replace(/\.([a-z]|[A-Z]|[0-9]|[\~\`\!\@\.\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/\[(class|id)(=|)("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").replace(/\]/g, "").split(/\[/g).length; i++)
+                                    !CSSSelector.replace(/\.([a-z]|[A-Z]|[0-9]|[\~\`\!\@\.\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/\[(class|id)(=|)("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").replace(/\]/g, "").split(/\[/g)[i].replace(/ /g, "") || this.setAttribute(CSSSelector.replace(/\.([a-z]|[A-Z]|[0-9]|[\~\`\!\@\.\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/\[(class|id)(=|)("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").replace(/\]/g, "").split(/\[/g)[i].getBeforeChar("="), CSSSelector.replace(/\.([a-z]|[A-Z]|[0-9]|[\~\`\!\@\.\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/\[(class|id)(=|)("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").replace(/\]/g, "").split(/\[/g)[i].replace(/=("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\"\'\[\]\{\}\|\\\:\;\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)/, function(data) {
+                                            // Return
+                                            return data.replace(/("|')/g, "")
+                                        }).getAfterChar("=").replace(/::lapys_period::/g, ".").replace(/("|')([^("|')]*)$/, "")
+                                    )
+                            }
+                        }));
+
+                        // Parent
+                        document.createElement("div").parent || (Object.defineProperty(Element.prototype, "parent", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            get: function() {
+                                // Return
+                                return (this.parentElement || this.parentNode)
+                            }
+                        }));
+
+                        // Parent Path
+                        document.createElement("div").parentPath || (Object.defineProperty(Element.prototype, "parentPath", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization
+                                    // Target Element
+                                    var that = this;
+
+                                    // Parent Nodes
+                                    var parents = [];
+
+                                /* Logic
+                                        While
+                                            the Target Element is still defined.
+                                */
+                                while (that) {
+                                    // Update
+                                        // Parent Nodes
+                                        parents.unshift(that);
+
+                                        // Target Element
+                                        that = (that.parentNode || that.parentElement)
+                                };
+
+                                // Update
+                                    // Parent Nodes
+                                    parents.unshift(window);
+                                    parents.reverse();
+
+                                // Return
+                                return parents
+                            },
+
+                            // Set
+                            set: function() {
+                                /* Do nothing… */
+                            }
+                        }));
+
+                        // Role
+                        document.createElement("div").role || (Object.defineProperty(Element.prototype, "role", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            default: 2,
+
+                            // Get
+                            get: function() {
+                                // Return
+                                return this.getAttribute("role")
+                            },
+
+                            // Set
+                            set: function(data) {
+                                // Modification
+                                    // Target Element
+                                        // Role
+                                        this.setAttribute("role", data)
+                            }
+                        }));
+
+                        /* Siblings
+                                --- NOTE ---
+                                    The property here should be volatile.
+                        */
+                        Object.defineProperty(Element.prototype, "siblings", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function(number) {
+                                // Initialization > (Target, Array)
+                                var that = this;
+                                var array = [];
+
+                                for (var i = 0; i < ((this.parentElement || this.parentNode).children || []).length; i++)
+                                    array[i] = (this.parentElement || this.parentNode).children[i];
+
+                                // Return
+                                return array.filter(function(data) {
+                                    // Return
+                                    return data != that
+                                })
+                            }
+                        });
+
+                        // Height
+                        document.getElementsByTagName("html").height || (Object.defineProperty(HTMLCollection.prototype, "height", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].height;
+
+                                // Return
+                                return array
+                            },
+
+                            // Set
+                            set: function(number) {
+                                /* Loop
+                                        Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Style > Target Element > Height
+                                    this[i].style.height = `${number}px`;
+                            }
+                        }));
+
+                        // Node Index
+                        document.getElementsByTagName("html").nodeIndex || (Object.defineProperty(HTMLCollection.prototype, "nodeIndex", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                    Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].nodeIndex;
+
+                                // Return
+                                return array
+                            },
+
+                            // Set
+                            set: function(number) {
+                                /* Do nothing... */
+                            }
+                        }));
+
+                        // Offset
+                        document.getElementsByTagName("html").offset || (Object.defineProperty(HTMLCollection.prototype, "offset", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                        Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].offset;
+
+                                // Return
+                                return array
+                            }
+                        }));
+
+                        // Parent
+                        document.getElementsByTagName("html").parent || (Object.defineProperty(HTMLCollection.prototype, "parent", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                        Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].parent;
+
+                                // Return
+                                return array
+                            }
+                        }));
+
+                        // Parent Path
+                        document.getElementsByTagName("html").parentPath || (Object.defineProperty(HTMLCollection.prototype, "parentPath", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                        Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].parentPath;
+
+                                // Return
+                                return array
+                            }
+                        }));
+
+                        // Role
+                        document.getElementsByTagName("html").role || (Object.defineProperty(HTMLCollection.prototype, "role", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                        Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].role;
+
+                                // Return
+                                return array
+                            },
+
+                            // Set
+                            set: function(data) {
+                                /* Loop
+                                        Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Modification > Target Element > Role
+                                    this[i].role = data
+                            }
+                        }));
+
+                        // Siblings
+                        document.getElementsByTagName("html").siblings || (Object.defineProperty(HTMLCollection.prototype, "siblings", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                        Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].siblings;
+
+                                // Return
+                                return array
+                            }
+                        }));
+
+                        // Width
+                        document.getElementsByTagName("html").width || (Object.defineProperty(HTMLCollection.prototype, "width", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization
+                                var array = [];
+
+                                /* Loop
+                                        Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                        array[i] = this[i].width;
+
+                                // Return
+                                return array
+                            },
+
+                            // Set
+                            set: function(number) {
+                                /* Loop
+                                        Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Style > Target Element > Width
+                                    this[i].style.width = `${number}px`
+                            }
+                        }));
+
+                        // Height
+                        document.createElement("div").height || (Object.defineProperty(HTMLElement.prototype, "height", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Return
+                                return this.clientHeight
+                            },
+
+                            // Set
+                            set: function(number) {
+                                // Target Element > Style > Height
+                                this.style.height = `${number}px`
+                            }
+                        }));
+
+                        // Offset
+                        document.createElement("div").offset || (Object.defineProperty(HTMLElement.prototype, "offset", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Return
+                                return this.getBoundingClientRect()
+                            }
+                        }));
+
+                        // Width
+                        document.createElement("div").width || (Object.defineProperty(HTMLElement.prototype, "width", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Return
+                                return this.clientWidth
+                            },
+
+                            // Set
+                            set: function(number) {
+                                // Target Element
+                                    // Style
+                                        // Width
+                                        this.style.width = `${number}px`
+                            }
+                        }));
+
+                        // Height
+                        document.querySelectorAll("html").height || (Object.defineProperty(NodeList.prototype, "height", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                        Index all members of the Node List.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].height;
+
+                                // Return
+                                return array
+                            },
+
+                            // Set
+                            set: function(number) {
+                                /* Loop
+                                        Index all members of the Node List.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Style
+                                        // Target Element
+                                            // Height
+                                            this[i].style.height = `${number}px`;
+                            }
+                        }));
+
+                        // Node Index
+                        document.querySelectorAll("html").nodeIndex || (Object.defineProperty(NodeList.prototype, "nodeIndex", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                    Index all members of the HTML Collection.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].nodeIndex;
+
+                                // Return
+                                return array
+                            },
+
+                            // Set
+                            set: function(number) {
+                                /* Do nothing... */
+                            }
+                        }));
+
+                        // Offset
+                        document.querySelectorAll("html").offset || (Object.defineProperty(NodeList.prototype, "offset", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                        Index all members of the Node List.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].offset;
+
+                                // Return
+                                return array
+                            }
+                        }));
+
+                        // Parent
+                        document.querySelectorAll("html").parent || (Object.defineProperty(NodeList.prototype, "parent", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                        Index all members of the Node List.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].parent;
+
+                                // Return
+                                return array
+                            }
+                        }));
+
+                        // Parent Path
+                        document.querySelectorAll("html").parentPath || (Object.defineProperty(NodeList.prototype, "parentPath", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                        Index all members of the Node List.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].parentPath;
+
+                                // Return
+                                return array
+                            }
+                        }));
+
+                        // Role
+                        document.querySelectorAll("html").role || (Object.defineProperty(NodeList.prototype, "role", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                        Index all members of the Node List.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].role;
+
+                                // Return
+                                return array
+                            },
+
+                            // Set
+                            set: function(data) {
+                                /* Loop
+                                        Index all members of the Node List.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Modification
+                                        // Target Element
+                                            // Role
+                                            this[i].role = data
+                            }
+                        }));
+
+                        // Siblings
+                        document.querySelectorAll("html").siblings || (Object.defineProperty(NodeList.prototype, "siblings", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                        Index all members of the Node List.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].siblings;
+
+                                // Return
+                                return array
+                            }
+                        }));
+
+                        // Width
+                        document.querySelectorAll("html").width || (Object.defineProperty(NodeList.prototype, "width", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Initialization > Array
+                                var array = [];
+
+                                /* Loop
+                                        Index all members of the Node List.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Update > Array
+                                    array[i] = this[i].width;
+
+                                // Return
+                                return array
+                            },
+
+                            // Set
+                            set: function(number) {
+                                /* Loop
+                                        Index all members of the Node List.
+                                */
+                                for (var i = 0; i < this.length; i++)
+                                    // Style
+                                        // Target Element
+                                            // Width
+                                            this[i].style.width = `${number}px`
+                            }
+                        }));
+
+                // Data Event Type, On[*]
+                    /* Loop
+                            Index all Event-Handling elements.
+                    */
+                    for (var i = 0; i < document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]").length; i++) {
+                        // Modification > Event-Handling Element > Events
+                        document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]")[i].events = (document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]")[i].events || new (function LapysJSEventMap() {}));
+
+                        /* Loop
+                                Index all Event-Handling Element attributes.
+                        */
+                        for (var j = 0; j < document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]")[i].attributes.length; j++)
+                            /* Logic
+                                    If
+                                        the attribute begins with "on".
+                            */
+                            if (
+                                document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]")[i].attributes[j].name[0] == "o" &&
+                                document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]")[i].attributes[j].name[1] == "n"
+                            )
+                                /* Logic
+                                        If
+                                            the Event-Handling Element has the specified attribute.
+                                */
+                                if (document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]")[i].hasAttribute("on" + document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]")[i].attributes[j].name.slice(2))) {
+                                    // Update > Event-Handling Element > Event
+                                    document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]")[i].events[document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]")[i].attributes[j].name.slice(2)] = [];
+                                    document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]")[i].events[document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]")[i].attributes[j].name.slice(2)].push({type: document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]")[i].attributes[j].name.slice(2), listener: () => { document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]")[i].getAttribute("on" + document.querySelectorAll("[onabort], [onautocomplete], [onautocompleteerror], [onblur], [oncancel], [oncanplay], [oncanplaythrough], [onchange], [onclick], [onclose], [oncontextmenu], [oncuechange], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragexit], [ondragleave], [ondragover], [ondragstart], [ondrop], [ondurationchange], [onempty], [onended], [onerror], [onfocus], [oninput], [oninvalid], [onkeydown], [onkeypress], [onkeyup], [onload], [onloadeddata], [onloadedmetadata], [onloadstart], [onmousedown], [onmouseenter], [onmouseleave], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onoffline], [ononline], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onreset], [onresize], [onscroll], [onseeked], [onseeking], [onselect], [onshow], [onsort], [onstalled], [onsubmit], [onsuspend], [ontimeupdate], [ontoggle], [onvolumechange], [onwaiting]")[i].attributes[j].name.slice(2)) }, wantsUntrusted: false, useCapture: false})
+                                }
+                    }
+
+                // Class Sets
+                    /* Loop
+                            Index all items of the LapysJS script's "data-enable" attribute.
+                    */
+                    for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
+                        /* Logic
+                                If
+                                    the LapysJS script has "_all" enabled or
+                                    the LapysJS script has "classSets" enabled.
+                        */
+                        if (
+                            (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "_all" ||
+                            (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "classSets"
+                        ) {
+                            function classSets() {
+                                /* Loop
+                                        Index all DOM Class Elements.
+                                */
+                                for (var i = 0; i < document.querySelectorAll("[class]").length; i++)
+                                    /* Logic
+                                            If
+                                                the DOM Class Element has "-" in its class
+                                                    and
+                                                the DOM Class Element has "_" in its class.
+                                    */
+                                    if (document.querySelectorAll("[class]")[i].getAttribute("class").indexOf("_") >= 0)
+                                        /* Loop
+                                                Index all the DOM Class Element's class nodes.
+                                        */
+                                        for (var k = 0; k < document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g).length; k++) {
+                                            /* Logic
+                                                    Switch case to
+                                                        Flex, Maximum and Minimum.
+                                            */
+                                            switch (document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].replace(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_")), "").slice(0, document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].replace(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice( document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_")), "").indexOf("-"))) {
+                                                // Flex
+                                                case ("flex" || "flx"):
+                                                    document.querySelectorAll("[class]")[i].classSetMetadata = "flex";
                                                     break;
 
-                                                case "length":
-                                                    // Return
-                                                    return that.querySelectorAll(selector).length;
+                                                // Maximum
+                                                case "max":
+                                                    document.querySelectorAll("[class]")[i].classSetMetadata = "max";
                                                     break;
 
-                                                case "_length":
-                                                    // Return
-                                                    return (that.querySelectorAll(selector).length - 1)
+                                                // Minimum
+                                                case "min":
+                                                    document.querySelectorAll("[class]")[i].classSetMetadata = "min";
+                                                    break;
+
+                                                // [Default]
+                                                default:
+                                                    document.querySelectorAll("[class]")[i].classSetMetadata = ""
+                                            };
+
+                                            /* Logic
+                                                    Switch case to
+                                                        Basis, Height and Width.
+                                            */
+                                            switch (document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].replace(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_")), "").slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].replace(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_")), "").indexOf("-") + "-".length)) {
+                                                case "b":
+                                                    document.querySelectorAll("[class]")[i].classSetData = "basis";
+                                                    break;
+
+                                                case "basis":
+                                                    document.querySelectorAll("[class]")[i].classSetData = "basis";
+                                                    break;
+
+                                                case "h":
+                                                    document.querySelectorAll("[class]")[i].classSetData = "height";
+                                                    break;
+
+                                                case "height":
+                                                    document.querySelectorAll("[class]")[i].classSetData = "height";
+                                                    break;
+
+                                                case "w":
+                                                    document.querySelectorAll("[class]")[i].classSetData = "width";
+                                                    break;
+
+                                                case "width":
+                                                    document.querySelectorAll("[class]")[i].classSetData = "width";
+                                                    break;
+
+                                                // [Default]
+                                                default:
+                                                    document.querySelectorAll("[class]")[i].classSetData = ""
                                             };
 
                                             /* Logic
                                                     If
-                                                        "index" is a number,
-
-                                                    else if
-                                                        multiple instances of the specified element is not defined.
+                                                        the class set metadata is defined.
                                             */
-                                            if (typeof index == "number")
-                                                // Return
-                                                return that.querySelectorAll(selector)[index];
-
-                                            else if (!that.querySelectorAll(selector)[1])
-                                                // Return
-                                                return that.querySelector(selector);
+                                            if (document.querySelectorAll("[class]")[i].classSetMetadata)
+                                                // Modification > Element > Class Set
+                                                document.querySelectorAll("[class]")[i].classSet = (
+                                                    document.querySelectorAll("[class]")[i].classSetMetadata +
+                                                    (
+                                                        document.querySelectorAll("[class]")[i].classSetData[0].toUpperCase() +
+                                                        document.querySelectorAll("[class]")[i].classSetData.slice(1)
+                                                    )
+                                                );
 
                                             else
-                                                // Return
-                                                return that.querySelectorAll(selector);
-                                        }
+                                                // Modification > Element > Class Set
+                                                document.querySelectorAll("[class]")[i].classSet = document.querySelectorAll("[class]")[i].classSetData;
 
-                                        else
-                                            // Return
-                                            return that.querySelector(selector)
-                                    };
-
-                                    /* Logic
-                                            If
-                                                [switch statement].
-                                    */
-                                    switch (selector) {
-                                        // []
-                                        case "[]":
-                                            // Return
-                                            return document.getElementsByAttributeName("*");
-                                            break;
-
-                                        // [=]
-                                        case "[=]":
-                                            // Return
-                                            return document.getElementsByAttributeNameAndValue("*");
-                                            break;
-
-                                        // [*=]
-                                        case "[*=]":
-                                            // Return
-                                            return document.getElementsByAttributeNameWithValue("*");
-                                            break;
-
-                                        // [=]:not([])
-                                        case "[=]:not([])":
-                                            // Return
-                                            return [];
-                                            break;
-
-                                        // [*=]:not([])
-                                        case "[*=]:not([])":
-                                            // Return
-                                            return [];
-                                            break;
-
-                                        // [*=]:not([*=])
-                                        case "[*=]:not([*=])":
-                                            // Return
-                                            return [];
-                                            break;
-
-                                        // [=]:not([=])
-                                        case "[=]:not([=])":
-                                            // Return
-                                            return document.getElementsByAttributeNameAndValueExceptValue("*");
-                                            break;
-
-                                        // [*=]:not([=])
-                                        case "[*=]:not([=])":
-                                            // Return
-                                            return document.getElementsByAttributeNameWithValueExceptValue("*");
-                                            break;
-
-                                        // [=]:not([*=])
-                                        case "[=]:not([*=])":
-                                            // Return
-                                            return document.getElementsByAttributeNameAndValueWithoutValue("*");
-                                            break;
-
-                                        // [*=]:not([*=])
-                                        case "[*=]:not([*=])":
-                                            // Return
-                                            return document.getElementsByAttributeNameWithValueWithoutValue("*");
-                                            break;
-
-                                        // :not([])
-                                        case ":not([])":
-                                            // Return
-                                            return [];
-                                            break;
-
-                                        // :not([=])
-                                        case ":not([=])":
-                                            // Return
-                                            return document.getElementsByAttributeNameExceptValue("*");
-                                            break;
-
-                                        // :not([*=])
-                                        case ":not([*=])":
-                                            // Return
-                                            return document.getElementsByAttributeNameWithoutValue("*")
-                                    }
-                                }
-                            });
-
-                            // Run Event
-                            EventTarget.prototype.runEvent || (EventTarget.prototype.runEvent = function(type) {
-                                // Execution
-                                    // Target Element
-                                        // [New Event]
-                                        (this || window).dispatchEvent((this || window).customEvents[type])
-                            });
-
-                            // Set Event
-                            EventTarget.prototype.setEvent || (EventTarget.prototype.setEvent = function(type, listener, useCapture, wantsUntrusted) {
-                                // Modification > Target > Events
-                                (this || window).events = ((this || window).events || new (function  LapysJSEventMap() {  }));
-
-                                /* Loop
-                                        Index all Types.
-                                */
-                                for (var i = 0; i < type.replace(/ /g, "").split(/,/g).length; i++) {
-                                    // Modification > Target > Events
-                                    (this || window).events[
-                                        (function() {
                                             /* Logic
                                                     If
-                                                        the Type is not "online".
+                                                        the Class Set is "eval".
                                             */
-                                            if (type.replace(/ /g, "").split(/,/g)[i] != "online")
-                                                // Return
-                                                return type.replace(/ /g, "").split(/,/g)[i].replace("on", "");
-
-                                            else
-                                                // Return
-                                                return type.replace(/ /g, "").split(/,/g)[i]
-                                        })()
-                                    ] = ((this || window).events[(function() { if (type.replace(/ /g, "").split(/,/g)[i] != "online") return type.replace(/ /g, "").split(/,/g)[i].replace("on", ""); else return type.replace(/ /g, "").split(/,/g)[i] })()] || []);
-
-                                    // Update > Target > Events
-                                    (this || window).events[(function() { if (type.replace(/ /g, "").split(/,/g)[i] != "online") return type.replace(/ /g, "").split(/,/g)[i].replace("on", ""); else return type.replace(/ /g, "").split(/,/g)[i] })()].push({
-                                        // Listener
-                                        listener: (function() { return listener })(),
-
-                                        // Type
-                                        type: (function() { return (function() { if (type.replace(/ /g, "").split(/,/g)[i] != "online") return type.replace(/ /g, "").split(/,/g)[i].replace("on", ""); else return type.replace(/ /g, "").split(/,/g)[i] })() })(),
-
-                                        // Use Capture
-                                        useCapture: (function() { return (useCapture || false) })(),
-
-                                        // Wants Untrusted
-                                        wantsUntrusted: (function() { return (wantsUntrusted || false) })()
-                                    });
-
-                                    // Event > [if]
-                                    (document.addEventListener) ?
-                                        // [true] > [Type]
-                                        (this || window).addEventListener(type.replace(/ /g, "").split(/,/g)[i], listener, useCapture, wantsUntrusted) :
-
-                                        // [false] > On [Type]
-                                        (this || window).attachEvent(("on" + type.replace(/ /g, "").split(/,/g)[i]), listener, useCapture, wantsUntrusted)
-                                }
-                            });
-
-                            // Load
-                            HTMLHeadElement.prototype.load || (HTMLHeadElement.prototype.load = function(dataID, array) {
-                                /* Logic
-                                        If
-                                            Array has ".css" in it,
-
-                                        else if
-                                            Array has ".js" in it.
-                                */
-                                if (array.indexOf(".css") >= 0)
-                                    css.link(dataID, array);
-
-                                else if (array.indexOf(".js") >= 0)
-                                    js.src(dataID, array);
-
-                                else
-                                    LapysJS.warn("The 'load()' method can only call to '.css' and '.js' files.")
-                            });
-
-                            // Add Class
-                            HTMLCollection.prototype.addClass || (HTMLCollection.prototype.addClass = function(name) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Modification > Target Element > Class
-                                    this[i].addClass(name)
-                            });
-
-                            // Add Event
-                            HTMLCollection.prototype.addEvent || (HTMLCollection.prototype.addEvent = function(type, listener) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Event > Target Element > [Type]
-                                    this[i].addEvent(type, listener)
-                            });
-
-                            // Add Event Listener
-                            HTMLCollection.prototype.addEventListener || (HTMLCollection.prototype.addEventListener = function(type, listener, useCapture, wantsUntrusted) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Event > Target Element > [Type]
-                                    this[i].addEventListener(type, listener, useCapture, wantsUntrusted)
-                            });
-
-                            // Append After
-                            HTMLCollection.prototype.appendAfter || (HTMLCollection.prototype.appendAfter = function(sibling) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Insertion > Target Element
-                                    this[i].appendAfter(sibling)
-                            });
-
-                            // Append Before
-                            HTMLCollection.prototype.appendBefore || (HTMLCollection.prototype.appendBefore = function(sibling) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Insertion > Target Element
-                                    this[i].appendBefore(sibling)
-                            });
-
-                            // Close
-                            HTMLCollection.prototype.close || (HTMLCollection.prototype.close = function() {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Target Element > Close
-                                    this[i].close()
-                            });
-
-                            // CSS Selector
-                            HTMLCollection.prototype.CSSSelector || (HTMLCollection.prototype.CSSSelector = function(value) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Modification > Target Element > CSS Selector
-                                    this[i].CSSSelector = value
-                            });
-
-                            // Delete
-                            HTMLCollection.prototype.delete || (HTMLCollection.prototype.delete = function() {
-                                /* Logic
-                                        If
-                                            the number of DOM Elements is greater than
-                                            the number of members of the HTML Collection.
-                                */
-                                if (document.querySelectorAll("*").length > this.length) {
-                                    // Initialization > Node List
-                                    var nodeList = this;
-
-                                    /* Loop
-                                            Index all members of the HTML Collection.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Deletion > Target Element
-                                        (nodeList[i] || document.createElement("div")).remove()
-                                }
-
-                                else
-                                    // LapysJS > Error
-                                    LapysJS.error("LapysJS cannot delete all DOM Elements.")
-                            });
-
-                            // Delete Attribute
-                            HTMLCollection.prototype.delAttr || (HTMLCollection.prototype.delAttr = function(name) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Modification > Target Element > [Name]
-                                    this[i].delAttr(name)
-                            });
-
-                            // Delete Class
-                            HTMLCollection.prototype.delClass || (HTMLCollection.prototype.delClass = function(data) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Modification > Target Element > Class
-                                    this[i].delClass(data)
-                            });
-
-                            // Delete Event
-                            HTMLCollection.prototype.delEvent || (HTMLCollection.prototype.delEvent = function(type, listener) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Event > Target Element > [Type]
-                                    this[i].delEvent(type, listener)
-                            });
-
-                            // Delete Style
-                            HTMLCollection.prototype.delStyle || (HTMLCollection.prototype.delStyle = function(style) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Modification > Target Element > Style
-                                    this[i].delStyle(style)
-                            });
-
-                            /* Empty
-                                    --- CONSIDER ---
-                                        This method apparently removes a pre-built "empty()" String method.
-                            */
-                            HTMLCollection.prototype.empty = function() {
-                                // Return
-                                return !(this[0] || false)
-                            };
-
-                            // Get Attr[ibute]
-                            HTMLCollection.prototype.getAttr || (HTMLCollection.prototype.getAttr = function(name) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].getAttr(name);
-
-                                // Return
-                                return array
-                            });
-
-                            // Get Attribute
-                            HTMLCollection.prototype.getAttribute || (HTMLCollection.prototype.getAttribute = function(name) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].getAttribute(name);
-
-                                // Return
-                                return array
-                            });
-
-                            // Get CSS
-                            HTMLCollection.prototype.getCSS || (HTMLCollection.prototype.getCSS = function(property) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                        array[i] = this[i].getCSS(property);
-
-                                // Return
-                                return array
-                            });
-
-                            // Get Elements By Attribute Name
-                            HTMLCollection.prototype.getElementsByAttributeName || (HTMLCollection.prototype.getElementsByAttributeName = function(name) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].getElementsByAttributeName(name);
-
-                                // Return
-                                return array
-                            });
-
-                            // Get Elements By Attribute Name and Value
-                            HTMLCollection.prototype.getElementsByAttributeNameAndValue || (HTMLCollection.prototype.getElementsByAttributeNameAndValue = function(name, value) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].getElementsByAttributeNameAndValue(name, value);
-
-                                // Return
-                                return array
-                            });
-
-                            // Get Elements By Attribute Name and Value except Value
-                            HTMLCollection.prototype.getElementsByAttributeNameAndValueExceptValue || (HTMLCollection.prototype.getElementsByAttributeNameAndValueExceptValue = function(name, value1, value2) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].getElementsByAttributeNameAndValueExceptValue(name, value1, value2);
-
-                                // Return
-                                return array
-                            });
-
-                            // Get Elements By Attribute Name and Value without Value
-                            HTMLCollection.prototype.getElementsByAttributeNameAndValueWithoutValue || (HTMLCollection.prototype.getElementsByAttributeNameAndValueWithoutValue = function(name, value1, value2) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].getElementsByAttributeNameAndValueWithoutValue(name, value1, value2);
-
-                                // Return
-                                return array
-                            });
-
-                            // Get Elements By Attribute Name except Value
-                            HTMLCollection.prototype.getElementsByAttributeNameExceptValue || (HTMLCollection.prototype.getElementsByAttributeNameExceptValue = function(name, value) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].getElementsByAttributeNameExceptValue(name, value);
-
-                                // Return
-                                return array
-                            });
-
-                            // Get Elements By Attribute Name with Value
-                            HTMLCollection.prototype.getElementsByAttributeNameWithValue || (HTMLCollection.prototype.getElementsByAttributeNameWithValue = function(name, value) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].getElementsByAttributeNameWithValue(name, value);
-
-                                // Return
-                                return array
-                            });
-
-                            // Get Elements By Attribute Name with Value except Value
-                            HTMLCollection.prototype.getElementsByAttributeNameWithValueExceptValue || (HTMLCollection.prototype.getElementsByAttributeNameWithValueExceptValue = function(name, value1, value2) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].getElementsByAttributeNameWithValueExceptValue(name, value1, value2);
-
-                                // Return
-                                return array
-                            });
-
-                            // Get Elements By Attribute Name with Value without Value
-                            HTMLCollection.prototype.getElementsByAttributeNameWithValueWithoutValue || (HTMLCollection.prototype.getElementsByAttributeNameWithValueWithoutValue = function(name, value1, value2) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].getElementsByAttributeNameWithValueWithoutValue(name, value1, value2);
-
-                                // Return
-                                return array
-                            });
-
-                            // Get Elements By Attribute Name without Value
-                            HTMLCollection.prototype.getElementsByAttributeNameWithoutValue || (HTMLCollection.prototype.getElementsByAttributeNameWithoutValue = function(name, value) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].getElementsByAttributeNameWithoutValue(name, value);
-
-                                // Return
-                                return array
-                            });
-
-                            // Get Elements Related By Data ID
-                            HTMLCollection.prototype.getElementsRelatedByDataID || (HTMLCollection.prototype.getElementsRelatedByDataID = function() {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].getElementsRelatedByDataID();
-
-                                // Return
-                                return array
-                            });
-
-                            // Has Attr[ibute]
-                            HTMLCollection.prototype.hasAttr || (HTMLCollection.prototype.hasAttr = function(name) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].hasAttr(name);
-
-                                // Return
-                                return array
-                            });
-
-                            // Has Attribute
-                            HTMLCollection.prototype.hasAttribute || (HTMLCollection.prototype.hasAttribute = function(name) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].hasAttribute(name);
-
-                                // Return
-                                return array
-                            });
-
-                            // Has Class
-                            HTMLCollection.prototype.hasClass || (HTMLCollection.prototype.hasClass = function(name) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTMLCollection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].hasClass(name);
-
-                                // Return
-                                return array
-                            });
-
-                            // Has Child (Element)
-                            HTMLCollection.prototype.hasChild || (HTMLCollection.prototype.hasChild = function(child) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].hasChild(child);
-
-                                // Return
-                                return array
-                            });
-
-                            // Has Child By Query Selector
-                            HTMLCollection.prototype.hasChildByQuerySelector || (HTMLCollection.prototype.hasChildByQuerySelector = function(child) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].hasChildByQuerySelector(child);
-
-                                // Return
-                                return array
-                            });
-
-                            // Hide
-                            HTMLCollection.prototype.hide || (HTMLCollection.prototype.hide = function(child) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Modification > Target Element > Hidden
-                                    this[i].hidden = true
-                            });
-
-                            // Open
-                            HTMLCollection.prototype.open || (HTMLCollection.prototype.open = function(child) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Modification > Target Element > Open
-                                    this[i].open()
-                            });
-
-                            // [Query Selector (All)]
-                            HTMLCollection.prototype.$$ || (HTMLCollection.prototype.$$ = function(selector, index) {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i].$$(selector, index);
-
-                                // Return
-                                return array
-                            });
-
-                            // Relate Element By Data ID
-                            HTMLCollection.prototype.relateElementByDataID || (HTMLCollection.prototype.relateElementByDataID = function(element) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Target Element > Relate Element By Data ID
-                                    this[i].relateElementByDataID(element)
-                            });
-
-                            // Remove Attribute
-                            HTMLCollection.prototype.removeAttribute || (HTMLCollection.prototype.removeAttribute = function(name) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Modification > Target Element > [Name]
-                                    this[i].removeAttribute(name)
-                            });
-
-                            // Remove Event Listener
-                            HTMLCollection.prototype.removeEventListener || (HTMLCollection.prototype.removeEventListener = function(type, listener) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Event > Target Element > [Type]
-                                    this[i].removeEventListener(type, listener)
-                            });
-
-                            // Run Event
-                            HTMLCollection.prototype.runEvent || (HTMLCollection.prototype.runEvent = function(type) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Event > Target Element > [Type]
-                                    this[i].runEvent(type)
-                            });
-
-                            // Set Attr[ibute]
-                            HTMLCollection.prototype.setAttr || (HTMLCollection.prototype.setAttr = function(name, value) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Modification > Target Element > [Name]
-                                    this[i].setAttr(name, value)
-                            });
-
-                            // Set Attribute
-                            HTMLCollection.prototype.setAttribute || (HTMLCollection.prototype.setAttribute = function(name, value) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Modification > Target Element > [Name]
-                                    this[i].setAttribute(name, value)
-                            });
-
-                            // Attr[ibute]
-                            HTMLCollection.prototype.attr || (HTMLCollection.prototype.attr = function(name, value) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Modification > Target Element > [Name]
-                                    this[i].attr(name, value)
-                            });
-
-                            // Get CSS
-                            HTMLCollection.prototype.setCSS || (HTMLCollection.prototype.setCSS = function(property, value) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Style > Target Element > [Property]
-                                    this[i].setCSS(property, value)
-                            });
-
-                            // Set Event
-                            HTMLCollection.prototype.setEvent || (HTMLCollection.prototype.setEvent = function(type, listener, useCapture, wantsUntrusted) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Event > Target Element > [Type]
-                                    this[i].setEvent(type, listener, useCapture, wantsUntrusted)
-                            });
-
-                            // Show
-                            HTMLCollection.prototype.show || (HTMLCollection.prototype.show = function() {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Target Element > Show
-                                    this[i].show()
-                            });
-
-                            // Style
-                            HTMLCollection.prototype.style || (HTMLCollection.prototype.style = function(declaration, value) {
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Modification > Target Element > Style > [Declaration]
-                                    this[i].style[declaration] = value
-                            });
-
-                            // To Array
-                            HTMLCollection.prototype.toArray || (HTMLCollection.prototype.toArray = function() {
-                                // Initialization > Array
-                                var array = [];
-
-                                /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                for (var i = 0; i < this.length; i++)
-                                    // Update > Array
-                                    array[i] = this[i];
-
-                                // Return
-                                return array
-                            });
-
-                            // Hide
-                            HTMLElement.prototype.hide || (HTMLElement.prototype.hide = function() {
-                                // Modification > Target Element > Hidden
-                                this.hidden = true
-                            });
-
-                            // Show
-                            HTMLElement.prototype.show || (HTMLElement.prototype.show = function() {
-                                // Modification > Target Element > Hidden
-                                this.hidden = false
-                            });
-
-                            // Append After
-                            Node.prototype.appendAfter || (Node.prototype.appendAfter = function(sibling) {
-                                /* Logic
-                                        If
-                                            Sibling is defined.
-                                */
-                                if (sibling)
-                                    /* Logic
-                                            If
-                                                Sibling is an element.
-                                    */
-                                    if (typeof sibling.tagName == "string") {
-                                        // Insertion, Adjacent Initialization
-                                            // Target Element
-                                            (
-                                                this.parentElement ||
-                                                this.parentNode ||
-                                                sibling.parentElement ||
-                                                sibling.parentNode
-                                            ).insertBefore(this, sibling);
-
-                                            // Sibling
-                                            (
-                                                this.parentElement ||
-                                                this.parentNode ||
-                                                sibling.parentElement ||
-                                                sibling.parentNode
-                                            ).insertBefore(sibling, this)
-                                    }
-                            });
-
-                            // Append Before
-                            Node.prototype.appendBefore || (Node.prototype.appendBefore = function(sibling) {
-                                /* Logic
-                                        If
-                                            Sibling is defined.
-                                */
-                                if (sibling)
-                                    /* Logic
-                                            If
-                                                Sibling is an element.
-                                    */
-                                    if (typeof sibling.tagName == "string")
-                                        // Insertion, Adjacent Initialization
-                                            // Target Element
-                                            (
-                                                this.parentElement ||
-                                                this.parentNode ||
-                                                sibling.parentElement ||
-                                                sibling.parentNode
-                                            ).insertBefore(this, sibling)
-                            });
-
-                            // Delete
-                            Node.prototype.delete || (Node.prototype.delete = function() {
-                                // Deletion
-                                    // Target Element
-                                    this.remove()
-                            });
-
-                            // Add Class
-                            NodeList.prototype.addClass || (NodeList.prototype.addClass = HTMLCollection.prototype.addClass);
-
-                            // Add Event
-                            NodeList.prototype.addEvent || (NodeList.prototype.addEvent = HTMLCollection.prototype.addEvent);
-
-                            // Add Event Listener
-                            NodeList.prototype.addEventListener || (NodeList.prototype.addEventListener = HTMLCollection.prototype.addEventListener);
-
-                            // Append After
-                            NodeList.prototype.appendAfter || (NodeList.prototype.appendAfter = HTMLCollection.prototype.appendAfter);
-
-                            // Append Before
-                            NodeList.prototype.appendBefore || (NodeList.prototype.appendBefore = HTMLCollection.prototype.appendBefore);
-
-                            // Close
-                            NodeList.prototype.close || (NodeList.prototype.close = HTMLCollection.prototype.close);
-
-                            // CSS Selector
-                            NodeList.prototype.CSSSelector || (NodeList.prototype.CSSSelector = HTMLCollection.prototype.CSSSelector);
-
-                            // Delete Attr[ibute]
-                            NodeList.prototype.delAttr || (NodeList.prototype.delAttr = HTMLCollection.prototype.delAttr);
-
-                            // Delete Class
-                            NodeList.prototype.delClass || (NodeList.prototype.delClass = HTMLCollection.prototype.delClass);
-
-                            // Delete
-                            NodeList.prototype.delete || (NodeList.prototype.delete = HTMLCollection.prototype.delete);
-
-                            // Delete Event
-                            NodeList.prototype.delEvent || (NodeList.prototype.delEvent = HTMLCollection.prototype.delEvent);
-
-                            // Delete Style
-                            NodeList.prototype.delStyle || (NodeList.prototype.delStyle = HTMLCollection.prototype.delStyle);
-
-                            // Empty
-                            NodeList.prototype.empty = HTMLCollection.prototype.empty;
-
-                            // Get Attr[ibute]
-                            NodeList.prototype.getAttr || (NodeList.prototype.getAttr = HTMLCollection.prototype.getAttr);
-
-                            // Get Attribute
-                            NodeList.prototype.getAttribute || (NodeList.prototype.getAttribute = HTMLCollection.prototype.getAttribute);
-
-                            // Get CSS
-                            NodeList.prototype.getCSS || (NodeList.prototype.getCSS = HTMLCollection.prototype.getCSS);
-
-                            // Get Elements By Attribute Name
-                            NodeList.prototype.getElementsByAttributeName || (NodeList.prototype.getElementsByAttributeName = HTMLCollection.prototype.getElementsByAttributeName);
-
-                            // Get Elements By Attribute Name and Value
-                            NodeList.prototype.getElementsByAttributeNameAndValue || (NodeList.prototype.getElementsByAttributeNameAndValue = HTMLCollection.prototype.getElementsByAttributeNameAndValue);
-
-                            // Get Elements By Attribute Name and Value except Value
-                            NodeList.prototype.getElementsByAttributeNameAndValueExceptValue || (NodeList.prototype.getElementsByAttributeNameAndValueExceptValue = HTMLCollection.prototype.getElementsByAttributeNameAndValueExceptValue);
-
-                            // Get Elements By Attribute Name and Value without Value
-                            NodeList.prototype.getElementsByAttributeNameAndValueWithoutValue || (NodeList.prototype.getElementsByAttributeNameAndValueWithoutValue = HTMLCollection.prototype.getElementsByAttributeNameAndValueWithoutValue);
-
-                            // Get Elements By Attribute Name except Value
-                            NodeList.prototype.getElementsByAttributeNameExceptValue || (NodeList.prototype.getElementsByAttributeNameExceptValue = HTMLCollection.prototype.getElementsByAttributeNameExceptValue);
-
-                            // Get Element By Attribute Name with Value
-                            NodeList.prototype.getElementsByAttributeNameWithValue || (NodeList.prototype.getElementsByAttributeNameWithValue = HTMLCollection.prototype.getElementsByAttributeNameWithValue);
-
-                            // Get Elements By Attribute Name with Value except Value
-                            NodeList.prototype.getElementsByAttributeNameWithValueExceptValue || (NodeList.prototype.getElementsByAttributeNameWithValueExceptValue = HTMLCollection.prototype.getElementsByAttributeNameWithValueExceptValue);
-
-                            // Get Elements By Attribute Name with Value without Value
-                            NodeList.prototype.getElementsByAttributeNameWithValueWithoutValue || (NodeList.prototype.getElementsByAttributeNameWithValueWithoutValue = HTMLCollection.prototype.getElementsByAttributeNameWithValueWithoutValue);
-
-                            // Get Elements By Attribute Name without Value
-                            NodeList.prototype.getElementsByAttributeNameWithoutValue || (NodeList.prototype.getElementsByAttributeNameWithoutValue = HTMLCollection.prototype.getElementsByAttributeNameWithoutValue);
-
-                            // Get Elements Related By Data ID
-                            NodeList.prototype.getElementsRelatedByDataID || (NodeList.prototype.getElementsRelatedByDataID = HTMLCollection.prototype.getElementsRelatedByDataID);
-
-                            // Has Attr[ibute]
-                            NodeList.prototype.hasAttr || (NodeList.prototype.hasAttr = HTMLCollection.prototype.hasAttr);
-
-                            // Has Attribute
-                            NodeList.prototype.hasAttribute || (NodeList.prototype.hasAttribute = HTMLCollection.prototype.hasAttribute);
-
-                            // Has Child
-                            NodeList.prototype.hasChild || (NodeList.prototype.hasChild = HTMLCollection.prototype.hasChild);
-
-                            // Has Child by Query Selector
-                            NodeList.prototype.hasChildByQuerySelector || (NodeList.prototype.hasChildByQuerySelector = HTMLCollection.prototype.hasChildByQuerySelector);
-
-                            // Has Class
-                            NodeList.prototype.hasClass || (NodeList.prototype.hasClass = HTMLCollection.prototype.hasClass);
-
-                            // Hide
-                            NodeList.prototype.hide || (NodeList.prototype.hide = HTMLCollection.prototype.hide);
-
-                            // Open
-                            NodeList.prototype.open || (NodeList.prototype.open = HTMLCollection.prototype.open);
-
-                            // [Query Selector (All)]
-                            NodeList.prototype.$$ || (NodeList.prototype.$$ = HTMLCollection.prototype.$$);
-
-                            // Relate Element By Data ID
-                            NodeList.prototype.relateElementByDataID || (NodeList.prototype.relateElementByDataID = HTMLCollection.prototype.relateElementByDataID);
-
-                            // Remove Attribute
-                            NodeList.prototype.removeAttribute || (NodeList.prototype.removeAttribute = HTMLCollection.prototype.removeAttribute);
-
-                            // Remove Event Listener
-                            NodeList.prototype.removeEventListener || (NodeList.prototype.removeEventListener = HTMLCollection.prototype.removeEventListener);
-
-                            // Run Event
-                            NodeList.prototype.runEvent || (NodeList.prototype.runEvent = HTMLCollection.prototype.runEvent);
-
-                            // Set Attr[ibute]
-                            NodeList.prototype.setAttr || (NodeList.prototype.setAttr = HTMLCollection.prototype.setAttr);
-
-                            // Set Attribute
-                            NodeList.prototype.setAttribute || (NodeList.prototype.setAttribute = HTMLCollection.prototype.setAttribute);
-
-                            // Attr[ibute]
-                            NodeList.prototype.attr || (NodeList.prototype.attr = HTMLCollection.prototype.attr);
-
-                            // Set CSS
-                            NodeList.prototype.setCSS || (NodeList.prototype.setCSS = HTMLCollection.prototype.setCSS);
-
-                            // Set Event
-                            NodeList.prototype.setEvent || (NodeList.prototype.setEvent = HTMLCollection.prototype.setEvent);
-
-                            // Show
-                            NodeList.prototype.show || (NodeList.prototype.show = HTMLCollection.prototype.show);
-
-                            // Style
-                            NodeList.prototype.style || (NodeList.prototype.style = HTMLCollection.prototype.style);
-
-                            // To Array
-                            NodeList.prototype.toArray || (NodeList.prototype.toArray = HTMLCollection.prototype.toArray);
-
-                            // CSS Selector
-                            document.createElement("div").CSSSelector || (Object.defineProperty(Element.prototype, "CSSSelector", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization
-                                        // Target Element
-                                        var that = this;
-
-                                        // CSS Selector
-                                        var CSSSelector = (
-                                            // Element Tag Name
-                                            that.tagName.toLowerCase() +
-
-                                            // Class
-                                            (function() {
-                                                /* Logic
-                                                        If the element has a class.
-                                                */
-                                                if ((that.getAttribute("class") || " ").indexOf(" ") <= -1)
-                                                    /* Loop
-                                                            Index the element's class nodes.
-                                                    */
-                                                    for (var i = 0; i < (that.getAttribute("class") || " ").trim().split(/ /g).length; i++)
-                                                        // Return
-                                                        return ("." + (that.getAttribute("class") || " ").trim().split(/ /g)[i]);
-
-                                                else
-                                                    // Return
-                                                    return ""
-                                            })() +
-
-                                            // ID
-                                            (function() {
-                                                /* Logic
-                                                        If
-                                                            the element has an ID.
-                                                */
-                                                if (that.id)
-                                                    // Return
-                                                    return ("#" + that.id);
-
-                                                else
-                                                    // Return
-                                                    return ""
-                                            })() +
-
-                                            // Attributes
-                                            (function() {
-                                                // Initialization
-                                                    // Target Element
-                                                        // Attributes
-                                                        var thatAttributes = "";
-
-                                                /* Loop
-                                                        Index the element's attributes.
-                                                */
-                                                for (var i = 0; i < that.attributes.length; i++)
-                                                    /* Logic
-                                                            If
-                                                                the attribute name is not "class" and "id".
-                                                    */
-                                                    if (
-                                                        that.attributes[i].name != "class" &&
-                                                        that.attributes[i].name != "id"
-                                                    )
-                                                        // Update
-                                                            // Attributes
-                                                            thatAttributes += ('[' + that.attributes[i].name + '="' + (that.attributes[i].value || "").replace(/"/g, '\'') + '"]');
-
-                                                // Return
-                                                    // Attributes
-                                                    return thatAttributes
-                                            })()
-                                        );
-
-                                    // Return
-                                        // CSS Selector
-                                        return CSSSelector.replace(/=\"\"/g, "")
-                                },
-
-                                // Set
-                                set: function(CSSSelector) {
-                                    CSSSelector = CSSSelector.replace(/ /g, "");
-
-                                    /* Logic
-                                            If
-                                                the specified "CSSSelector" has "." in it.
-                                    */
-                                        // Class
-                                        if (
-                                            CSSSelector.indexOf(".") >= 0 &&
-                                            (
-                                                (
-                                                    CSSSelector.indexOf(".") < CSSSelector.indexOf("[") &&
-                                                    CSSSelector.indexOf(".") < CSSSelector.indexOf("]")
-                                                ) ||
-                                                (
-                                                    CSSSelector.indexOf(".") > CSSSelector.indexOf("[") &&
-                                                    CSSSelector.indexOf(".") > CSSSelector.indexOf("]")
-                                                )
+                                            if (
+                                                document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_") + "_".length).indexOf("eval(") >= 0
                                             )
-                                        )
-                                            /* Loop
-                                                    For all existing class nodes.
+                                                // Style > DOM Class Element > [Class Set]
+                                                document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = eval(document.querySelectorAll("[class]")[i].getAttribute("class").replace(document.querySelectorAll("[class]")[i].classSet + "_eval", "::lapys::").replace(/\:\:lapys\:\:\(([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|)\{1,}\)/g, "").slice(document.querySelectorAll("[class]")[i].getAttribute("class").replace(document.querySelectorAll("[class]")[i].classSet + "_eval", "::lapys::").replace(/\:\:lapys\:\:\(([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|)\{1,}\)/g, "").indexOf("(") + "(".length, -1));
+
+                                            /* Logic
+                                                    Switch case to
+                                                        [case]
                                             */
-                                            for (var i = 0; i < CSSSelector.replace(/(\[([a-zA-Z0-9]|_|\.|\\|\/|\*|\"|\'|-|\=|){1,}\]|\#([a-zA-Z0-9]|_|-){1,})/g, "").trim().split(/\./).filter(function(data) { return !!data }).length; i++)
-                                                // Modification
-                                                    // Target Element
-                                                        // Class
-                                                        this.addClass(CSSSelector.replace(/(\[([a-zA-Z0-9]|_|\.|\\|\/|\*|\"|\'|-|\=|){1,}\]|\#([a-zA-Z0-9]|_|-){1,})/g, "").trim().replace(/\[style\=([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|){1,}\]/g, "").split(/\./).filter(function(data) { return !!data })[i]);
+                                            switch (document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_") + "_".length)) {
+                                                // Device Height
+                                                case "device-height":
+                                                    document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = `${screen.availHeight}px`;
+                                                    break;
+
+                                                // Device Width
+                                                case "device-width":
+                                                    document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = `${screen.availWidth}px`;
+                                                    break;
 
-                                    /* Logic
-                                            If
-                                                the specified "CSSSelector" has "." in it.
-                                    */
-                                        // ID
-                                        if (CSSSelector.indexOf("#") >= 0)
-                                            // Modification
-                                                // Target Element
-                                                    // ID
-                                                    this.id = CSSSelector.replace(/(((\[([a-zA-Z0-9]|_|-|\=|\\|\/|"|'|){1,}\]|\.([a-zA-Z0-9]|_|-){1,})|#)|(\[style\=([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|){1,}\]))/g, "");
-
-                                    /* Logic
-                                            If
-                                                the specified "CSSSelector" has "[" in it
-                                                    and
-                                                the specified "CSSSelector" has "]" further than "[" in it.
-                                    */
-                                        // Attributes
-                                        if (
-                                            CSSSelector.indexOf("[") >= 0 &&
-                                            CSSSelector.indexOf("]") >= 0
-                                        )
-                                            /* Loop
-                                                    Index all existing attribute nodes that are not "class" or "id".
-                                            */
-                                            for (var i = 0; i < CSSSelector.replace(/(\.([a-zA-Z0-9]|_|-){1,}|\#([a-zA-Z0-9]|_|-){1,})|(\[([a-zA-Z0-9]|_|-|\=|"|'|)class([a-zA-Z0-9]|_|-|\=|"|'|){1,}\]|\[([a-zA-Z0-9]|_|-|\=|"|'|)id([a-zA-Z0-9]|_|-|\=|"|'|){1,}\])|(\[|\"|\')/g, "").split(/\]/).filter(function(data) { return !!data }).length; i++)
-                                                // Modification
-                                                    // Target Element
-                                                        // 'Modified "CSSSelector"'
-                                                        this.setAttribute(
-                                                            CSSSelector.replace(/(\.([a-zA-Z0-9]|_|-){1,}|\#([a-zA-Z0-9]|_|-){1,})|(\[([a-zA-Z0-9]|_|-|\=|"|'|)class([a-zA-Z0-9]|_|-|\=|"|'|){1,}\]|\[([a-zA-Z0-9]|_|-|\=|"|'|)id([a-zA-Z0-9]|_|-|\=|"|'|){1,}\])|(\[|\"|\')/g, "").split(/\]/).filter(function(data) { return !!data })[i].slice(
-                                                                0,
-                                                                CSSSelector.replace(/(\.([a-zA-Z0-9]|_|-){1,}|\#([a-zA-Z0-9]|_|-){1,})|(\[([a-zA-Z0-9]|_|-|\=|"|'|)class([a-zA-Z0-9]|_|-|\=|"|'|){1,}\]|\[([a-zA-Z0-9]|_|-|\=|"|'|)id([a-zA-Z0-9]|_|-|\=|"|'|){1,}\])|(\[|\"|\')/g, "").split(/\]/).filter(function(data) { return !!data })[i].indexOf("=")
-                                                            ),
-                                                            CSSSelector.replace(/(\.([a-zA-Z0-9]|_|-){1,}|\#([a-zA-Z0-9]|_|-){1,})|(\[([a-zA-Z0-9]|_|-|\=|"|'|)class([a-zA-Z0-9]|_|-|\=|"|'|){1,}\]|\[([a-zA-Z0-9]|_|-|\=|"|'|)id([a-zA-Z0-9]|_|-|\=|"|'|){1,}\])|(\[|\"|\')/g, "").split(/\]/).filter(function(data) { return !!data })[i].slice(
-                                                                CSSSelector.replace(/(\.([a-zA-Z0-9]|_|-){1,}|\#([a-zA-Z0-9]|_|-){1,})|(\[([a-zA-Z0-9]|_|-|\=|"|'|)class([a-zA-Z0-9]|_|-|\=|"|'|){1,}\]|\[([a-zA-Z0-9]|_|-|\=|"|'|)id([a-zA-Z0-9]|_|-|\=|"|'|){1,}\])|(\[|\"|\')/g, "").split(/\]/).filter(function(data) { return !!data })[i].indexOf("=") + "=".length
-                                                            )
-                                                        )
-                                }
-                            }));
-
-                            // Parent
-                            document.createElement("div").parent || (Object.defineProperty(Element.prototype, "parent", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                get: function() {
-                                    // Return
-                                    return (this.parentElement || this.parentNode)
-                                }
-                            }));
-
-                            // Parent Path
-                            document.createElement("div").parentPath || (Object.defineProperty(Element.prototype, "parentPath", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization
-                                        // Target Element
-                                        var that = this;
-
-                                        // Parent Nodes
-                                        var parents = [];
-
-                                    /* Logic
-                                            While
-                                                the Target Element is still defined.
-                                    */
-                                    while (that) {
-                                        // Update
-                                            // Parent Nodes
-                                            parents.unshift(that);
-
-                                            // Target Element
-                                            that = (that.parentNode || that.parentElement)
-                                    };
-
-                                    // Update
-                                        // Parent Nodes
-                                        parents.unshift(window);
-                                        parents.reverse();
-
-                                    // Return
-                                    return parents
-                                },
-
-                                // Set
-                                set: function() {
-                                    /* Do nothing… */
-                                }
-                            }));
-
-                            // Role
-                            document.createElement("div").role || (Object.defineProperty(Element.prototype, "role", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                default: 2,
-
-                                // Get
-                                get: function() {
-                                    // Return
-                                    return this.getAttribute("role")
-                                },
-
-                                // Set
-                                set: function(data) {
-                                    // Modification
-                                        // Target Element
-                                            // Role
-                                            this.setAttribute("role", data)
-                                }
-                            }));
-
-                            /* Siblings
-                                    --- NOTE ---
-                                        The property here should be volatile.
-                            */
-                            Object.defineProperty(Element.prototype, "siblings", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function(number) {
-                                    // Initialization > Target
-                                    var that = this;
-
-                                    // Return
-                                    return Array.from((this.parentElement || this.parentNode).children).filter(function(data) {
-                                        // Return
-                                        return data != that
-                                    })
-                                }
-                            });
-
-                            // Height
-                            document.getElementsByTagName("html").height || (Object.defineProperty(HTMLCollection.prototype, "height", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
-
-                                    /* Loop
-                                        Index all members of the HTML Collection.
-                                */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].height;
-
-                                    // Return
-                                    return array
-                                },
-
-                                // Set
-                                set: function(number) {
-                                    /* Loop
-                                            Index all members of the HTML Collection.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Style > Target Element > Height
-                                        this[i].style.height = (number + "px");
-                                }
-                            }));
-
-                            // Node Index
-                            document.getElementsByTagName("html").nodeIndex || (Object.defineProperty(HTMLCollection.prototype, "nodeIndex", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
-
-                                    /* Loop
-                                        Index all members of the HTML Collection.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].nodeIndex;
-
-                                    // Return
-                                    return array
-                                },
-
-                                // Set
-                                set: function(number) {
-                                    /* Do nothing... */
-                                }
-                            }));
-
-                            // Offset
-                            document.getElementsByTagName("html").offset || (Object.defineProperty(HTMLCollection.prototype, "offset", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
-
-                                    /* Loop
-                                            Index all members of the HTML Collection.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].offset;
-
-                                    // Return
-                                    return array
-                                }
-                            }));
-
-                            // Parent
-                            document.getElementsByTagName("html").parent || (Object.defineProperty(HTMLCollection.prototype, "parent", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
-
-                                    /* Loop
-                                            Index all members of the HTML Collection.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].parent;
-
-                                    // Return
-                                    return array
-                                }
-                            }));
-
-                            // Parent Path
-                            document.getElementsByTagName("html").parentPath || (Object.defineProperty(HTMLCollection.prototype, "parentPath", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
-
-                                    /* Loop
-                                            Index all members of the HTML Collection.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].parentPath;
-
-                                    // Return
-                                    return array
-                                }
-                            }));
-
-                            // Role
-                            document.getElementsByTagName("html").role || (Object.defineProperty(HTMLCollection.prototype, "role", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
-
-                                    /* Loop
-                                            Index all members of the HTML Collection.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].role;
-
-                                    // Return
-                                    return array
-                                },
-
-                                // Set
-                                set: function(data) {
-                                    /* Loop
-                                            Index all members of the HTML Collection.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Modification > Target Element > Role
-                                        this[i].role = data
-                                }
-                            }));
-
-                            // Siblings
-                            document.getElementsByTagName("html").siblings || (Object.defineProperty(HTMLCollection.prototype, "siblings", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
-
-                                    /* Loop
-                                            Index all members of the HTML Collection.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].siblings;
-
-                                    // Return
-                                    return array
-                                }
-                            }));
-
-                            // Width
-                            document.getElementsByTagName("html").width || (Object.defineProperty(HTMLCollection.prototype, "width", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization
-                                    var array = [];
-
-                                    /* Loop
-                                            Index all members of the HTML Collection.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                            array[i] = this[i].width;
-
-                                    // Return
-                                    return array
-                                },
-
-                                // Set
-                                set: function(number) {
-                                    /* Loop
-                                            Index all members of the HTML Collection.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Style > Target Element > Width
-                                        this[i].style.width = (number + "px")
-                                }
-                            }));
-
-                            // Height
-                            document.createElement("div").height || (Object.defineProperty(HTMLElement.prototype, "height", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Return
-                                    return this.clientHeight
-                                },
-
-                                // Set
-                                set: function(number) {
-                                    // Target Element > Style > Height
-                                    this.style.height = (number + "px")
-                                }
-                            }));
-
-                            // Offset
-                            document.createElement("div").offset || (Object.defineProperty(HTMLElement.prototype, "offset", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Return
-                                    return this.getBoundingClientRect()
-                                }
-                            }));
-
-                            // Width
-                            document.createElement("div").width || (Object.defineProperty(HTMLElement.prototype, "width", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Return
-                                    return this.clientWidth
-                                },
-
-                                // Set
-                                set: function(number) {
-                                    // Target Element
-                                        // Style
-                                            // Width
-                                            this.style.width = (number + "px")
-                                }
-                            }));
-
-                            // Height
-                            document.querySelectorAll("html").height || (Object.defineProperty(NodeList.prototype, "height", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
-
-                                    /* Loop
-                                            Index all members of the Node List.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].height;
-
-                                    // Return
-                                    return array
-                                },
-
-                                // Set
-                                set: function(number) {
-                                    /* Loop
-                                            Index all members of the Node List.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Style
-                                            // Target Element
                                                 // Height
-                                                this[i].style.height = (number + "px");
-                                }
-                            }));
+                                                case "height":
+                                                    document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = `${parseNumber(document.querySelectorAll("[class]")[i].getCSS("height"))}px`;
+                                                    break;
 
-                            // Node Index
-                            document.querySelectorAll("html").nodeIndex || (Object.defineProperty(NodeList.prototype, "nodeIndex", {
-                                // Configurable
-                                configurable: true,
+                                                // Fill Parent
+                                                case "fill-parent":
+                                                    document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (() => {
+                                                        /* Logic
+                                                                If
+                                                                        the DOM Class Element's parent has a "flex-direction" of "column",
+                                                                            or
+                                                                        the DOM Class Element's parent has a "flex-direction" of "column-reverse",
 
-                                // Enumerable
-                                enumerable: true,
+                                                                        or
+                                                                    the DOM Class Element "height" in its Class Set,
 
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
+                                                                else if
+                                                                        the DOM Class Element's parent has a "flex-direction" of "auto",
+                                                                            or
+                                                                        the DOM Class Element's parent has a "flex-direction" of "initial",
+                                                                            or
+                                                                        the DOM Class Element's parent has a "flex-direction" of "inherit",
+                                                                            or
+                                                                        the DOM Class Element's parent has a "flex-direction" of "row",
+                                                                            or
+                                                                        the DOM Class Element's parent has a "flex-direction" of "row-reverse",
 
-                                    /* Loop
-                                        Index all members of the HTML Collection.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].nodeIndex;
-
-                                    // Return
-                                    return array
-                                },
-
-                                // Set
-                                set: function(number) {
-                                    /* Do nothing... */
-                                }
-                            }));
-
-                            // Offset
-                            document.querySelectorAll("html").offset || (Object.defineProperty(NodeList.prototype, "offset", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
-
-                                    /* Loop
-                                            Index all members of the Node List.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].offset;
-
-                                    // Return
-                                    return array
-                                }
-                            }));
-
-                            // Parent
-                            document.querySelectorAll("html").parent || (Object.defineProperty(NodeList.prototype, "parent", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
-
-                                    /* Loop
-                                            Index all members of the Node List.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].parent;
-
-                                    // Return
-                                    return array
-                                }
-                            }));
-
-                            // Parent Path
-                            document.querySelectorAll("html").parentPath || (Object.defineProperty(NodeList.prototype, "parentPath", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
-
-                                    /* Loop
-                                            Index all members of the Node List.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].parentPath;
-
-                                    // Return
-                                    return array
-                                }
-                            }));
-
-                            // Role
-                            document.querySelectorAll("html").role || (Object.defineProperty(NodeList.prototype, "role", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
-
-                                    /* Loop
-                                            Index all members of the Node List.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].role;
-
-                                    // Return
-                                    return array
-                                },
-
-                                // Set
-                                set: function(data) {
-                                    /* Loop
-                                            Index all members of the Node List.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Modification
-                                            // Target Element
-                                                // Role
-                                                this[i].role = data
-                                }
-                            }));
-
-                            // Siblings
-                            document.querySelectorAll("html").siblings || (Object.defineProperty(NodeList.prototype, "siblings", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
-
-                                    /* Loop
-                                            Index all members of the Node List.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].siblings;
-
-                                    // Return
-                                    return array
-                                }
-                            }));
-
-                            // Width
-                            document.querySelectorAll("html").width || (Object.defineProperty(NodeList.prototype, "width", {
-                                // Configurable
-                                configurable: true,
-
-                                // Enumerable
-                                enumerable: true,
-
-                                // Get
-                                get: function() {
-                                    // Initialization > Array
-                                    var array = [];
-
-                                    /* Loop
-                                            Index all members of the Node List.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Update > Array
-                                        array[i] = this[i].width;
-
-                                    // Return
-                                    return array
-                                },
-
-                                // Set
-                                set: function(number) {
-                                    /* Loop
-                                            Index all members of the Node List.
-                                    */
-                                    for (var i = 0; i < this.length; i++)
-                                        // Style
-                                            // Target Element
-                                                // Width
-                                                this[i].style.width = (number + "px")
-                                }
-                            }));
-
-                    // Class Sets
-                        /* Loop
-                                Index all items of the LapysJS script's "data-enable" attribute.
-                        */
-                        for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
-                            /* Logic
-                                    If
-                                        the LapysJS script has "_all" enabled or
-                                        the LapysJS script has "classSets" enabled.
-                            */
-                            if (
-                                (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "_all" ||
-                                (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "classSets"
-                            ) {
-                                function classSets() {
-                                    /* Loop
-                                            Index all DOM Class Elements.
-                                    */
-                                    for (var i = 0; i < document.querySelectorAll("[class]").length; i++)
-                                        /* Logic
-                                                If
-                                                    the DOM Class Element has "-" in its class
-                                                        and
-                                                    the DOM Class Element has "_" in its class.
-                                        */
-                                        if (document.querySelectorAll("[class]")[i].getAttribute("class").indexOf("_") >= 0)
-                                            /* Loop
-                                                    Index all the DOM Class Element's class nodes.
-                                            */
-                                            for (var k = 0; k < document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g).length; k++) {
-                                                /* Logic
-                                                        Switch case to
-                                                            Flex, Maximum and Minimum.
-                                                */
-                                                switch (document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].replace(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_")), "").slice(0, document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].replace(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice( document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_")), "").indexOf("-"))) {
-                                                    // Flex
-                                                    case ("flex" || "flx"):
-                                                        document.querySelectorAll("[class]")[i].classSetMetadata = "flex";
-                                                        break;
-
-                                                    // Maximum
-                                                    case "max":
-                                                        document.querySelectorAll("[class]")[i].classSetMetadata = "max";
-                                                        break;
-
-                                                    // Minimum
-                                                    case "min":
-                                                        document.querySelectorAll("[class]")[i].classSetMetadata = "min";
-                                                        break;
-
-                                                    // [Default]
-                                                    default:
-                                                        document.querySelectorAll("[class]")[i].classSetMetadata = ""
-                                                };
-
-                                                /* Logic
-                                                        Switch case to
-                                                            Basis, Height and Width.
-                                                */
-                                                switch (document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].replace(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_")), "").slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].replace(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_")), "").indexOf("-") + "-".length)) {
-                                                    case ("b" || "basis"):
-                                                        document.querySelectorAll("[class]")[i].classSetData = "basis";
-                                                        break;
-
-                                                    case ("h" || "height"):
-                                                        document.querySelectorAll("[class]")[i].classSetData = "height";
-                                                        break;
-
-                                                    case ("w" || "width"):
-                                                        document.querySelectorAll("[class]")[i].classSetData = "width";
-                                                        break;
-
-                                                    // [Default]
-                                                    default:
-                                                        document.querySelectorAll("[class]")[i].classSetData = ""
-                                                };
-
-                                                /* Logic
-                                                        If
-                                                            the class set metadata is defined.
-                                                */
-                                                if (document.querySelectorAll("[class]")[i].classSetMetadata)
-                                                    // Modification > Element > Class Set
-                                                    document.querySelectorAll("[class]")[i].classSet = (
-                                                        document.querySelectorAll("[class]")[i].classSetMetadata +
-                                                        (
-                                                            document.querySelectorAll("[class]")[i].classSetData[0].toUpperCase() +
-                                                            document.querySelectorAll("[class]")[i].classSetData.slice(1)
+                                                                        or
+                                                                    the DOM Class Element "width" in its Class Set.
+                                                        */
+                                                        if (
+                                                            document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction").indexOf("column") >= 0 ||
+                                                            document.querySelectorAll("[class]")[i].classSet.toLowerCase().indexOf("height") >= 0
                                                         )
-                                                    );
+                                                            // Return
+                                                            return (
+                                                                parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("border-bottom-width")) +
+                                                                parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("border-top-width")) +
+                                                                parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("padding-bottom")) +
+                                                                parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("padding-top")) +
+                                                                parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("height"))
+                                                            ) + "px";
 
-                                                else
-                                                    // Modification > Element > Class Set
-                                                    document.querySelectorAll("[class]")[i].classSet = document.querySelectorAll("[class]")[i].classSetData;
+                                                        else if (
+                                                            document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction") == "auto" ||
+                                                            document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction") == "initial" ||
+                                                            document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction") == "inherit" ||
+                                                            document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction").indexOf("row") >= 0 ||
+                                                            document.querySelectorAll("[class]")[i].classSet.toLowerCase().indexOf("width") >= 0
+                                                        )
+                                                            // Return
+                                                            return (
+                                                                parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("border-left-width")) +
+                                                                parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("border-right-width")) +
+                                                                parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("padding-left")) +
+                                                                parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("padding-right")) +
+                                                                parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("width"))
+                                                            ) + "px"
+                                                    })();
+                                                    break;
 
-                                                /* Logic
-                                                        If
-                                                            the Class Set is "eval".
-                                                */
-                                                if (
-                                                    document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_") + "_".length).indexOf("eval(") >= 0
-                                                )
-                                                    // Style > DOM Class Element > [Class Set]
-                                                    document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = eval(document.querySelectorAll("[class]")[i].getAttribute("class").replace(document.querySelectorAll("[class]")[i].classSet + "_eval", "::lapys::").replace(/\:\:lapys\:\:\(([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|)\{1,}\)/g, "").slice(document.querySelectorAll("[class]")[i].getAttribute("class").replace(document.querySelectorAll("[class]")[i].classSet + "_eval", "::lapys::").replace(/\:\:lapys\:\:\(([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]| |\n|)\{1,}\)/g, "").indexOf("(") + "(".length, -1));
+                                                // Match Parent
+                                                case "match-parent":
+                                                    document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = `${parseNumber((document.querySelectorAll("[class]")[i].parentElement || document.querySelectorAll("[class]")[i].parentNode).getCSS(document.querySelectorAll("[class]")[i].classSet))}px`;
+                                                    break;
 
-                                                /* Logic
-                                                        Switch case to
-                                                            [case]
-                                                */
-                                                switch (document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].slice(document.querySelectorAll("[class]")[i].getAttribute("class").split(/ /g)[k].indexOf("_") + "_".length)) {
-                                                    // Device Height
-                                                    case "device-height":
-                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (screen.availHeight + "px");
-                                                        break;
+                                                // Width
+                                                case "width":
+                                                    document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = `${parseNumber(document.querySelectorAll("[class]")[i].getCSS("width"))}px`;
+                                                    break;
 
-                                                    // Device Width
-                                                    case "device-width":
-                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (screen.availWidth + "px");
-                                                        break;
+                                                // Window Height
+                                                case "window-height":
+                                                    document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = `${innerHeight}px`;
+                                                    break;
 
-                                                    // Height
-                                                    case "height":
-                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (parseNumber(document.querySelectorAll("[class]")[i].getCSS("height")) + "px");
-                                                        break;
+                                                // Window Width
+                                                case "window-width":
+                                                    document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = `${innerWidth}px`
+                                            };
 
-                                                    // Fill Parent
-                                                    case "fill-parent":
-                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (function() {
-                                                            /* Logic
-                                                                    If
-                                                                            the DOM Class Element's parent has a "flex-direction" of "column",
-                                                                                or
-                                                                            the DOM Class Element's parent has a "flex-direction" of "column-reverse",
+                                            document.querySelectorAll("[class]")[i].classSet = void 0;
+                                            document.querySelectorAll("[class]")[i].classSetMetadata = void 0;
+                                            document.querySelectorAll("[class]")[i].classSetData = void 0
+                                        }
+                            };
+                            classSets();
+                            window.setEvent("resize", classSets)
+                        };
 
-                                                                            or
-                                                                        the DOM Class Element "height" in its Class Set,
+                // Style
+                    /* Loop
+                            Index all items of the LapysJS script's "data-enable" attribute.
+                    */
+                    for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
+                        /* Logic
+                                If
+                                    the LapysJS script has "_all" enabled or
+                                    the LapysJS script has "styleAttributes" enabled.
+                        */
+                        if (
+                            (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "_all" ||
+                            (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "styleAttributes"
+                        ) {
+                            /* Loop
+                                    Index all "css-style" attributed DOM Elements.
+                            */
+                            for (var i = 0; i < document.querySelectorAll("[css-style]").length; i++) {
+                                /* Loop
+                                        Index all "css-style" CSS declarations.
+                                */
+                                for (var k = 0; k < document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g).length; k++)
+                                    // Style > Element > [CSS Style]
+                                    document.querySelectorAll("[css-style]")[i].style[document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g)[k].trim().slice(0, document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g)[k].trim().indexOf(":")).replace(/[a-z]\-[a-z]/g, function(data) { return (data.replace("-", "").slice(0, -1) + data[data.length - 1].toUpperCase()) })] = document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g)[k].trim().slice(document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g)[k].trim().indexOf(":") + ":".length).trim();
 
-                                                                    else if
-                                                                            the DOM Class Element's parent has a "flex-direction" of "auto",
-                                                                                or
-                                                                            the DOM Class Element's parent has a "flex-direction" of "initial",
-                                                                                or
-                                                                            the DOM Class Element's parent has a "flex-direction" of "inherit",
-                                                                                or
-                                                                            the DOM Class Element's parent has a "flex-direction" of "row",
-                                                                                or
-                                                                            the DOM Class Element's parent has a "flex-direction" of "row-reverse",
-
-                                                                            or
-                                                                        the DOM Class Element "width" in its Class Set.
-                                                            */
-                                                            if (
-                                                                document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction").indexOf("column") >= 0 ||
-                                                                document.querySelectorAll("[class]")[i].classSet.toLowerCase().indexOf("height") >= 0
-                                                            )
-                                                                // Return
-                                                                return (
-                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("border-bottom-width")) +
-                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("border-top-width")) +
-                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("padding-bottom")) +
-                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("padding-top")) +
-                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("height"))
-                                                                ) + "px";
-
-                                                            else if (
-                                                                document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction") == "auto" ||
-                                                                document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction") == "initial" ||
-                                                                document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction") == "inherit" ||
-                                                                document.querySelectorAll("[class]")[i].parent.getCSS("flex-direction").indexOf("row") >= 0 ||
-                                                                document.querySelectorAll("[class]")[i].classSet.toLowerCase().indexOf("width") >= 0
-                                                            )
-                                                                // Return
-                                                                return (
-                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("border-left-width")) +
-                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("border-right-width")) +
-                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("padding-left")) +
-                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("padding-right")) +
-                                                                    parseNumber(document.querySelectorAll("[class]")[i].parent.getCSS("width"))
-                                                                ) + "px"
-                                                        })();
-                                                        break;
-
-                                                    // Match Parent
-                                                    case "match-parent":
-                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (parseNumber((document.querySelectorAll("[class]")[i].parentElement || document.querySelectorAll("[class]")[i].parentNode).getCSS(document.querySelectorAll("[class]")[i].classSet)) + "px");
-                                                        break;
-
-                                                    // Width
-                                                    case "width":
-                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (parseNumber(document.querySelectorAll("[class]")[i].getCSS("width")) + "px");
-                                                        break;
-
-                                                    // Window Height
-                                                    case "window-height":
-                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (innerHeight + "px");
-                                                        break;
-
-                                                    // Window Width
-                                                    case "window-width":
-                                                        document.querySelectorAll("[class]")[i].style[document.querySelectorAll("[class]")[i].classSet] = (innerWidth + "px")
-                                                };
-
-                                                document.querySelectorAll("[class]")[i].classSet = void 0;
-                                                document.querySelectorAll("[class]")[i].classSetMetadata = void 0;
-                                                document.querySelectorAll("[class]")[i].classSetData = void 0
-                                            }
-                                };
-                                classSets();
-                                window.setEvent("resize", classSets)
+                                // Modification > Element > CSS Style
+                                document.querySelectorAll("[css-style]")[i].removeAttribute("css-style")
                             };
 
-                    // Style
-                        /* Loop
-                                Index all items of the LapysJS script's "data-enable" attribute.
-                        */
-                        for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
-                            /* Logic
-                                    If
-                                        the LapysJS script has "_all" enabled or
-                                        the LapysJS script has "styleAttributes" enabled.
+                            /* Loop
+                                    Index all "js-style" attributed DOM Elements.
                             */
-                            if (
-                                (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "_all" ||
-                                (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "styleAttributes"
-                            ) {
-                                /* Loop
-                                        Index all "css-style" attributed DOM Elements.
-                                */
-                                for (var i = 0; i < document.querySelectorAll("[css-style]").length; i++) {
-                                    /* Loop
-                                            Index all "css-style" CSS declarations.
-                                    */
-                                    for (var k = 0; k < document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g).length; k++)
-                                        // Style > Element > [CSS Style]
-                                        document.querySelectorAll("[css-style]")[i].style[document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g)[k].trim().slice(0, document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g)[k].trim().indexOf(":")).replace(/[a-z]\-[a-z]/g, function(data) { return (data.replace("-", "").slice(0, -1) + data[data.length - 1].toUpperCase()) })] = document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g)[k].trim().slice(document.querySelectorAll("[css-style]")[i].getAttribute("css-style").split(/;/g)[k].trim().indexOf(":") + ":".length).trim();
-
-                                    // Modification > Element > CSS Style
-                                    document.querySelectorAll("[css-style]")[i].removeAttribute("css-style")
-                                };
+                            for (var i = 0; i < document.querySelectorAll("[js-style]").length; i++) {
+                                // Modification > Element > JS Style
+                                document.querySelectorAll("[js-style]")[i].setAttribute("js-style", document.querySelectorAll("[js-style]")[i].getAttribute("js-style").replace(/\(([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\"\'\<\,\>\.\?\/]| |\n|);([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\"\'\<\,\>\.\?\/]| |\n|){1,}\)/g, function(data) { return data.replace(/\;/g, "::semi-colon::") }));
 
                                 /* Loop
-                                        Index all "js-style" attributed DOM Elements.
+                                        Index all "js-style" CSS declarations.
                                 */
-                                for (var i = 0; i < document.querySelectorAll("[js-style]").length; i++) {
-                                    // Modification > Element > JS Style
-                                    document.querySelectorAll("[js-style]")[i].setAttribute("js-style", document.querySelectorAll("[js-style]")[i].getAttribute("js-style").replace(/\(([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\"\'\<\,\>\.\?\/]| |\n|);([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\{\}\|\\\:\"\'\<\,\>\.\?\/]| |\n|){1,}\)/g, function(data) { return data.replace(/\;/g, "::semi-colon::") }));
+                                for (var k = 0; k < document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g).length; k++)
+                                    // Style > Element > [CSS Style]
+                                    document.querySelectorAll("[js-style]")[i].style[document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g)[k].trim().slice(0, document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g)[k].trim().indexOf(":")).replace(/[a-z]\-[a-z]/g, function(data) { return (data.replace("-", "").slice(0, -1) + data[data.length - 1].toUpperCase()) })] = eval(document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g)[k].trim().slice(document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g)[k].trim().indexOf(":") + ":".length).trim());
 
-                                    /* Loop
-                                            Index all "js-style" CSS declarations.
-                                    */
-                                    for (var k = 0; k < document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g).length; k++)
-                                        // Style > Element > [CSS Style]
-                                        document.querySelectorAll("[js-style]")[i].style[document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g)[k].trim().slice(0, document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g)[k].trim().indexOf(":")).replace(/[a-z]\-[a-z]/g, function(data) { return (data.replace("-", "").slice(0, -1) + data[data.length - 1].toUpperCase()) })] = eval(document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g)[k].trim().slice(document.querySelectorAll("[js-style]")[i].getAttribute("js-style").split(/;/g)[k].trim().indexOf(":") + ":".length).trim());
-
-                                    // Modification > Element > JS Style
-                                    document.querySelectorAll("[js-style]")[i].removeAttribute("js-style")
-                                }
+                                // Modification > Element > JS Style
+                                document.querySelectorAll("[js-style]")[i].removeAttribute("js-style")
                             }
-                };
-                modifyDOMElements();
-                onDOMChange(function() { modifyDOMElements() });
+                        }
+            };
+            modifyDOMElements();
+            onDOMChange(modifyDOMElements);
 
         /* LapysJS Plug-Ins
                 --- WARN ---
@@ -7170,25 +7713,23 @@ if (
                                 // Accordion
                                     // Close
                                     document.getElementsByClassName("accordion")[i].constructor.prototype["LapysJS close"] = function() {
-                                        // Modification
-                                            // Target Element
-                                                // Data Open
-                                                this.removeAttribute("data-open");
+                                        // Modification > Target Element
+                                            // Data Open
+                                            this.removeAttribute("data-open");
 
-                                                // Data Close
-                                                this.setAttribute("data-close", "")
+                                            // Data Close
+                                            this.setAttribute("data-close", "")
                                     };
                                     document.getElementsByClassName("accordion")[i]["LapysJS close"]();
 
                                     // Open
                                     document.getElementsByClassName("accordion")[i].constructor.prototype["LapysJS open"] = function() {
-                                        // Modification
-                                            // Target Element
-                                                // Data Close
-                                                this.removeAttribute("data-close");
+                                        // Modification > Target Element
+                                            // Data Close
+                                            this.removeAttribute("data-close");
 
-                                                // Data Open
-                                                this.setAttribute("data-open", "")
+                                            // Data Open
+                                            this.setAttribute("data-open", "")
                                     };
 
                             /* Logic
@@ -7216,23 +7757,23 @@ if (
                                                 // Accordion
                                                 document.getElementsByClassName('accordion')[i].querySelectorAll('[data-id="content"], [data-id="header"]')[j]["LapysJS accordion"] = document.getElementsByClassName("accordion")[i];
 
-                                    // Header
-                                        // Events
-                                            // [Data Event Type] | Mouse Up
-                                            document.getElementsByClassName("accordion")[i]["LapysJS header"].setEvent(
-                                                (
-                                                    document.getElementsByClassName("accordion")[i].getAttribute("data-event-type") ||
-                                                    document.getElementsByClassName("accordion")[i]["LapysJS header"].getAttribute("data-event-type") ||
-                                                    "mouseup"
-                                                ),
+                                    // Header > Events > [Data Event Type] | Mouse Up
+                                    document.getElementsByClassName("accordion")[i]["LapysJS header"]["LapysJS accordionHeaderHasEventSet"] || document.getElementsByClassName("accordion")[i]["LapysJS header"].setEvent(
+                                        (
+                                            document.getElementsByClassName("accordion")[i].getAttribute("data-event-type") ||
+                                            document.getElementsByClassName("accordion")[i]["LapysJS header"].getAttribute("data-event-type") ||
+                                            "mouseup"
+                                        ),
 
-                                                function() {
-                                                    // Toggle
-                                                    !this["LapysJS toggle"] ? this["LapysJS accordion"]["LapysJS open"]() : this["LapysJS accordion"]["LapysJS close"]();
+                                        function() {
+                                            // Toggle
+                                            !this["LapysJS toggle"] ? this["LapysJS accordion"]["LapysJS open"]() : this["LapysJS accordion"]["LapysJS close"]();
 
-                                                    this["LapysJS toggle"] = !this["LapysJS toggle"]
-                                                }
-                                            )
+                                            this["LapysJS toggle"] = !this["LapysJS toggle"]
+                                        }
+                                    );
+
+                                    document.getElementsByClassName("accordion")[i]["LapysJS header"]["LapysJS accordionHeaderHasEventSet"] = true
                             }
                         };
 
@@ -7303,12 +7844,12 @@ if (
                                                                 /* Buttons Container */
                                                                 '\n\r<div class="buttons-container">' +
                                                                     /* Left Button */
-                                                                    '\r\t<button class="button left-button" onmouseup="this.parentElement.parentElement[\'LapysJS prev\']()">' +
+                                                                    '\r\t<button class="button left-button" onclick="this.parentElement.parentElement[\'LapysJS prev\']()">' +
                                                                         (document.getElementsByClassName("carousel")[i].getAttribute("data-button-left-inner-html") || '<') +
                                                                     '\r\t</button>' +
 
                                                                     /* Right Button */
-                                                                    '\r\t<button class="button right-button" onmouseup="this.parentElement.parentElement[\'LapysJS next\']()">' +
+                                                                    '\r\t<button class="button right-button" onclick="this.parentElement.parentElement[\'LapysJS next\']()">' +
                                                                         (document.getElementsByClassName("carousel")[i].getAttribute("data-button-right-inner-html") || '>') +
                                                                     '\r\t</button>' +
                                                                 '\r</div>'
@@ -7338,7 +7879,7 @@ if (
                                                                                 carouselIndicators += (
                                                                                     '\r\t<input ' +
                                                                                         'class="indicator indicator-' + j + '" ' +
-                                                                                        'onmouseup="' +
+                                                                                        'onclick="' +
                                                                                             '((this.parentElement || this.parentNode).parentElement || (this.parentElement || this.parentNode).parentNode)[\'LapysJS toggle\'](' + j + ')' +
                                                                                         '" ' +
                                                                                         'type="checkbox">'
@@ -7459,18 +8000,6 @@ if (
                                 // Function
                                     // Next
                                     document.getElementsByClassName("carousel")[i].constructor.prototype["LapysJS next"] = function() {
-                                        /* Loop
-                                                Index all the Carousel's 'Slide Container''s child elements.
-                                        */
-                                        for (var j = 0; j < this.querySelector(".slides-container").children.length; j++)
-                                            // Slide
-                                                // Modification
-                                                    // Hide
-                                                    this.querySelector(".slides-container").children[j].hidden = true;
-
-                                                    // Show
-                                                    this.querySelector(".slides-container").children[this["LapysJS currentSlideIndex"]].hidden = false;
-
                                         /* Logic
                                                 If
                                                     [statement].
@@ -7485,11 +8014,8 @@ if (
                                             // Modification
                                                 // Carousel
                                                     // Current Index
-                                                    this["LapysJS currentSlideIndex"] += 1
-                                    };
+                                                    this["LapysJS currentSlideIndex"] += 1;
 
-                                    // Previous
-                                    document.getElementsByClassName("carousel")[i].constructor.prototype["LapysJS prev"] = function() {
                                         /* Loop
                                                 Index all the Carousel's 'Slide Container''s child elements.
                                         */
@@ -7500,8 +8026,11 @@ if (
                                                     this.querySelector(".slides-container").children[j].hidden = true;
 
                                                     // Show
-                                                    this.querySelector(".slides-container").children[this["LapysJS currentSlideIndex"]].hidden = false;
+                                                    this.querySelector(".slides-container").children[this["LapysJS currentSlideIndex"]].hidden = false
+                                    };
 
+                                    // Previous
+                                    document.getElementsByClassName("carousel")[i].constructor.prototype["LapysJS prev"] = function() {
                                         /* Logic
                                                 If
                                                     the Carousel's "Current Slide Index" is lesser than 0
@@ -7518,7 +8047,19 @@ if (
                                             // Modification
                                                 // Carousel
                                                     // Current Index
-                                                    this["LapysJS currentSlideIndex"] -= 1
+                                                    this["LapysJS currentSlideIndex"] -= 1;
+
+                                        /* Loop
+                                                Index all the Carousel's 'Slide Container''s child elements.
+                                        */
+                                        for (var j = 0; j < this.querySelector(".slides-container").children.length; j++)
+                                            // Slide
+                                                // Modification
+                                                    // Hide
+                                                    this.querySelector(".slides-container").children[j].hidden = true;
+
+                                                    // Show
+                                                    this.querySelector(".slides-container").children[this["LapysJS currentSlideIndex"]].hidden = false;
                                     };
 
                                     // Toggle
@@ -7546,16 +8087,16 @@ if (
                     // Clipboard
                         // Definition
                             // <clip-clone>
-                            (!window.customElements || (document.createElement("clip-clone").constructor !== HTMLElement) || customElements.define("clip-clone", class ClipboardClone extends HTMLElement {}));
+                            (!window.customElements || (document.createElement("clip-clone").constructor !== HTMLElement) || window.customElements.define("clip-clone", class ClipboardClone extends HTMLElement {}));
 
                             // <clip-copy>
-                            (!window.customElements || (document.createElement("clip-copy").constructor !== HTMLElement) || customElements.define("clip-copy", class ClipboardCopy extends HTMLElement {}));
+                            (!window.customElements || (document.createElement("clip-copy").constructor !== HTMLElement) || window.customElements.define("clip-copy", class ClipboardCopy extends HTMLElement {}));
 
                             // <clip-cut>
-                            (!window.customElements || (document.createElement("clip-cut").constructor !== HTMLElement) || customElements.define("clip-cut", class ClipboardCut extends HTMLElement {}));
+                            (!window.customElements || (document.createElement("clip-cut").constructor !== HTMLElement) || window.customElements.define("clip-cut", class ClipboardCut extends HTMLElement {}));
 
                             // <clip-paste>
-                            (!window.customElements || (document.createElement("clip-paste").constructor !== HTMLElement) || customElements.define("clip-paste", class ClipboardPaste extends HTMLElement {}));
+                            (!window.customElements || (document.createElement("clip-paste").constructor !== HTMLElement) || window.customElements.define("clip-paste", class ClipboardPaste extends HTMLElement {}));
 
                         /* Loop
                                 Index all <clip-clone> elements.
@@ -8822,20 +9363,20 @@ if (
                                                         '\r\t\tclass="playback-range" ' +
                                                         '\r\t\tonchange="' +
                                                             '\r\t\tthis.media.playbackRate = (function() {' +
-                                                                '\r\t\t\tif (((event || []).target || []).value >= 500)' +
-                                                                    '\r\t\t\t\treturn parseFloat((((event || []).target || []).value - 500) / 50); ' +
+                                                                '\r\t\t\tif ((event.target || []).value >= 500)' +
+                                                                    '\r\t\t\t\treturn parseFloat(((event.target || []).value - 500) / 50); ' +
 
                                                                 '\r\t\t\telse' +
-                                                                    '\r\t\t\t\treturn -parseFloat((((event || []).target || []).value) / 100)' +
+                                                                    '\r\t\t\t\treturn -parseFloat(((event.target || []).value) / 100)' +
                                                             '\r\t\t})()' +
                                                         '" ' +
                                                         '\r\t\toninput="' +
-                                                            '\r\t\t((event || []).target || []).media.playbackRate = (function() {' +
-                                                                '\r\t\t\tif (((event || []).target || []).value >= 500)' +
-                                                                    '\r\t\t\t\treturn parseFloat((((event || []).target || []).value - 500) / 50); ' +
+                                                            '\r\t\t(event.target || []).media.playbackRate = (function() {' +
+                                                                '\r\t\t\tif ((event.target || []).value >= 500)' +
+                                                                    '\r\t\t\t\treturn parseFloat(((event.target || []).value - 500) / 50); ' +
 
                                                                 '\r\t\t\telse' +
-                                                                    '\r\t\t\t\treturn -parseFloat((((event || []).target || []).value) / 100)' +
+                                                                    '\r\t\t\t\treturn -parseFloat(((event.target || []).value) / 100)' +
                                                             '\r\t\t})()' +
                                                         '" ' +
                                                         '\r\t\tmax="1000" ' +
@@ -9238,6 +9779,9 @@ if (
                                         // Has Placeholder
                                         document.querySelectorAll("input[data-placeholder], textarea[data-placeholder]")[i].hasPlaceholder = true;
 
+                                        // Placeholder Element
+                                        document.querySelectorAll("input[data-placeholder], textarea[data-placeholder]")[i].placeholderElement = document.querySelectorAll("input[data-placeholder], textarea[data-placeholder]")[i].previousElementSibling;
+
                                 // Events
                                     // Placeholder Element
                                         // Blur
@@ -9310,7 +9854,7 @@ if (
                         screen.tip = document.createElement("screen-tip");
 
                         // Insertion
-                        document.body.append(screen.tip);
+                        document.body.appendChild(screen.tip);
 
                         // Deletion
                         (document.getElementsByTagName("screen-tip")[1] || document.createElement("div")).remove();
@@ -9473,10 +10017,10 @@ if (
                                                         screen.tip.margin.top = (that.getBoundingClientRect().height * (5 / 100));
 
                                                         // Screentip Position > Left
-                                                        screen.tip.position.left = (event || []).clientX || 0;
+                                                        screen.tip.position.left = event.clientX || 0;
 
                                                         // Screentip Position > Top
-                                                        screen.tip.position.top = (event || []).clientY || 0;
+                                                        screen.tip.position.top = event.clientY || 0;
 
                                                         /* Logic
                                                                 [if:else if:else function]
@@ -9826,7 +10370,7 @@ if (
                         screen.toast = document.createElement("screen-toast");
 
                         // Insertion
-                        document.body.append(screen.toast);
+                        document.body.appendChild(screen.toast);
 
                         // Deletion
                         !(document.getElementsByTagName("screen-toast")[1]) || document.getElementsByTagName("screen-toast")[1].remove();
@@ -9854,10 +10398,7 @@ if (
 
                                         // Modification
                                             // Inner HTML
-                                            screen.toast.innerHTML = this.getAttribute("data-toast").replace(
-                                                this.getAttribute("data-toast").slice(this.getAttribute("data-toast").lastIndexOf("(")),
-                                                ""
-                                            );
+                                            screen.toast.innerHTML = this.getAttribute("data-toast").slice(0, -(this.getAttribute("data-toast").slice(this.getAttribute("data-toast").lastIndexOf("_") + "_".length).length + 1));
 
                                         // Set Timeout
                                         setTimeout(function() {
@@ -9882,8 +10423,8 @@ if (
 
                                                     // Style
                                                     screen.toast.removeAttribute("style")
-                                            },  ((parseFloat(that.getAttribute("data-toast").replace(/([a-z]|[A-Z]|[0-9]| ){1,}\([0-9]{1,}_/, "").slice(0, -1)) * 1000) || 0))
-                                        }, ((parseFloat(that.getAttribute("data-toast").replace(/([a-z]|[A-Z]|[0-9]| ){1,}\(/, "").replace(/_[0-9]\)/, "")) * 1000) || 0))
+                                            }, ((parseFloat(that.getAttribute("data-toast").slice(that.getAttribute("data-toast").lastIndexOf("_") + "_".length)) * 1000) || 0))
+                                        }, ((parseFloat(that.getAttribute("data-toast").slice(that.getAttribute("data-toast").lastIndexOf("_") + "_".length)) * 1000) || 0))
                                     }
                                 );
 
@@ -9949,15 +10490,15 @@ if (
                                             else if
                                                 the Event Code is "ArrowRight".
                                     */
-                                    if (((event || []).code || "") == "ArrowLeft")
+                                    if ((event.code || "") == "ArrowLeft")
                                         // Carousel [Selected]
                                             // Previous
-                                            document.querySelector(".carousel[data-selected]")["LapysJS prev"]();
+                                            document.querySelector(".carousel[data-selected]")["LapysJS next"]();
 
-                                    else if (((event || []).code || "") == "ArrowRight")
+                                    else if ((event.code || "") == "ArrowRight")
                                         // Carousel [Selected]
                                             // Next
-                                            document.querySelector(".carousel[data-selected]")["LapysJS next"]();
+                                            document.querySelector(".carousel[data-selected]")["LapysJS prev"]();
 
                                 /* Loop
                                         Index all 'focused' Media.
@@ -10028,14 +10569,14 @@ if (
                                                     or
                                                 the Event Code is "KeyF".
                                     */
-                                    if (((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-play-event-key") || "Space"))
+                                    if ((event.code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-play-event-key") || "Space"))
                                         // Function
                                             // Toggle Play Mode
                                             document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i]["LapysJS togglePlayMode"]();
 
                                     else if (
-                                        (((event || []).ctrlKey || false) || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
-                                        ((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seekmore-left-event-key") || "ArrowLeft")
+                                        ((event.ctrlKey || false) || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
+                                        (event.code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seekmore-left-event-key") || "ArrowLeft")
                                     )
                                         // Modification
                                             // Current Time
@@ -10044,8 +10585,8 @@ if (
                                             );
 
                                     else if (
-                                        (((event || []).ctrlKey || false) || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
-                                        ((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seekmore-right-event-key") || "ArrowRight")
+                                        ((event.ctrlKey || false) || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
+                                        (event.code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seekmore-right-event-key") || "ArrowRight")
                                     )
                                         // Modification
                                             // Current Time
@@ -10054,8 +10595,8 @@ if (
                                             );
 
                                     else if (
-                                        ((event || []).shiftKey || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
-                                        ((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seek-left-event-key") || "ArrowLeft")
+                                        (event.shiftKey || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
+                                        (event.code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seek-left-event-key") || "ArrowLeft")
                                     )
                                         // Modification
                                             // Current Time
@@ -10064,8 +10605,8 @@ if (
                                             );
 
                                     else if (
-                                        ((event || []).shiftKey || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
-                                        ((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seek-right-event-key") || "ArrowRight")
+                                        (event.shiftKey || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-seek-meta-event-key")) &&
+                                        (event.code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-seek-right-event-key") || "ArrowRight")
                                     )
                                         // Modification
                                             // Current Time
@@ -10074,8 +10615,8 @@ if (
                                             );
 
                                     else if (
-                                        (((event || []).ctrlKey || false) || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-volume-meta-event-key")) &&
-                                        ((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-volume-reduce-event-key") || "ArrowDown")
+                                        ((event.ctrlKey || false) || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-volume-meta-event-key")) &&
+                                        (event.code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-volume-reduce-event-key") || "ArrowDown")
                                     )
                                         // Modification
                                             // Volume
@@ -10105,8 +10646,8 @@ if (
                                                         false;
 
                                     else if (
-                                        (((event || []).ctrlKey || false) || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-volume-meta-event-key")) &&
-                                        ((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-volume-increase-event-key") || "ArrowUp")
+                                        ((event.ctrlKey || false) || document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].hasAttribute("data-volume-meta-event-key")) &&
+                                        (event.code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-volume-increase-event-key") || "ArrowUp")
                                     )
                                         // Modification
                                             // Volume
@@ -10141,7 +10682,7 @@ if (
                                                         })() + '"]')) :
                                                         false;
 
-                                    else if (((event || []).code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-fullscreen-event-key") || "KeyF"))
+                                    else if ((event.code || "") == (document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i].getAttribute("data-fullscreen-event-key") || "KeyF"))
                                         // Function
                                             // Fullscreen
                                             document.querySelectorAll("audio.media[data-focus], video.media[data-focus]")[i]["LapysJS fullscreen"]()
@@ -10158,7 +10699,7 @@ if (
                                             else if
                                                 its respective Option Box exists.
                                     */
-                                    if (((event || []).code || "") == "Escape")
+                                    if ((event.code || "") == "Escape")
                                         // Modification
                                             // Option Box
                                                 // Hidden
@@ -10184,7 +10725,7 @@ if (
                                                         else if
                                                             the Event Code is "Enter".
                                                 */
-                                                if (((event || []).code || "") == "ArrowDown") {
+                                                if ((event.code || "") == "ArrowDown") {
                                                     // Modification
                                                         // Data Selected
                                                         document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]:not([hidden])')[1].children[k].removeAttribute("data-selected");
@@ -10200,7 +10741,7 @@ if (
                                                     k = document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]:not([hidden])')[1].children.length
                                                 }
 
-                                                else if (((event || []).code || "") == "ArrowUp") {
+                                                else if ((event.code || "") == "ArrowUp") {
                                                     // Modification
                                                         // Data Selected
                                                         document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]:not([hidden])')[1].children[k].removeAttribute("data-selected");
@@ -10218,7 +10759,7 @@ if (
                                                     k = document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]:not([hidden])')[1].children.length
                                                 }
 
-                                                else if (((event || []).code || "") == "Enter") {
+                                                else if ((event.code || "") == "Enter") {
                                                     // Modification
                                                         // [Select Box]
                                                             // Value
@@ -10251,7 +10792,7 @@ if (
                                                             else if
                                                                 the Event Code is "ArrowUp".
                                                     */
-                                                    if (((event || []).code || "") == "ArrowDown") {
+                                                    if ((event.code || "") == "ArrowDown") {
                                                         // Modification
                                                             // Data Selected
                                                             document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]:not([hidden])')[1].children[0].setAttribute("data-selected", "");
@@ -10260,7 +10801,7 @@ if (
                                                         k = document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]:not([hidden])')[1].children.length
                                                     }
 
-                                                    else if (((event || []).code || "") == "ArrowUp") {
+                                                    else if ((event.code || "") == "ArrowUp") {
                                                         // Modification
                                                             // Data Selected
                                                             document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[j].getAttribute('data-id') + '"]:not([hidden])')[1].children[
@@ -10292,24 +10833,24 @@ if (
                                 /* Loop
                                         Index all Targets.
                                 */
-                                for (var i = 0; i < ((event || []).path || []).length; i++)
+                                for (var i = 0; i < (event.path || []).length; i++)
                                     /* Logic
                                             If
                                                 the Target is an element.
                                     */
-                                    if (typeof ((event || []).path || [])[i].tagName == "string")
+                                    if (typeof (event.path || [])[i].tagName == "string")
                                         /* Logic
                                                 If
                                                     the Target Element is a Carousel.
                                         */
-                                        if (((event || []).path || [])[i].hasClass("carousel")) {
+                                        if ((event.path || [])[i].hasClass("carousel")) {
                                             // Modification
                                                 // Carousel
                                                     // Data Selected
-                                                    ((event || []).path || [])[i].setAttribute("data-selected", "");
+                                                    (event.path || [])[i].setAttribute("data-selected", "");
 
                                             // End
-                                            i = ((event || []).path || []).length
+                                            i = (event.path || []).length
                                         };
 
                                 /* Loop
@@ -10323,12 +10864,12 @@ if (
                                 /* Loop
                                         Index all Targets.
                                 */
-                                for (var i = 0; i < ((event || []).path || []).length; i++)
+                                for (var i = 0; i < (event.path || []).length; i++)
                                     /* Logic
                                             If
                                                 the Target is an element.
                                     */
-                                    if (typeof ((event || []).path || [])[i].tagName == "string")
+                                    if (typeof (event.path || [])[i].tagName == "string")
                                         /* Logic
                                                 If
                                                     the Target Element is a Dropdown
@@ -10336,28 +10877,28 @@ if (
                                                 else if
                                                     the Target Element is a Dropdown Content.
                                         */
-                                        if (((event || []).path || [])[i].hasClass("dropdown")) {
+                                        if ((event.path || [])[i].hasClass("dropdown")) {
                                                 // Dropdown
                                                     // Open
-                                                    ((event || []).path || [])[i]["LapysJS open"]();
+                                                    (event.path || [])[i]["LapysJS open"]();
 
                                             // End
-                                            i = ((event || []).path || []).length
+                                            i = (event.path || []).length
                                         }
 
-                                        else if (((event || []).path || [])[i]["LapysJS dropdown"]) {
+                                        else if ((event.path || [])[i]["LapysJS dropdown"]) {
                                             // Dropdown
                                                 // Open
-                                                document.querySelector('.dropdown[data-id="' + ((event || []).path || [])[i].getAttribute("data-id") + '"]')["LapysJS open"]();
+                                                document.querySelector('.dropdown[data-id="' + (event.path || [])[i].getAttribute("data-id") + '"]')["LapysJS open"]();
 
                                             // End
-                                            i = ((event || []).path || []).length
+                                            i = (event.path || []).length
                                         };
 
                                 /* Loop
                                         Index all targets.
                                 */
-                                for (var j = 0; j < ((event || []).path || []).length; j++)
+                                for (var j = 0; j < (event.path || []).length; j++)
                                     /* Loop
                                             Index all Select Boxes.
                                     */
@@ -10366,7 +10907,7 @@ if (
                                                 If
                                                     the target is an element.
                                         */
-                                        if (typeof ((event || []).path || [])[j].tagName == "string")
+                                        if (typeof (event.path || [])[j].tagName == "string")
                                             /* Logic
                                                     If
                                                         the Target Element
@@ -10375,14 +10916,14 @@ if (
                                                         is an Option Box.
                                             */
                                             if (
-                                                ((event || []).path || [])[j].hasClass("select-box") ||
-                                                ((event || []).path || [])[j] == document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[k].getAttribute('data-id') + '"]')[1]
+                                                (event.path || [])[j].hasClass("select-box") ||
+                                                (event.path || [])[j] == document.querySelectorAll('[data-id="' + document.querySelectorAll('input.select-box')[k].getAttribute('data-id') + '"]')[1]
                                             ) {
                                                 // End
                                                 k = document.querySelectorAll("input.select-box").length;
 
                                                 // End
-                                                j = ((event || []).path || []).length
+                                                j = (event.path || []).length
                                             }
 
                                             else
@@ -10392,8 +10933,7 @@ if (
                                     }
                             })
                 };
-                plugIns();
-                onDOMNodeAdded(function() { plugIns() });
+                onDOMNodeAdded(plugIns);
 
         /* Execution
             --- WARN ---

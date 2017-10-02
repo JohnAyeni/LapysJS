@@ -1,6 +1,6 @@
 /**
     @author: Lapys Dev Team
-    @currentUpdate: Additional methods to Objects: foreach(); and newer functions: objectify() & repeat().
+    @currentUpdate: <for>, <foreach>, <switch> and <while> Elements installed.
     @description: LapysJS is a JavaScript library with its independent CSS framework designed to make JavaScript more forgiving and faster to script.
     @version: 0.0.1
 */
@@ -61,7 +61,7 @@
                 var object = {};
 
                 /* Loop
-                        Iterate for the length of Array A.
+                        Iterate over the length of Array A.
 
                     > Update > Object > [Array A > Element]
                 */
@@ -265,7 +265,7 @@
             > Return
         */
         if (typeof data == "number")
-            return data ** .3333333333333333
+            return data ** .3333333333333333;
 
         else
             return NaN
@@ -797,7 +797,7 @@
                 > Return
             */
             if (typeof data == "number")
-                return data ** .5
+                return data ** .5;
 
             else
                 return NaN
@@ -1032,7 +1032,13 @@
             // Name (Title)
             this.name = "LapysJS";
 
-            // Script
+            /* Script
+                    --- WARN ---
+                        This property can easily be voided by file modifications.
+
+                        The "data-enable" attribute that comes with the <script> element is
+                        not dynamic and must be pre-decided for now.
+            */
             this.script = document.querySelector('script[src*="lapys."][src*=".js"]') || ((document.scripts || [])[(document.scripts || [0]).length - 1] || document.querySelectorAll("script")[document.querySelectorAll("script").length - 1]);
 
             // Strict Mode
@@ -1112,6 +1118,40 @@
                 }
             }
         });
+            // Script
+                // Modification
+                    // Data Enable
+                    !((LapysJS.script.getAttribute("data-enable") || "").indexOf("_null") >= 0) || LapysJS.script.removeAttribute("data-enable");
+
+                    // Enable
+                    Object.defineProperty(LapysJS.script.constructor.prototype, "enable", {
+                        // Configurable
+                        configurable: true,
+
+                        // Enumerable
+                        enumerable: true,
+
+                        // Get
+                        get: function() {
+                            // Return
+                            return this.getAttribute("data-enable")
+                        },
+
+                        // Set
+                        set: function(data) {
+                            /* Logic
+                                    If
+                                        Data is not "_null".
+
+                                > Modification > Target > Data Enable
+                            */
+                            if ((this.getAttribute("data-enable") || "").indexOf("_null") <= -1)
+                                this.setAttribute("data-enable", data);
+
+                            else
+                                this.removeAttribute("data-enable")
+                        }
+                    });
 
 /* Array Data */
     // Add Element
@@ -1327,7 +1367,7 @@
             // Function > Remove Element
             !(that.indexOf(element[0]) >= 0) || removeElement()
         };
-        removeElement()
+        removeElement();
 
         // Return
         return this
@@ -1467,7 +1507,7 @@
         */
         if (typeof func == "function")
             /* Loop
-                    For the length of the Target.
+                    Iterate over the length of the Target.
 
                 > Function > Function
             */
@@ -1971,7 +2011,7 @@
         // Get
         get: function() {
             // Return
-            return (document.createElement(this.toLowerCase()).constructor !== HTMLElement)
+            return (document.createElement(this.toLowerCase()).constructor.name.toString().indexOf("HTML") <= document.createElement(this.toLowerCase()).constructor.name.toString().indexOf("Element")) && (document.createElement(this.toLowerCase()).constructor.name.toString().indexOf("HTMLUnknownElement") <= -1)
         }
     });
 
@@ -2036,11 +2076,23 @@
         // Return
         return JSON.parse("{" +
             (function() {
+                // Initialization > Array
                 var array = [];
 
+                /* Loop
+                        Index all "," characters in That.
+
+                    > Update > Array
+                */
                 for (var i = 0; i < that.split(/,/g).length; i++)
                     array[i] = "\"" + that.split(/,/g)[i].trim().getBeforeChar(":").replace(/\"/g, "") + "\":" + that.split(/,/g)[i].trim().getAfterChar(":");
 
+                /* Logic
+                        If
+                            [if:else if:else statement]
+
+                    > Return
+                */
                 if (array[0] != "\"\":")
                     return array.toString().replace(/\'/g, "\"");
 
@@ -2063,6 +2115,9 @@
     String.prototype.upper || (String.prototype.upper = String.prototype.toUpperCase);
 
 /* Function */
+    // Absolute
+    constructor.prototype.abs || (constructor.prototype.abs = Math.abs);
+
     /* Array
             --- NOTE ---
                 Made for converting HTMLCollections, NodeLists & Objects into arrays.
@@ -2411,15 +2466,16 @@
     });
 
     // Register Element
-    constructor.prototype.registerElement || (constructor.prototype.registerElement = (element) => {
-        /* Logic
-                If
-                    Custom Elements is defined.
+    constructor.prototype.registerElement || (constructor.prototype.registerElement = (...element) => {
+        for (var i = 0; i < element.length; i++)
+            /* Logic
+                    If
+                        Custom Elements is defined.
 
-            > Return
-        */
-        if (window.customElements)
-            return customElements.define(element, class customElement extends HTMLElement {})
+                > Return
+            */
+            if (window.customElements)
+                return window.customElements.define(element[i], class HTMLCustomElement extends HTMLElement {})
     });
 
     // Reload
@@ -2483,9 +2539,39 @@ if (
 ) {
     /* Custom Data */
         // App
-        constructor.prototype.app || (constructor.prototype.app = new (function App() {
-            // Return
-            return navigator || window.navigator || []
+        constructor.prototype.app || (constructor.prototype.app = new (function Application() {
+            // Initialization > Name
+            var name = "";
+
+            // Author
+            this.author = "";
+
+            // Name
+            Object.defineProperty(this, "name", {
+                // Configurable
+                configurable: true,
+
+                // Enumerable
+                enumerable: true,
+
+                // Get
+                get: () => {
+                    // Return
+                    return name || document.title
+                },
+
+                // Set
+                set: (data) => {
+                    // Update > Name
+                    name = data
+                }
+            });
+
+            // Navigator
+            this.navigator = navigator || window.navigator || [];
+
+            // Version
+            this.version = "0.0.1"
         })());
 
         // Browser
@@ -3855,7 +3941,7 @@ if (
             // Initialization
                 // <key-command>
                     // Registration
-                    (!window.customElements || (document.createElement("key-command").constructor !== HTMLElement) || window.customElements.define("key-command", class KeyCommand extends HTMLElement {}));
+                    (!window.customElements || (document.createElement("key-command").constructor !== HTMLElement) || window.customElements.define("key-command", class HTMLKeyCommandElement extends HTMLElement {}));
 
                     // On DOM Ready
                     onDOMReady(function() {
@@ -3874,9 +3960,74 @@ if (
                             })
                     });
 
+                    // Modification
+                        // Function
+                        Object.defineProperty(new (document.createElement("key-command")).constructor().constructor.prototype, "function", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Return
+                                return this.getAttribute("data-event-function")
+                            },
+
+                            // Set
+                            set: function(data) {
+                                // Modification > Target > Data Event Function
+                                this.setAttribute("data-event-function", data)
+                            }
+                        });
+
+                        // Key
+                        Object.defineProperty(new (document.createElement("key-command")).constructor().constructor.prototype, "key", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Return
+                                return this.getAttribute("data-event-key")
+                            },
+
+                            // Set
+                            set: function(data) {
+                                // Modification > Target > Data Event Key
+                                this.setAttribute("data-event-key", data)
+                            }
+                        });
+
                 // <lorem-ipsum>
                     // Registration
-                    (!window.customElements ||  (document.createElement("lorem-ipsum").constructor !== HTMLElement) || window.customElements.define("lorem-ipsum", class LoremIpsum extends HTMLElement {}));
+                    (!window.customElements ||  (document.createElement("lorem-ipsum").constructor !== HTMLElement) || window.customElements.define("lorem-ipsum", class HTMLLoremIpsumElement extends HTMLElement {}));
+
+                    // Modification
+                        // Value Length
+                        Object.defineProperty(new (document.createElement("lorem-ipsum")).constructor().constructor.prototype, "valLength", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Return
+                                return this.hasAttribute("1") || this.hasAttribute("2") || this.hasAttribute("3") || this.hasAttribute("4") || this.hasAttribute("5")
+                            },
+
+                            // Set
+                            set: function(data) {
+                                // Modification > Target > [Data]
+                                !(data == 1 || data == 2 || data == 3 || data == 4 || data == 5) || this.setAttribute(data.toString(), "")
+                            }
+                        });
 
                     /* Set Timeout
                             --- NOTE ---
@@ -3951,18 +4102,40 @@ if (
 
                 // <fav-icon>
                     // Registration
-                    (!window.customElements || (document.createElement("fav-icon").constructor !== HTMLElement) || customElements.define("fav-icon", class FavIcon extends HTMLElement {}));
+                    (!window.customElements || (document.createElement("fav-icon").constructor !== HTMLElement) || customElements.define("fav-icon", class HTMLFavIconElement extends HTMLElement {}));
 
-                    // Modification > <head> > Inner HTML
-                    !(
-                        document.querySelector("fav-icon") &&
-                        (document.querySelector("fav-icon") || document.createElement("fav-icon")).hasAttribute("src") ||
-                        (document.querySelector("fav-icon") || document.createElement("fav-icon")).src
-                    ) || (document.head.innerHTML += (
-                        '\n\r\t<!-- Document Favicon -->' +
-                        '\r\t<link href="' + (document.querySelector("fav-icon").getAttribute("src") || document.querySelector("fav-icon").src) + '" rel="icon" type="image/png">' +
-                        '\r\t<link href="' + (document.querySelector("fav-icon").getAttribute("src") || document.querySelector("fav-icon").src) + '" rel="shortcut icon">\r'
-                    ));
+                    // Modification
+                        // <fav-icon> > Source
+                        Object.defineProperty(new (document.createElement("fav-icon")).constructor().constructor.prototype, "src", {
+                            // Configurable
+                            configurable: true,
+
+                            // Enumerable
+                            enumerable: true,
+
+                            // Get
+                            get: function() {
+                                // Return
+                                return this.getAttribute("src")
+                            },
+
+                            // Set
+                            set: function(data) {
+                                // Modification > Target > Source
+                                this.setAttribute("src", data)
+                            }
+                        });
+
+                        // <head> > Inner HTML
+                        !(
+                            document.querySelector("fav-icon") &&
+                            (document.querySelector("fav-icon") || document.createElement("fav-icon")).hasAttribute("src") ||
+                            (document.querySelector("fav-icon") || document.createElement("fav-icon")).src
+                        ) || (document.head.innerHTML += (
+                            '\n\r\t<!-- Document Favicon -->' +
+                            '\r\t<link href="' + (document.querySelector("fav-icon").getAttribute("src") || document.querySelector("fav-icon").src) + '" rel="icon" type="image/png">' +
+                            '\r\t<link href="' + (document.querySelector("fav-icon").getAttribute("src") || document.querySelector("fav-icon").src) + '" rel="shortcut icon">\r'
+                        ));
 
                     /* Loop
                             Index all <fav-icon> elements.
@@ -5088,7 +5261,7 @@ if (
                             var that = this;
 
                             /* Loop
-                                    For the number of white-spaces Name has.
+                                    Iterate over the number of white-spaces Name has.
                             */
                             for (var i = 0; i < name.split(/ /g).length; i++)
                                 // Update > Name
@@ -5678,22 +5851,17 @@ if (
                                         };
 
                                         /* Logic
-                                                If
-                                                    "index" is a number,
+                                                [if:else if:else statement]
 
-                                                else if
-                                                    multiple instances of the specified element is not defined.
+                                            > Return
                                         */
                                         if (typeof index == "number")
-                                            // Return
                                             return that.querySelectorAll(selector)[index];
 
                                         else if (!that.querySelectorAll(selector)[1])
-                                            // Return
                                             return that.querySelector(selector);
 
                                         else
-                                            // Return
                                             return that.querySelectorAll(selector);
                                     }
 
@@ -5909,6 +6077,16 @@ if (
                             for (var i = 0; i < this.length; i++)
                                 // Event > Target Element > [Type]
                                 this[i].addEventListener(type, listener, useCapture, wantsUntrusted)
+                        });
+
+                        // Clear HTML
+                        HTMLCollection.prototype.clearHTML || (HTMLCollection.prototype.clearHTML = function() {
+                            /* Loop
+                                    Index all members of the HTML Collection.
+                            */
+                            for (var i = 0; i < this.length; i++)
+                                // Target Element > Clear HTML
+                                this[i].clearHTML()
                         });
 
                         // Close
@@ -6464,16 +6642,17 @@ if (
                             return array
                         });
 
+                        // Clear HTML
+                        HTMLElement.prototype.clearHTML || (HTMLElement.prototype.clearHTML = function() {
+                            // Modification > Target Element > (Inner HTML, Value)
+                            !this.innerHTML || (this.innerHTML = "");
+                            !this.value || (this.value = "")
+                        });
+
                         // Hide
                         HTMLElement.prototype.hide || (HTMLElement.prototype.hide = function() {
                             // Modification > Target Element > Hidden
                             this.hidden = true
-                        });
-
-                        // Insert
-                        HTMLElement.prototype.insertChild || (HTMLElement.prototype.insertChild = function(position, element) {
-                            // Insertion > Element
-                            this[(str(!(position == "begin") || str((!this.prepend || "prepend")).replace("true", "cloneNode")).replace("true", str(!(position == "end") || str((!this.append || "append")).replace("true", "appendChild")).replace("true", "")) || "cloneNode")](element)
                         });
 
                         // Show
@@ -6489,6 +6668,12 @@ if (
                                 this.remove()
                         });
 
+                        // Insert Child
+                        Node.prototype.insertChild || (Node.prototype.insertChild = function(position, element) {
+                            // Insertion > Element
+                            this[(str(!(position == "begin") || str((!this.prepend || "prepend")).replace("true", "cloneNode")).replace("true", str(!(position == "end") || str((!this.append || "append")).replace("true", "appendChild")).replace("true", "")) || "cloneNode")](element)
+                        });
+
                         // Add Class
                         NodeList.prototype.addClass || (NodeList.prototype.addClass = HTMLCollection.prototype.addClass);
 
@@ -6500,6 +6685,9 @@ if (
 
                         // Close
                         NodeList.prototype.close || (NodeList.prototype.close = HTMLCollection.prototype.close);
+
+                        // Clear HTML
+                        NodeList.prototype.clearHTML || (NodeList.prototype.clearHTML = HTMLCollection.prototype.clearHTML);
 
                         // CSS Selector
                         NodeList.prototype.CSSSelector || (NodeList.prototype.CSSSelector = HTMLCollection.prototype.CSSSelector);
@@ -6624,7 +6812,33 @@ if (
                         // To Array
                         NodeList.prototype.toArray || (NodeList.prototype.toArray = HTMLCollection.prototype.toArray);
 
-                        // CSS Selector
+                        // Child Node Index
+                        document.createElement("div").childNodeIndex || (Object.defineProperty(Element.prototype, "childNodeIndex", {
+                            configurable: true,
+                            enumerable: true,
+                            get: function() {
+                                /* Loop
+                                        Index all children of the Target's parent.
+                                */
+                                for (var i = 0; i < ((this.parentElement || this.parentNode || []).children || []).length; i++)
+                                    /* Logic
+                                            If
+                                                the indexed child is the Target.
+                                    */
+                                    if (((this.parentElement || this.parentNode || []).children || [])[i] == this) {
+                                        // Return
+                                        return i;
+
+                                        // Break
+                                        break
+                                    }
+                            }
+                        }));
+
+                        /* CSS Selector
+                                --- WARN ---
+                                    Strings cannot be placed as values in attributes.
+                        */
                         document.createElement("div").CSSSelector || (Object.defineProperty(Element.prototype, "CSSSelector", {
                             // Configurable
                             configurable: true,
@@ -6713,7 +6927,13 @@ if (
                             // Set
                             set: function(CSSSelector) {
                                 // Update > CSS Selector
-                                CSSSelector = CSSSelector.replace(/("|')([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}\.([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|')/g, function(data) {
+                                CSSSelector = CSSSelector.replace(/("|')([a-z]|[A-Z]|[0-9]|[\~\`\!\@\*\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|')/g, (data) => {
+                                    // Return
+                                    return "\"" + data.slice("\"".length, -"\"".length).replace(/("|')/g, (data) => {
+                                        // Return
+                                        return String(!(data == "\"") || "::lapys_string_2::").replace("true", "::lapys_string_1::");
+                                    }).replace(/#/g, "::lapys_hash_2::") + "\""
+                                }).replace(/("|')([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}\.([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|')/g, function(data) {
                                     // Return
                                     return data.replace(/\./g, "::lapys_period::")
                                 }).replace(/\.( |){1,}\./g, ".").replace(/#( |){1,}#/g, "#").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/, function(data) {
@@ -6727,11 +6947,11 @@ if (
                                 /* Loop
                                         Index all classes in the CSS Selector.
                                 */
-                                for (var i = 1; i < CSSSelector.replace(/\[("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").split(/\./g).length; i++)
-                                    this.addClass(CSSSelector.replace(/\[("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").split(/\./g)[i]);
+                                for (var i = 1; i < CSSSelector.replace(/\[("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\*\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").split(/\./g).length; i++)
+                                    this.addClass(CSSSelector.replace(/\[("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\*\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").split(/\./g)[i]);
 
                                 // Modification > Target > ID
-                                !(CSSSelector.indexOf("#") >= 0) || (this.id = CSSSelector.replace(/\.([a-z]|[A-Z]|[0-9]|[\~\`\!\@\.\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/\[("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").slice(1));
+                                !(CSSSelector.indexOf("#") >= 0) || (this.id = CSSSelector.replace(/\.([a-z]|[A-Z]|[0-9]|[\~\`\!\@\.\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/\[("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\[\]\{\}\|\\\*\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").slice(1));
 
                                 /* Loop
                                         Index all attributes except Class, ID & Style in the CSS Selector.
@@ -6740,7 +6960,7 @@ if (
                                     !CSSSelector.replace(/\.([a-z]|[A-Z]|[0-9]|[\~\`\!\@\.\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/\[(class|id)(=|)("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").replace(/\]/g, "").split(/\[/g)[i].replace(/ /g, "") || this.setAttribute(CSSSelector.replace(/\.([a-z]|[A-Z]|[0-9]|[\~\`\!\@\.\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/\[(class|id)(=|)("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").replace(/\]/g, "").split(/\[/g)[i].getBeforeChar("="), CSSSelector.replace(/\.([a-z]|[A-Z]|[0-9]|[\~\`\!\@\.\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/#([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}/g, "").replace(/\[(class|id)(=|)("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\=\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)\]/g, "").replace(/\]/g, "").split(/\[/g)[i].replace(/=("|'|)([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\_\-\+\"\'\[\]\{\}\|\\\:\;\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}("|'|)/, function(data) {
                                             // Return
                                             return data.replace(/("|')/g, "")
-                                        }).getAfterChar("=").replace(/::lapys_period::/g, ".").replace(/("|')([^("|')]*)$/, "")
+                                        }).getAfterChar("=").replace(/::lapys_period::/g, ".").replace(/::lapys_hash_2::/g, "#").replace(/::lapys_string_1::/g, "'").replace(/::lapys_string_2::/g, "\"")
                                     )
                             }
                         }));
@@ -7646,6 +7866,363 @@ if (
                             window.setEvent("resize", classSets)
                         };
 
+                // HTML JavaScript
+                    /* Loop
+                            Index all items of the LapysJS script's "data-enable" attribute.
+                    */
+                    for (var j = 0; j < (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g).length; j++)
+                        /* Logic
+                                If
+                                    the LapysJS script has "_all" enabled or
+                                    the LapysJS script has "HTMLJavaScript" enabled.
+
+                                --- NOTE ---
+                                    All iterators (<for>, <while>) must run before the (<if>, <switch>).
+                        */
+                        if (
+                            (
+                                (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "_all" ||
+                                (LapysJS.script.getAttribute("data-enable") || "").replace(/ /g, "").split(/,/g)[j] == "HTMLJavaScript"
+                            )
+                        ) {
+                            // <for>
+                                /* Loop
+                                        Index all <for> elements.
+                                */
+                                for (var i = document.getElementsByTagName("for").length - 1; i >= 0; i--) {
+                                    // Modification > <for>
+                                        // Counter
+                                        Object.defineProperty(document.getElementsByTagName("for")[i].constructor.prototype, "counter", {
+                                            // Configurable
+                                            configurable: true,
+
+                                            // Enumerable
+                                            enumerable: true,
+
+                                            // Get
+                                            get: function() {
+                                                // Return
+                                                return this.getAttribute("counter")
+                                            },
+
+                                            // Set
+                                            set: function(data) {
+                                                // Modification > Target > Counter
+                                                this.setAttribute("counter", data)
+                                            }
+                                        });
+
+                                        // Limit
+                                        Object.defineProperty(document.getElementsByTagName("for")[i].constructor.prototype, "limit", {
+                                            // Configurable
+                                            configurable: true,
+
+                                            // Enumerable
+                                            enumerable: true,
+
+                                            // Get
+                                            get: function() {
+                                                // Return
+                                                return this.getAttribute("limit")
+                                            },
+
+                                            // Set
+                                            set: function(data) {
+                                                // Modification > Target > Limit
+                                                this.setAttribute("limit", data)
+                                            }
+                                        });
+
+                                        // Start
+                                        Object.defineProperty(document.getElementsByTagName("for")[i].constructor.prototype, "start", {
+                                            // Configurable
+                                            configurable: true,
+
+                                            // Enumerable
+                                            enumerable: true,
+
+                                            // Get
+                                            get: function() {
+                                                // Return
+                                                return this.getAttribute("start")
+                                            },
+
+                                            // Set
+                                            set: function(data) {
+                                                // Modification > Target > Start
+                                                this.setAttribute("start", data)
+                                            }
+                                        })
+                                };
+
+                                /* Loop
+                                        Index all <for> elements.
+                                */
+                                for (var i = document.getElementsByTagName("for").length - 1; i >= 0; i--) {
+                                    // Modification > <for>
+                                        // Inner HTML Value
+                                        document.getElementsByTagName("for")[i].innerHTMLValue = document.getElementsByTagName("for")[i].innerHTML;
+
+                                        // Inner HTML
+                                        document.getElementsByTagName("for")[i].innerHTML = "";
+
+                                        // Loop Counter
+                                        document.getElementsByTagName("for")[i].loopCounter = parseFloat(eval(document.getElementsByTagName("for")[i].getAttribute("start"))) || 0;
+
+
+                                    /* Loop
+                                            Iterate over the limit of the <for> elements.
+                                    */
+                                    for (var j = 0; j < (parseFloat(eval(document.getElementsByTagName("for")[i].getAttribute("limit"))) || 0); j++) {
+                                        // Modification > <for> > Inner HTML
+                                        document.getElementsByTagName("for")[i].innerHTML += document.getElementsByTagName("for")[i].innerHTMLValue.replace(/::/g, "::lapys_eval::").replace(/::lapys_eval::([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}::lapys_eval::/g, (data) => {
+                                            // Return
+                                            return eval(
+                                                data.slice("::lapys_eval::".length, -"::lapys_eval::".length).replace(
+                                                    new RegExp(document.getElementsByTagName("for")[i].getAttribute("counter") || "", "g"),
+                                                    document.getElementsByTagName("for")[i].loopCounter
+                                                )
+                                            )
+                                        });
+
+                                        // Update > <for> > Loop Counter
+                                        document.getElementsByTagName("for")[i].loopCounter++
+                                    };
+                                };
+
+                                /* Loop
+                                        Index all <for> elements.
+
+                                    > Modification > <for> > Outer HTML
+                                */
+                                for (var i = 0; i < document.getElementsByTagName("for").length; i++)
+                                    document.getElementsByTagName("for")[i].outerHTML = document.getElementsByTagName("for")[i--].innerHTML;
+
+                            // <while>
+                                /* Loop
+                                        Index all <while> elements.
+                                */
+                                for (var i = document.getElementsByTagName("while").length - 1; i >= 0; i--) {
+                                    // Modification > <for>
+                                        // Condition
+                                        Object.defineProperty(document.getElementsByTagName("while")[i].constructor.prototype, "condition", {
+                                            // Configurable
+                                            configurable: true,
+
+                                            // Enumerable
+                                            enumerable: true,
+
+                                            // Get
+                                            get: function() {
+                                                // Return
+                                                return this.getAttribute("condition")
+                                            },
+
+                                            // Set
+                                            set: function(data) {
+                                                // Modification > Target > Condition
+                                                this.setAttribute("condition", data)
+                                            }
+                                        });
+
+                                        // Counter
+                                        Object.defineProperty(document.getElementsByTagName("while")[i].constructor.prototype, "counter", {
+                                            // Configurable
+                                            configurable: true,
+
+                                            // Enumerable
+                                            enumerable: true,
+
+                                            // Get
+                                            get: function() {
+                                                // Return
+                                                return this.getAttribute("counter")
+                                            },
+
+                                            // Set
+                                            set: function(data) {
+                                                // Modification > Target > Counter
+                                                this.setAttribute("counter", data)
+                                            }
+                                        });
+
+                                        // Do
+                                        Object.defineProperty(document.getElementsByTagName("while")[i].constructor.prototype, "do", {
+                                            // Configurable
+                                            configurable: true,
+
+                                            // Enumerable
+                                            enumerable: true,
+
+                                            // Get
+                                            get: function() {
+                                                // Return
+                                                return this.getAttribute("do")
+                                            },
+
+                                            // Set
+                                            set: function(data) {
+                                                // Modification > Target > Do
+                                                this.setAttribute("do", data)
+                                            }
+                                        });
+
+                                        // Value
+                                        Object.defineProperty(document.getElementsByTagName("while")[i].constructor.prototype, "value", {
+                                            // Configurable
+                                            configurable: true,
+
+                                            // Enumerable
+                                            enumerable: true,
+
+                                            // Get
+                                            get: function() {
+                                                // Return
+                                                return this.getAttribute("value")
+                                            },
+
+                                            // Set
+                                            set: function(data) {
+                                                // Modification > Target > Start
+                                                this.setAttribute("value", data)
+                                            }
+                                        })
+                                };
+
+                                /* Loop
+                                        Index all <while> elements.
+
+                                    > Deletion
+                                */
+                                for (var i = 0; i < document.getElementsByTagName("while").length; i++)
+                                    !(
+                                        !eval(document.getElementsByTagName("while")[i].getAttribute("condition").replace(new RegExp(document.getElementsByTagName("while")[i].getAttribute("counter") || "", "g"), document.getElementsByTagName("while")[i].getAttribute("value") || "") || false) &&
+                                        !document.getElementsByTagName("while")[i].hasAttribute("do")
+                                    ) || document.getElementsByTagName("while")[i--].remove();
+
+                                /* Loop
+                                        Index all <while> elements.
+                                */
+                                for (var i = document.getElementsByTagName("while").length - 1; i >= 0; i--) {
+                                    // Modification > <while>
+                                        // Loop Condition
+                                        document.getElementsByTagName("while")[i].loopCondition = document.getElementsByTagName("while")[i].getAttribute("condition").replace(
+                                            new RegExp(document.getElementsByTagName("while")[i].getAttribute("counter") || "", "g"),
+                                            document.getElementsByTagName("while")[i].getAttribute("value") || ""
+                                        );
+
+                                        // Inner HTML Value
+                                        document.getElementsByTagName("while")[i].innerHTMLValue = document.getElementsByTagName("while")[i].innerHTML;
+
+                                        // Update HTML
+                                        document.getElementsByTagName("while")[i].constructor.prototype.updateHTML = function() {
+                                            /* Logic
+                                                    [if:else if:else statement]
+                                            */
+                                            if (eval(document.getElementsByTagName("while")[i].getAttribute("condition").replace(new RegExp(document.getElementsByTagName("while")[i].getAttribute("counter") || "", "g"), document.getElementsByTagName("while")[i].getAttribute("value") || "") || false)) {
+                                                // Update > Target > (Inner HTML, Value)
+                                                this.innerHTML = this.innerHTML.replace(/::/g, "::lapys_eval::").replace(/::lapys_eval::([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}::lapys_eval::/g, (data) => {
+                                                    // Return
+                                                    return eval(
+                                                        data.slice("::lapys_eval::".length, -"::lapys_eval::".length).replace(
+                                                            new RegExp(this.getAttribute("counter") || "", "g"),
+                                                            this.getAttribute("value")
+                                                        )
+                                                    )
+                                                });
+                                                this.setAttribute("value", eval(this.getAttribute("value") + this.getAttribute("increment")));
+                                                this.innerHTML += this.innerHTMLValue;
+                                                this.innerHTML = this.innerHTML.replace(/::/g, "::lapys_eval::").replace(/::lapys_eval::([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}::lapys_eval::/g, (data) => {
+                                                    // Return
+                                                    return eval(
+                                                        data.slice("::lapys_eval::".length, -"::lapys_eval::".length).replace(
+                                                            new RegExp(this.getAttribute("counter") || "", "g"),
+                                                            this.getAttribute("value")
+                                                        )
+                                                    )
+                                                })
+                                            }
+                                        }
+                                };
+
+                                /* Loop
+                                        Index all <while> elements.
+                                */
+                                for (var i = 0; i < document.getElementsByTagName("while").length; i++)
+                                    /* Logic
+                                            If
+                                                the <while> element has the "do" attribute.
+                                    */
+                                    if (document.getElementsByTagName("while")[i].hasAttribute("do"))
+                                        /* Loop
+                                                [do:while statement]
+
+                                            > <while> > Update HTML
+                                        */
+                                        do {
+                                            document.getElementsByTagName("while")[i].updateHTML()
+                                        } while (eval(document.getElementsByTagName("while")[i].getAttribute("condition").replace(new RegExp(document.getElementsByTagName("while")[i].getAttribute("counter") || "", "g"), document.getElementsByTagName("while")[i].getAttribute("value") || "") || false));
+
+                                    else
+                                        /* Loop
+                                                [while statement]
+
+                                            > <while> > Update HTML
+                                        */
+                                        while (eval(document.getElementsByTagName("while")[i].getAttribute("condition").replace(new RegExp(document.getElementsByTagName("while")[i].getAttribute("counter") || "", "g"), document.getElementsByTagName("while")[i].getAttribute("value") || "") || false))
+                                            document.getElementsByTagName("while")[i].updateHTML();
+
+                                /* Loop
+                                        Index all <while> elements.
+                                */
+                                for (var i = 0; i < document.getElementsByTagName("while").length; i++) {
+                                    // Modification > <while>
+                                        // Inner HTML
+                                        document.getElementsByTagName("while")[i].innerHTML = document.getElementsByTagName("while")[i].innerHTML.replace(/::/g, "::lapys_eval::").replace(/::lapys_eval::([a-z]|[A-Z]|[0-9]|[\~\`\!\@\#\$\%\^\&\(\)\-\+\=\[\]\{\}\|\\\:\;\"\'\<\,\>\.\?\/]|(\.\.\.|&hellip;|…)|(&rsquo;|’)|(&amp;|&)| |\n|\t|\r|){1,}::lapys_eval::/g, (data) => {
+                                            // Return
+                                            return eval(
+                                                data.slice("::lapys_eval::".length, -"::lapys_eval::".length).replace(
+                                                    new RegExp(document.getElementsByTagName("while")[i].getAttribute("counter") || "", "g"),
+                                                    document.getElementsByTagName("while")[i].getAttribute("value")
+                                                )
+                                            )
+                                        });
+
+                                        // Outer HTML
+                                        !document.getElementsByTagName("while")[i] || (document.getElementsByTagName("while")[i].outerHTML = document.getElementsByTagName("while")[i--].innerHTML)
+                                };
+
+                            // <switch>
+                                /* Loop
+                                        Index all <switch> elements.
+                                */
+                                for (var i = document.getElementsByTagName("switch").length - 1; i >= 0; i--) {
+                                    for (var j = 0; j < document.getElementsByTagName("switch")[i].getElementsByTagName("case").length; j++) {
+                                        Object.defineProperty(document.getElementsByTagName("switch")[i].getElementsByTagName("case")[j], "value", {
+                                            // Configurable
+                                            configurable: true,
+
+                                            // Enumerable
+                                            enumerable: true,
+
+                                            // Get
+                                            get: function() {
+                                                // Return
+                                                return this.getAttribute("value")
+                                            },
+
+                                            // Set
+                                            set: function(data) {
+                                                // Modification > Target > Value
+                                                this.setAttribute("value", data)
+                                            }
+                                        })
+                                    }
+                                };
+
+                            // <if>
+                        };
+
                 // Style
                     /* Loop
                             Index all items of the LapysJS script's "data-enable" attribute.
@@ -8087,16 +8664,59 @@ if (
                     // Clipboard
                         // Definition
                             // <clip-clone>
-                            (!window.customElements || (document.createElement("clip-clone").constructor !== HTMLElement) || window.customElements.define("clip-clone", class ClipboardClone extends HTMLElement {}));
+                            (!window.customElements || (document.createElement("clip-clone").constructor !== HTMLElement) || window.customElements.define("clip-clone", class HTMLClipboardCloneElement extends HTMLElement {}));
 
                             // <clip-copy>
-                            (!window.customElements || (document.createElement("clip-copy").constructor !== HTMLElement) || window.customElements.define("clip-copy", class ClipboardCopy extends HTMLElement {}));
+                            (!window.customElements || (document.createElement("clip-copy").constructor !== HTMLElement) || window.customElements.define("clip-copy", class HTMLClipboardCopyElement extends HTMLElement {}));
 
                             // <clip-cut>
-                            (!window.customElements || (document.createElement("clip-cut").constructor !== HTMLElement) || window.customElements.define("clip-cut", class ClipboardCut extends HTMLElement {}));
+                            (!window.customElements || (document.createElement("clip-cut").constructor !== HTMLElement) || window.customElements.define("clip-cut", class HTMLClipboardCutElement extends HTMLElement {}));
 
                             // <clip-paste>
-                            (!window.customElements || (document.createElement("clip-paste").constructor !== HTMLElement) || window.customElements.define("clip-paste", class ClipboardPaste extends HTMLElement {}));
+                            (!window.customElements || (document.createElement("clip-paste").constructor !== HTMLElement) || window.customElements.define("clip-paste", class HTMLClipboardPasteElement extends HTMLElement {}));
+
+                        // Modification
+                            // <clip-copy>, <clip-cut>
+                                // Unit
+                                Object.defineProperty(new (document.createElement("clip-copy")).constructor().constructor.prototype, "unit", {
+                                    // Configurable
+                                    configurable: true,
+
+                                    // Enumerable
+                                    enumerable: true,
+
+                                    // Get
+                                    get: function() {
+                                        // Return
+                                        return this.getAttribute("unit")
+                                    },
+
+                                    // Set
+                                    set: function(data) {
+                                        // Modification > Target > Data Unit
+                                        this.setAttribute("data-unit", data)
+                                    }
+                                });
+
+                                Object.defineProperty(new (document.createElement("clip-cut")).constructor().constructor.prototype, "unit", {
+                                    // Configurable
+                                    configurable: true,
+
+                                    // Enumerable
+                                    enumerable: true,
+
+                                    // Get
+                                    get: function() {
+                                        // Return
+                                        return this.getAttribute("unit")
+                                    },
+
+                                    // Set
+                                    set: function(data) {
+                                        // Modification > Target > Data Unit
+                                        this.setAttribute("data-unit", data)
+                                    }
+                                });
 
                         /* Loop
                                 Index all <clip-clone> elements.
@@ -8112,7 +8732,7 @@ if (
                                     );
 
                                 /* Loop
-                                        For the amount unit of the element's "data-unit" attribute.
+                                        Iterate over the amount unit of the element's "data-unit" attribute.
                                 */
                                 for (var j = 0; j < document.getElementsByTagName("clip-clone")[i].getAttribute("data-unit"); j++) {
                                     // Adjacent Initialization
@@ -8148,7 +8768,7 @@ if (
                                     );
 
                                 /* Loop
-                                        For the amount unit of the element's "data-unit" attribute.
+                                        Iterate over the amount unit of the element's "data-unit" attribute.
                                 */
                                 for (var j = 0; j < document.getElementsByTagName("clip-paste")[i].getAttribute("data-unit"); j++) {
                                     // Adjacent Initialization
@@ -9848,7 +10468,7 @@ if (
 
                     // Screen Tip
                         // Definition
-                        (!window.customElements || (document.createElement("screen-tip").constructor !== HTMLElement) || customElements.define("screen-tip", class ScreenTip extends HTMLElement {}));
+                        (!window.customElements || (document.createElement("screen-tip").constructor !== HTMLElement) || customElements.define("screen-tip", class HTMLScreenTipElement extends HTMLElement {}));
 
                         // Initialization
                         screen.tip = document.createElement("screen-tip");
@@ -10249,7 +10869,7 @@ if (
                                             )
                                     }
                                 )
-                        }
+                        };
 
                     // Select Box
                         /* Loop
@@ -10364,7 +10984,7 @@ if (
 
                     // Toast
                         // Definition
-                        (!window.customElements || (document.createElement("screen-toast").constructor !== HTMLElement) || customElements.define("screen-toast", class ScreenToast extends HTMLElement {}));
+                        (!window.customElements || (document.createElement("screen-toast").constructor !== HTMLElement) || customElements.define("screen-toast", class HTMLScreenToastElement extends HTMLElement {}));
 
                         // Initialization
                         screen.toast = document.createElement("screen-toast");

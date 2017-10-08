@@ -1,5 +1,5 @@
 <center>
-    <img align=center height=150 src=https://github.com/LapysNights/LapysJS/blob/master/icon.png width=150>
+    <img align=center height=150 src=https://avatars2.githubusercontent.com/u/22405610?v=4&s=400 width=150>
 </center>
 
 <p align=center>
@@ -34,7 +34,7 @@ We provide compiled CSS and JS (`lapys.*`), as well as minified CSS and JS (`lap
 Have a bug or a feature request? Feel free to flag an issue for the developer team to work on, or better still fork the project and make a pull request telling us what to have fixed.
 
 # Creators
-** LapysNights **
+<b> LapysNights </b>
 - [https://github.com/LapysNights](https://github.com/LapysNights 'GitHub - LapysNights')
 
 # Copyright and License

@@ -11,7 +11,7 @@
 </p>
 
 # Quick Start
-Several quick start options are available:
+The following quick start ptions are available:
 - Clone or download the source files from GitHub.
 
 # Status

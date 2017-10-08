@@ -1,5 +1,5 @@
 <center>
-    <img height=150 src=img.png width=150>
+    <img align=center height=150 src=https://github.com/LapysNights/LapysJS/blob/master/icon.png width=150>
 </center>
 
 <p align=center>

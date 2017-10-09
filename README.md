@@ -1,4 +1,4 @@
-<center>
+<center align=cener>
     <img align=center height=150 src=https://avatars2.githubusercontent.com/u/22405610?v=4&s=400 width=150>
 </center>
 
@@ -36,6 +36,7 @@ Have a bug or a feature request? Feel free to flag an issue for the developer te
 # Creators
 <b> LapysNights </b>
 - [https://github.com/LapysNights](https://github.com/LapysNights 'GitHub - LapysNights')
+- [https://twitter.com/Lapys_Arts](https://twitter.com/Lapys_Arts 'Twitter - Lapys Arts')
 
 # Copyright and License
 Code copyright 2017 the Lapys Dev Team. Code released under the MIT License.

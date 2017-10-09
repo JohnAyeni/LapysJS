@@ -1,10 +1,12 @@
 /**
     @author: Lapys Dev Team
-    @currentUpdate: Implementation of Web-Safe colors; and improvements to some class selectors.
+    @currentUpdate: Improvement to typography;
+                                    New components: ".smooth" Class for smooth animations & transitions;
+                                    Improvements to the ".thumbnail" component.
     @description: LapysJS is a JavaScript library that uses its own CSS framework to beautify its JavaScript components and normalize DOM Elements.
     @version: 0.0.1
 */
-/* LapysJS CSS At-Rules */
+/* CSS At-Rules */
     /* Character-Set Encoding
             @charset
     */
@@ -250,7 +252,7 @@
             text-align: right !important
         }
 
-        input[dir="ltr"]:-moz-locale-dir(rtl) {
+        input[dir=ltr]:-moz-locale-dir(rtl) {
             text-align: left !important
         }
     }
@@ -312,16 +314,16 @@
         margin: 1px
     }
 
-    [dir="ltr"] {
+    [dir=ltr] {
         direction: ltr
     }
 
-    [dir="rtl"] {
+    [dir=rtl] {
         direction: rtl
     }
 
     [hidden],
-    .accordion[data-close] [data-id="content"],
+    .accordion[data-close] [data-id=content],
     clip-cut {
         display: none !important;
         opacity: 0 !important;
@@ -351,26 +353,26 @@
         font-size: 80% !important
     }
 
-    [type="button"],
-    [type="reset"],
-    [type="submit"],
+    [type=button],
+    [type=reset],
+    [type=submit],
     button {
         -webkit-appearance: button
     }
         /* Pseudo */
             /* -moz- Focus Inner */
-            [type="button"]::-moz-focus-inner,
-            [type="reset"]::-moz-focus-inner,
-            [type="submit"]::-moz-focus-inner,
+            [type=button]::-moz-focus-inner,
+            [type=reset]::-moz-focus-inner,
+            [type=submit]::-moz-focus-inner,
             button::-moz-focus-inner {
                 border-style: none;
                 padding: 0
             }
 
             /* -moz- Focus Ring */
-            [type="button"]:-moz-focusring,
-            [type="reset"]:-moz-focusring,
-            [type="submit"]:-moz-focusring,
+            [type=button]:-moz-focusring,
+            [type=reset]:-moz-focusring,
+            [type=submit]:-moz-focusring,
             button:-moz-focusring {
                 user-select: none;
                 outline: 0
@@ -858,13 +860,13 @@
     /* <bdi> */
         /* States > Direction */
             /* Left-to-Right */
-            [dir="auto"]:dir(ltr),
+            [dir=auto]:dir(ltr),
             bdi:dir(ltr) {
                 direction: ltr
             }
 
             /* Right-to-Left */
-            [dir="auto"]:dir(rtl),
+            [dir=auto]:dir(rtl),
             bdi:dir(rtl) {
                 direction: rtl
             }
@@ -890,7 +892,7 @@
         }
 
         blockquote[cite]:not([default]),
-        blockquote[type="cite"]:not([default]) {
+        blockquote[type=cite]:not([default]) {
             border: 0;
             border-inline-start: solid;
             display: block;
@@ -1133,9 +1135,9 @@
 
     /* <button>, <keygen>, <select>, <textarea>, Button */
         /* Not > Default */
-        [type="button"]:not([default]),
-        [type="reset"]:not([default]),
-        [type="submit"]:not([default]),
+        [type=button]:not([default]),
+        [type=reset]:not([default]),
+        [type=submit]:not([default]),
         button:not([default]),
         keygen:not([default]),
         select:not([default]),
@@ -1151,15 +1153,15 @@
             -webkit-appearance: button
         }
 
-        [type="button"]:not([default]),
-        [type="email"]:not([default]),
-        [type="number"]:not([default]),
-        [type="password"]:not([default]),
-        [type="reset"]:not([default]),
-        [type="submit"]:not([default]),
-        [type="tel"]:not([default]),
-        [type="text"]:not([default]),
-        [type="url"]:not([default]),
+        [type=button]:not([default]),
+        [type=email]:not([default]),
+        [type=number]:not([default]),
+        [type=password]:not([default]),
+        [type=reset]:not([default]),
+        [type=submit]:not([default]),
+        [type=tel]:not([default]),
+        [type=text]:not([default]),
+        [type=url]:not([default]),
         button:not([default]),
         input:not([type]):not([default]),
         keygen:not([default]),
@@ -1332,9 +1334,9 @@
 
     /* <embed>, <iframe>, <object> */
         /* Not > Default */
-        embed[src="#"]:not([default]),
+        embed[src=#]:not([default]),
         iframe:not([default]),
-        object[data="#"]:not([default]) {
+        object[data=#]:not([default]) {
             backface-visibility: visible;
             border: 1px solid #000000;
             border-image: initial;
@@ -1584,6 +1586,13 @@
     }
 
     /* <img> */
+    img[lazy-load] {
+        opacity: 0
+    }
+
+    img[lazy-loaded][src] {
+        opacity: 1
+    }
         /* Not > Default */
         img:not([default]) {
             border: 0;
@@ -1625,7 +1634,7 @@
         }
 
     /* <input> */
-    input[type="file"] {
+    input[type=file] {
         border: 1px solid;
         font-family: inherit;
         font-weight: lighter;
@@ -1652,7 +1661,7 @@
             -moz-user-select: text
         }
 
-        input[orient="block"][type="range"]:not([default]) {
+        input[orient=block][type=range]:not([default]) {
             block-size: 12em;
             inline-size: 1.3em;
             margin-inline-end: 0;
@@ -1661,29 +1670,29 @@
             margin-block-start: .7em
         }
 
-        input[orient="horizontal"][type="range"]:not([default]) {
+        input[orient=horizontal][type=range]:not([default]) {
             height: 1.3em;
             margin: 0 .7em;
             width: 12em
         }
 
-        input[orient="vertical"][type="range"]:not([default]) {
+        input[orient=vertical][type=range]:not([default]) {
             height: 12em;
             margin: 0.7em 0;
             width: 1.3em
         }
 
         input[type*="date"]:not([default]),
-        input[type="email"]:not([default]),
-        input[type="month"]:not([default]),
-        input[type="number"]:not([default]),
-        input[type="password"]:not([default]),
-        input[type="search"]:not([default]),
-        input[type="tel"]:not([default]),
-        input[type="text"]:not([default]),
-        input[type="url"]:not([default]),
-        input[type="week"]:not([default]),
-        input[type="year"]:not([default]),
+        input[type=email]:not([default]),
+        input[type=month]:not([default]),
+        input[type=number]:not([default]),
+        input[type=password]:not([default]),
+        input[type=search]:not([default]),
+        input[type=tel]:not([default]),
+        input[type=text]:not([default]),
+        input[type=url]:not([default]),
+        input[type=week]:not([default]),
+        input[type=year]:not([default]),
         input:not([type]) {
             /* --- NOTE ---
                     All text-based <input>'s must seem
@@ -1694,7 +1703,7 @@
             text-align: left
         }
 
-        input[type="number"]:not([default]) {
+        input[type=number]:not([default]) {
             /* --- NOTE ---
                     The height of numeric <input>'s should
                     be automatic or inherited.
@@ -1702,23 +1711,23 @@
             height: auto
         }
 
-        input[type="radio"]:not([default]) {
+        input[type=radio]:not([default]) {
             border-radius: 50%;
             outline: 0
         }
 
-        input[type="range"]:not([default]) {
+        input[type=range]:not([default]) {
             background: transparent;
             width: 100%;
             -webkit-appearance: none
         }
 
-        input[type="search"]:not([default]) {
+        input[type=search]:not([default]) {
             -webkit-appearance: textfield
         }
 
-        input[type="checkbox"]:not([default]),
-        input[type="radio"]:not([default]) {
+        input[type=checkbox]:not([default]),
+        input[type=radio]:not([default]) {
             /* --- NOTE ---
                     Make checkboxes and radios simpler to style.
             */
@@ -1734,7 +1743,7 @@
             -webkit-appearance: button
         }
 
-        input[type="color"]:not([default]) {
+        input[type=color]:not([default]) {
             /* --- NOTE ---
                     Make color swatches simpler to style.
             */
@@ -1755,7 +1764,7 @@
             font-family: inherit
         }
 
-        input[type="submit"]:not([default]) {
+        input[type=submit]:not([default]) {
             /* --- NOTE ---
                     For forms specifically.
             */
@@ -1788,7 +1797,7 @@
                 }
 
                 /* -moz- Range Thumb */
-                input[type="range"]:not([default])::-moz-range-thumb {
+                input[type=range]:not([default])::-moz-range-thumb {
                     background-color: #FFFFFF;
                     border: 1px solid;
                     border-radius: 50%;
@@ -1800,7 +1809,7 @@
                 }
 
                 /* -moz- Range Track */
-                input[type="range"]:not([default])::-moz-range-track {
+                input[type=range]:not([default])::-moz-range-track {
                     background-color: #EFEFEF;
                     box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3);
                     cursor: default;
@@ -1809,7 +1818,7 @@
                 }
 
                 /* -ms- Thumb */
-                input[type="range"]:not([default])::-ms-thumb {
+                input[type=range]:not([default])::-ms-thumb {
                     background-color: #FFFFFF;
                     border: 1px solid;
                     border-radius: 50%;
@@ -1821,7 +1830,7 @@
                 }
 
                 /* -ms- Track */
-                input[type="range"]:not([default])::-ms-track {
+                input[type=range]:not([default])::-ms-track {
                     background-color: #EFEFEF;
                     box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .3);
                     cursor: default;
@@ -1830,7 +1839,7 @@
                 }
 
                 /* -webkit- Color Swatch */
-                input[type="color"]:not([default])::-webkit-color-swatch {
+                input[type=color]:not([default])::-webkit-color-swatch {
                     /* --- NOTE ---
                             Style the -webkit- <input type="color"> swatch.
                     */
@@ -1839,7 +1848,7 @@
                 }
 
                 /* -webkit- Color Swatch Wrapper */
-                input[type="color"]:not([default])::-webkit-color-swatch-wrapper {
+                input[type=color]:not([default])::-webkit-color-swatch-wrapper {
                     /* --- NOTE ---
                             Style the -webkit- <input type="color"> swatch container.
                     */
@@ -1859,7 +1868,7 @@
                 }
 
                 /* -webkit- File Upload Button */
-                input[type="file"]:not([default])::-webkit-file-upload-button {
+                input[type=file]:not([default])::-webkit-file-upload-button {
                     /* --- NOTE ---
                             Style the -webkit- <input type="file">
                             file upload button.
@@ -1873,7 +1882,7 @@
                 }
 
                 /* -webkit- Slider Runnable Track */
-                input[type="range"]:not([default])::-webkit-slider-runnable-track {
+                input[type=range]:not([default])::-webkit-slider-runnable-track {
                     background-color: transparent;
                     /* --- CONSIDER ---
                             The "box-shadow" property
@@ -1892,7 +1901,7 @@
                 }
 
                 /* -webkit- Slider Thumb */
-                input[type="range"]:not([default])::-webkit-slider-thumb {
+                input[type=range]:not([default])::-webkit-slider-thumb {
                     background-color: #FFFFFF;
                     border: 1px solid;
                     border-radius: 50%;
@@ -1914,20 +1923,20 @@
                     cursor: default
                 }
 
-                input[type="button"]:not([default]):active,
-                input[type="checkbox"]:not([default]):active,
-                input[type="color"]:not([default]),
-                input[type="radio"]:not([default]):active,
-                input[type="reset"]:not([default]):active,
-                input[type="submit"]:not([default]):active {
+                input[type=button]:not([default]):active,
+                input[type=checkbox]:not([default]):active,
+                input[type=color]:not([default]),
+                input[type=radio]:not([default]):active,
+                input[type=reset]:not([default]):active,
+                input[type=submit]:not([default]):active {
                     /* --- NOTE ---
                             All input buttons are click-able.
                     */
                     cursor: pointer
                 }
 
-                input[type="checkbox"]:not([default]):active,
-                input[type="radio"]:not([default]):active {
+                input[type=checkbox]:not([default]):active,
+                input[type=radio]:not([default]):active {
                     /* --- NOTE ---
                         The padding increases marginally
                         when clicked.
@@ -1936,8 +1945,8 @@
                 }
 
                 /* Checked */
-                input[type="checkbox"]:not([default]):checked,
-                input[type="radio"]:not([default]):checked {
+                input[type=checkbox]:not([default]):checked,
+                input[type=radio]:not([default]):checked {
                     /* --- NOTE ---
                             Styles for selected checkboxes and radios.
                     */
@@ -1945,8 +1954,8 @@
                 }
 
                 /* Disabled */
-                input[type="checkbox"]:not([default]):disabled,
-                input[type="radio"]:not([default]):disabled {
+                input[type=checkbox]:not([default]):disabled,
+                input[type=radio]:not([default]):disabled {
                     /*
                         --- NOTE ---
                             Styles for disabled checkboxes and radios.
@@ -1965,9 +1974,9 @@
                     outline-width: 1px
                 }
 
-                input[type="checkbox"]:not([default]):focus,
-                input[type="color"]:not([default]):focus,
-                input[type="radio"]:not([default]):focus {
+                input[type=checkbox]:not([default]):focus,
+                input[type=color]:not([default]):focus,
+                input[type=radio]:not([default]):focus {
                     /* --- NOTE ---
                         All checkboxes, colors swatches and radios have no outline.
                     */
@@ -2000,7 +2009,7 @@
                         }
 
                 /* In Range */
-                input[type="number"]:not([default]):in-range,
+                input[type=number]:not([default]):in-range,
                 :invalid:active:not(button):not(
                     keygen):not(
                     select):not(
@@ -2016,7 +2025,7 @@
                 }
 
                 /* Out of Range */
-                input[type="number"]:not([default]):out-of-range,
+                input[type=number]:not([default]):out-of-range,
                 :valid:active:not(button):not(
                     keygen):not(
                     select):not(
@@ -2032,7 +2041,7 @@
                 /* Color Picker Available */
                     /* Pseudo */
                         /* -moz- Color Swatch */
-                        input[type="color"]:not([default]):-moz-system-metric(
+                        input[type=color]:not([default]):-moz-system-metric(
                             color-picker-available)::-moz-color-swatch {
                             /* --- NOTE ---
                                 Style the -moz- <input type="color"> swatch.
@@ -2050,14 +2059,14 @@
                         }
 
             /* <button> */
-            input[type="file"]:not([default]) > button[type="button"] {
+            input[type=file]:not([default]) > button[type=button] {
                 block-size: inherit;
                 cursor: pointer;
                 letter-spacing: inherit
             }
 
             /* <xul> */
-            input[type="file"]:not([default]) > xul|label {
+            input[type=file]:not([default]) > xul|label {
                 direction: ltr !important;
                 letter-spacing: inherit;
                 min-inline-size: 12em;
@@ -2171,6 +2180,12 @@
             padding: 5px
         }
 
+    /* <main> */
+        /* Not > Default */
+        main:not([default]) {
+            height: 100%
+        }
+
     /* <marquee> */
         /* Not > Default */
         marquee:not([default]) {
@@ -2180,8 +2195,8 @@
             vertical-align: text-bottom
         }
 
-        marquee[direction="down"]:not([default]),
-        marquee[direction="up"]:not([default]) {
+        marquee[direction=down]:not([default]),
+        marquee[direction=up]:not([default]) {
             block-size: 200px
         }
 
@@ -2219,7 +2234,7 @@
 
     /* <menu> */
         /* Not > Default */
-        menu[type="context"]:not([default]) {
+        menu[type=context]:not([default]) {
             display: none !important
         }
 
@@ -2400,15 +2415,15 @@
 
     /* <pre>, <span> */
         /* Not > Default */
-        pre[_moz_quote="true"]:not([default]),
-        span[_moz_quote="true"]:not([default]) {
+        pre[_moz_quote=true]:not([default]),
+        span[_moz_quote=true]:not([default]) {
             color: #0000FF
         }
 
     /* <pre>, <textarea> */
         /* Not > Default */
-        pre[dir="auto"]:not([default]),
-        textarea[dir="auto"]:not([default]) {
+        pre[dir=auto]:not([default]),
+        textarea[dir=auto]:not([default]) {
             unicode-bidi: plaintext
         }
 
@@ -2472,8 +2487,8 @@
         /* Not > Default */
             /* Pseudo */
                 /* After */
-                [data-quotes="false"] q::after,
-                q[data-quotes="false"]:not([default])::after {
+                [data-quotes=false] q::after,
+                q[data-quotes=false]:not([default])::after {
                     /*
                         --- NOTE ---
                             Quotes can be "turned off" in
@@ -2482,8 +2497,8 @@
                     content: ""
                 }
 
-                [data-quotes="single"] q::after,
-                q[data-quotes="single"]:not([default])::after {
+                [data-quotes=single] q::after,
+                q[data-quotes=single]:not([default])::after {
                     /*
                         --- NOTE ---
                             Quotes can be singled in
@@ -2501,13 +2516,13 @@
                 }
 
                 /* Before */
-                [data-quotes="false"] q::before,
-                q[data-quotes="false"]:not([default])::before {
+                [data-quotes=false] q::before,
+                q[data-quotes=false]:not([default])::before {
                     content: ""
                 }
 
-                [data-quotes="single"] q::before,
-                q[data-quotes="single"]:not([default])::before {
+                [data-quotes=single] q::before,
+                q[data-quotes=single]:not([default])::before {
                     content: "\0027" !important
                 }
 
@@ -2601,8 +2616,8 @@
             vertical-align: text-bottom;
             -moz-appearance: listbox
         }
-        select[size="0"]:not([default]),
-        select[size="1"]:not([default]) {
+        select[size=0]:not([default]),
+        select[size=1]:not([default]) {
             padding: 0;
             vertical-align: baseline;
             -moz-appearance: menulist
@@ -2706,11 +2721,11 @@
         text-indent: 0
     }
 
-    table[align="left"] {
+    table[align=left] {
         float: left
     }
 
-    table[align="right"] {
+    table[align=right] {
         float: right;
         text-align: start
     }
@@ -2890,7 +2905,7 @@
             Not > Default > States > Selection > Pseudo > Selection,
             States > Read-Write > Not > Default
     */
-    [contenteditable="true"]:not([default])::selection,
+    [contenteditable=true]:not([default])::selection,
     :read-write:not([default])::selection:not(:disabled) {
         /* --- NOTE ---
                 Editable text takes an orange outset.
@@ -2916,7 +2931,7 @@
     }
 
     /* States > (Focus, Host) */
-    [contenteditable="false"]:not([default]),
+    [contenteditable=false]:not([default]),
     :focus,
     :host {
         outline: 0
@@ -5496,6 +5511,13 @@
             background-size: 100% 100% !important
         }
 
+        /* Background Tone */
+        .bg-tone,
+        .background-tone {
+            box-shadow: inset 0 0 0 5000px rgba(0, 0, 0, .365);
+            filter: brightness(.965)
+        }
+
     /* Box Preset */
         /* Box Shadow Preset
             --- NOTE ---
@@ -5517,7 +5539,7 @@
                 .bx-s-0,
                 .crd,
                 .card {
-                    box-shadow: 0 2.5px 2.5px 0 #000000 !important
+                    box-shadow: 0 2.5px 2.5px 0 rgba(0, 0, 0, .3) !important
                 }
 
                 /* Inset */
@@ -5527,39 +5549,39 @@
 
                 /* Both */
                 .bx-s-0.bx-s--0 {
-                    box-shadow: 0 2.5px 2.5px 0 #000000,
+                    box-shadow: 0 2.5px 2.5px 0 rgba(0, 0, 0, .3),
                                 inset 0 2.5px 2.5px 0 #000000 !important
                 }
 
                 .bx-s-0.bx-s--1 {
-                    box-shadow: 0 2.5px 2.5px 0 #000000,
+                    box-shadow: 0 2.5px 2.5px 0 rgba(0, 0, 0, .3),
                                 inset 0 5px 5px 0 rgba(0, 0, 0, .75) !important
                 }
 
                 .bx-s-0.bx-s--2 {
-                    box-shadow: 0 2.5px 2.5px 0 #000000,
+                    box-shadow: 0 2.5px 2.5px 0 rgba(0, 0, 0, .3),
                                 inset 0 7.5px 7.5px 0 rgba(0, 0, 0, .6) !important
                 }
 
                 .bx-s-0.bx-s--3 {
-                    box-shadow: 0 2.5px 2.5px 0 #000000,
+                    box-shadow: 0 2.5px 2.5px 0 rgba(0, 0, 0, .3),
                                 inset 0 10px 10px 0 rgba(0, 0, 0, .45) !important
                 }
 
                 .bx-s-0.bx-s--4 {
-                    box-shadow: 0 2.5px 2.5px 0 #000000,
+                    box-shadow: 0 2.5px 2.5px 0 rgba(0, 0, 0, .3),
                                 inset 0 12.5px 12.5px 0 rgba(0, 0, 0, .3) !important
                 }
 
                 .bx-s-0.bx-s--5 {
-                    box-shadow: 0 2.5px 2.5px 0 #000000,
+                    box-shadow: 0 2.5px 2.5px 0 rgba(0, 0, 0, .3),
                                 inset 0 15px 15px 0 rgba(0, 0, 0, .15) !important
                 }
 
             /* Shadow Level 1 */
                 /* Outset */
                 .bx-s-1 {
-                    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .75) !important
+                    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .25) !important
                 }
 
                 /* Inset */
@@ -5569,39 +5591,39 @@
 
                 /* Both */
                 .bx-s-1.bx-s--0 {
-                    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .75),
+                    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .25),
                                 inset 0 2.5px 2.5px 0 #000000 !important
                 }
 
                 .bx-s-1.bx-s--1 {
-                    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .75),
+                    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .25),
                                 inset 0 5px 5px 0 rgba(0, 0, 0, .75) !important
                 }
 
                 .bx-s-1.bx-s--2 {
-                    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .75),
+                    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .25),
                                 inset 0 7.5px 7.5px 0 rgba(0, 0, 0, .6) !important
                 }
 
                 .bx-s-1.bx-s--3 {
-                    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .75),
+                    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .25),
                                 inset 0 10px 10px 0 rgba(0, 0, 0, .45) !important
                 }
 
                 .bx-s-1.bx-s--4 {
-                    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .75),
+                    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .25),
                                 inset 0 12.5px 12.5px 0 rgba(0, 0, 0, .3) !important
                 }
 
                 .bx-s-1.bx-s--5 {
-                    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .75),
+                    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .25),
                                 inset 0 15px 15px 0 rgba(0, 0, 0, .15) !important
                 }
 
             /* Shadow Level 2 */
                 /* Outset */
                 .bx-s-2 {
-                    box-shadow: 0 7.5px 7.5px 0 rgba(0, 0, 0, .6) !important
+                    box-shadow: 0 7.5px 7.5px 0 rgba(0, 0, 0, .2) !important
                 }
 
                 /* Inset */
@@ -5611,39 +5633,39 @@
 
                 /* Both */
                 .bx-s-2.bx-s--0 {
-                    box-shadow: 0 7.5px 7.5px 0 rgba(0, 0, 0, .6),
+                    box-shadow: 0 7.5px 7.5px 0 rgba(0, 0, 0, .2),
                                 inset 0 2.5px 2.5px 0 #000000 !important
                 }
 
                 .bx-s-2.bx-s--1 {
-                    box-shadow: 0 7.5px 7.5px 0 rgba(0, 0, 0, .6),
+                    box-shadow: 0 7.5px 7.5px 0 rgba(0, 0, 0, .2),
                                 inset 0 5px 5px 0 rgba(0, 0, 0, .75) !important
                 }
 
                 .bx-s-2.bx-s--2 {
-                    box-shadow: 0 7.5px 7.5px 0 rgba(0, 0, 0, .6),
+                    box-shadow: 0 7.5px 7.5px 0 rgba(0, 0, 0, .2),
                                 inset 0 7.5px 7.5px 0 rgba(0, 0, 0, .6) !important
                 }
 
                 .bx-s-2.bx-s--3 {
-                    box-shadow: 0 7.5px 7.5px 0 rgba(0, 0, 0, .6),
+                    box-shadow: 0 7.5px 7.5px 0 rgba(0, 0, 0, .2),
                                 inset 0 10px 10px 0 rgba(0, 0, 0, .45) !important
                 }
 
                 .bx-s-2.bx-s--4 {
-                    box-shadow: 0 7.5px 7.5px 0 rgba(0, 0, 0, .6),
+                    box-shadow: 0 7.5px 7.5px 0 rgba(0, 0, 0, .2),
                                 inset 0 12.5px 12.5px 0 rgba(0, 0, 0, .3) !important
                 }
 
                 .bx-s-2.bx-s--5 {
-                    box-shadow: 0 7.5px 7.5px 0 rgba(0, 0, 0, .6),
+                    box-shadow: 0 7.5px 7.5px 0 rgba(0, 0, 0, .2),
                                 inset 0 15px 15px 0 rgba(0, 0, 0, .15) !important
                 }
 
             /* Shadow Level 3 */
                 /* Outset */
                 .bx-s-3 {
-                    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .45) !important
+                    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .15) !important
                 }
 
                 /* Inset */
@@ -5653,39 +5675,39 @@
 
                 /* Both */
                 .bx-s-3.bx-s--0 {
-                    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .45),
+                    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .15),
                                 inset 0 2.5px 2.5px 0 #000000 !important
                 }
 
                 .bx-s-3.bx-s--1 {
-                    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .45),
+                    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .15),
                                 inset 0 5px 5px 0 rgba(0, 0, 0, .75) !important
                 }
 
                 .bx-s-3.bx-s--2 {
-                    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .45),
+                    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .15),
                                 inset 0 7.5px 7.5px 0 rgba(0, 0, 0, .6) !important
                 }
 
                 .bx-s-3.bx-s--3 {
-                    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .45),
+                    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .15),
                                 inset 0 10px 10px 0 rgba(0, 0, 0, .45) !important
                 }
 
                 .bx-s-3.bx-s--4 {
-                    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .45),
+                    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .15),
                                 inset 0 12.5px 12.5px 0 rgba(0, 0, 0, .3) !important
                 }
 
                 .bx-s-3.bx-s--5 {
-                    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .45),
+                    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .15),
                                 inset 0 15px 15px 0 rgba(0, 0, 0, .15) !important
                 }
 
             /* Shadow Level 4 */
                 /* Outset */
                 .bx-s-4 {
-                    box-shadow: 0 12.5px 12.5px 0 rgba(0, 0, 0, .3) !important
+                    box-shadow: 0 12.5px 12.5px 0 rgba(0, 0, 0, .1) !important
                 }
 
                 /* Inset */
@@ -5695,39 +5717,39 @@
 
                 /* Both */
                 .bx-s-4.bx-s--0 {
-                    box-shadow: 0 12.5px 12.5px 0 rgba(0, 0, 0, .3),
+                    box-shadow: 0 12.5px 12.5px 0 rgba(0, 0, 0, .1),
                                 inset 0 2.5px 2.5px 0 #000000 !important
                 }
 
                 .bx-s-4.bx-s--1 {
-                    box-shadow: 0 12.5px 12.5px 0 rgba(0, 0, 0, .3),
+                    box-shadow: 0 12.5px 12.5px 0 rgba(0, 0, 0, .1),
                                 inset 0 5px 5px 0 rgba(0, 0, 0, .75) !important
                 }
 
                 .bx-s-4.bx-s--2 {
-                    box-shadow: 0 12.5px 12.5px 0 rgba(0, 0, 0, .3),
+                    box-shadow: 0 12.5px 12.5px 0 rgba(0, 0, 0, .1),
                                 inset 0 7.5px 7.5px 0 rgba(0, 0, 0, .6) !important
                 }
 
                 .bx-s-4.bx-s--3 {
-                    box-shadow: 0 12.5px 12.5px 0 rgba(0, 0, 0, .3),
+                    box-shadow: 0 12.5px 12.5px 0 rgba(0, 0, 0, .1),
                                 inset 0 10px 10px 0 rgba(0, 0, 0, .45) !important
                 }
 
                 .bx-s-4.bx-s--4 {
-                    box-shadow: 0 12.5px 12.5px 0 rgba(0, 0, 0, .3),
+                    box-shadow: 0 12.5px 12.5px 0 rgba(0, 0, 0, .1),
                                 inset 0 12.5px 12.5px 0 rgba(0, 0, 0, .3) !important
                 }
 
                 .bx-s-4.bx-s--5 {
-                    box-shadow: 0 12.5px 12.5px 0 rgba(0, 0, 0, .3),
+                    box-shadow: 0 12.5px 12.5px 0 rgba(0, 0, 0, .1),
                                 inset 0 15px 15px 0 rgba(0, 0, 0, .15) !important
                 }
 
             /* Shadow Level 5 */
                 /* Outset */
                 .bx-s-5 {
-                    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, .15) !important
+                    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, .05) !important
                 }
 
                 /* Inset */
@@ -5737,32 +5759,32 @@
 
                 /* Both */
                 .bx-s-5.bx-s--0 {
-                    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, .15),
+                    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, .05),
                                 inset 0 2.5px 2.5px 0 #000000 !important
                 }
 
                 .bx-s-5.bx-s--1 {
-                    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, .15),
+                    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, .05),
                                 inset 0 5px 5px 0 rgba(0, 0, 0, .75) !important
                 }
 
                 .bx-s-5.bx-s--2 {
-                    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, .15),
+                    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, .05),
                                 inset 0 7.5px 7.5px 0 rgba(0, 0, 0, .6) !important
                 }
 
                 .bx-s-5.bx-s--3 {
-                    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, .15),
+                    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, .05),
                                 inset 0 10px 10px 0 rgba(0, 0, 0, .45) !important
                 }
 
                 .bx-s-5.bx-s--4 {
-                    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, .15),
+                    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, .05),
                                 inset 0 12.5px 12.5px 0 rgba(0, 0, 0, .3) !important
                 }
 
                 .bx-s-5.bx-s--5 {
-                    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, .15),
+                    box-shadow: 0 15px 15px 0 rgba(0, 0, 0, .05),
                                 inset 0 15px 15px 0 rgba(0, 0, 0, .15) !important
                 }
 
@@ -19851,7 +19873,7 @@
                     }
             }
 
-/* LapysJS Components */
+/* Components */
     /* Badges */
     .badge,
     .bdg {
@@ -19882,6 +19904,13 @@
             ul.block-list > li:empty {
                 min-height: 20px
             }
+
+    /* Card */
+    .crd,
+    .card {
+        border: 1px solid #CFCFCF;
+        padding: 7.5px 12.5px
+    }
 
     /* Center */
     .center:not([class*="txt-a-"]):not([class*="text-align-"]) {
@@ -20068,7 +20097,7 @@
         width: 65%
     }
 
-    /* Default Message */
+    /* Message */
     .msg {
         background-color: rgba(127, 127, 127, .5);
         border-color: #787878;
@@ -20132,15 +20161,31 @@
             position: static
         }
 
+    /* Smooth (Transition) */
+    .smooth {
+        animation-delay: .1s;
+        animation-direction: normal;
+        animation-duration: .3s;
+        animation-fill-mode: backwards;
+        animation-play-state: running;
+        transition-delay: 0;
+        transition-duration: .3s;
+        transition-property: all;
+        transition-timing-function: ease-in-out
+    }
+
     /* Thumbnails */
     .thumbnail {
         background-color: #FFFFFF;
-        border: 1px solid #FFFFFF;
         box-shadow: 0 0 5px 0 rgba(0, 0, 0, .5);
         height: auto;
         outline: 0;
-        padding: 2.5px
+        transition: .3s ease-in-out
     }
+        /* States > Hover */
+        .thumbnail:hover {
+            filter: brightness(.75)
+        }
 
 /* LapysJS Plug-ins */
     /* Accordion */
@@ -20148,7 +20193,7 @@
         z-index: 3
     }
         /* Accordion Header */
-        .accordion [data-id="header"] {
+        .accordion [data-id=header] {
             cursor: pointer
         }
 
@@ -20291,8 +20336,8 @@
             }
 
             /* <input> */
-            audio.media + div.media-console input[type="range"],
-            video.media + div.media-console input[type="range"] {
+            audio.media + div.media-console input[type=range],
+            video.media + div.media-console input[type=range] {
                 max-width: 30%
             }
 
